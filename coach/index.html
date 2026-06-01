@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>English Voice Coach</title>
+<style>
+  :root{
+    --ink:#1a1c2e; --paper:#f4f1ea; --accent:#e85d3d; --accent2:#2b7a78;
+    --gold:#e8b04b; --ok:#3a9d5d; --bad:#d94f4f; --soft:#fff; --line:#dcd6ca;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Georgia',serif; background:var(--paper); color:var(--ink);
+    background-image:radial-gradient(circle at 12% 8%, rgba(232,176,75,.10), transparent 40%),
+                     radial-gradient(circle at 88% 92%, rgba(43,122,120,.10), transparent 42%);
+    display:flex; flex-direction:column; min-height:100%;
+  }
+  header{
+    padding:18px 18px 10px; text-align:center; border-bottom:2px solid var(--ink);
+    background:var(--ink); color:var(--paper);
+  }
+  header h1{font-size:1.35rem; letter-spacing:.5px; font-weight:700}
+  header .sub{font-family:system-ui,sans-serif; font-size:.72rem; opacity:.7; margin-top:3px; letter-spacing:2px; text-transform:uppercase}
+  .wrap{flex:1; width:100%; max-width:560px; margin:0 auto; padding:16px; display:flex; flex-direction:column}
+  /* ---- course picker ---- */
+  .picker h2{font-size:1.05rem; margin:6px 2px 12px; font-weight:700}
+  .courses{display:grid; grid-template-columns:1fr 1fr; gap:9px}
+  .cbtn{
+    font-family:system-ui,sans-serif; text-align:left; border:1.5px solid var(--line);
+    background:var(--soft); border-radius:13px; padding:11px 12px; cursor:pointer;
+    transition:transform .1s, border-color .15s, background .15s; position:relative;
+  }
+  .cbtn:active{transform:scale(.97)}
+  .cbtn.on{border-color:var(--accent); background:#fff6f2}
+  .cbtn .num{font-size:.7rem; font-weight:700; color:var(--accent); letter-spacing:1px}
+  .cbtn .nm{font-size:.86rem; font-weight:600; margin-top:2px; font-family:'Georgia',serif}
+  .cbtn .ck{position:absolute; top:8px; right:9px; font-size:.85rem; opacity:0; color:var(--accent)}
+  .cbtn.on .ck{opacity:1}
+  .modes{display:flex; gap:8px; margin:16px 0 6px; font-family:system-ui,sans-serif}
+  .modes .mc{flex:1; text-align:center; padding:9px 4px; border:1.5px solid var(--line); border-radius:11px; font-size:.75rem; font-weight:600; cursor:pointer; background:var(--soft)}
+  .modes .mc.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .go{
+    margin-top:18px; font-family:system-ui,sans-serif; font-weight:700; font-size:1rem;
+    background:var(--accent); color:#fff; border:none; border-radius:14px; padding:15px;
+    cursor:pointer; letter-spacing:.5px; box-shadow:0 4px 0 #b8472c;
+  }
+  .go:active{transform:translateY(2px); box-shadow:0 2px 0 #b8472c}
+  .go:disabled{opacity:.4; box-shadow:none}
+  .hint-note{font-family:system-ui,sans-serif; font-size:.7rem; opacity:.6; margin-top:14px; text-align:center; line-height:1.5}
+  /* ---- tabs in session ---- */
+  .tabs{display:flex; gap:5px; margin-bottom:14px; font-family:system-ui,sans-serif}
+  .tab{flex:1; padding:9px 2px; text-align:center; font-size:.7rem; font-weight:600; border:1.5px solid var(--line); border-radius:10px; background:var(--soft); cursor:pointer}
+  .tab.on{background:var(--accent2); color:#fff; border-color:var(--accent2)}
+  /* ---- card ---- */
+  .progress{font-family:system-ui,sans-serif; font-size:.72rem; opacity:.65; display:flex; justify-content:space-between; margin-bottom:8px}
+  .bar{height:5px; background:var(--line); border-radius:3px; overflow:hidden; margin-bottom:16px}
+  .bar>div{height:100%; background:var(--gold); width:0; transition:width .3s}
+  .card{background:var(--soft); border:1.5px solid var(--line); border-radius:18px; padding:22px 18px; box-shadow:0 6px 18px rgba(26,28,46,.07)}
+  .qlabel{font-family:system-ui,sans-serif; font-size:.7rem; text-transform:uppercase; letter-spacing:2px; opacity:.55; margin-bottom:10px}
+  .prompt{font-size:1.5rem; font-weight:700; line-height:1.3; margin-bottom:6px}
+  .prompt.small{font-size:1.2rem}
+  .sub2{font-family:system-ui,sans-serif; font-size:.8rem; opacity:.6; margin-bottom:18px}
+  input.ans{
+    width:100%; font-family:system-ui,sans-serif; font-size:1.05rem; padding:13px 14px;
+    border:1.5px solid var(--line); border-radius:12px; background:#fff; color:var(--ink);
+  }
+  input.ans:focus{outline:none; border-color:var(--accent2)}
+  .opts{display:flex; flex-direction:column; gap:9px}
+  .opt{font-family:system-ui,sans-serif; font-size:1rem; padding:13px 15px; border:1.5px solid var(--line); border-radius:12px; background:#fff; cursor:pointer; text-align:left; transition:all .12s}
+  .opt:active{transform:scale(.98)}
+  .opt.correct{background:#e7f6ec; border-color:var(--ok); color:#1c6b38}
+  .opt.wrong{background:#fbeaea; border-color:var(--bad); color:#9e2e2e}
+  .opt.dim{opacity:.45}
+  .speakrow{display:flex; gap:10px; margin-top:14px}
+  .mic{flex:1; font-family:system-ui,sans-serif; font-weight:700; font-size:.95rem; padding:14px; border:none; border-radius:12px; background:var(--accent2); color:#fff; cursor:pointer}
+  .mic.rec{background:var(--bad); animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+  .listen{width:52px; border:1.5px solid var(--line); background:#fff; border-radius:12px; font-size:1.3rem; cursor:pointer}
+  .heard{font-family:system-ui,sans-serif; font-size:.82rem; margin-top:12px; padding:10px 12px; border-radius:10px; background:#f0ede5; min-height:20px}
+  .heard b{color:var(--accent2)}
+  .feedback{margin-top:16px; font-family:system-ui,sans-serif}
+  .feedback .verdict{font-size:1rem; font-weight:700; margin-bottom:6px}
+  .feedback .verdict.ok{color:var(--ok)}
+  .feedback .verdict.bad{color:var(--bad)}
+  .feedback .corr{font-size:1.05rem; font-weight:700; font-family:'Georgia',serif}
+  .feedback .why{font-size:.82rem; opacity:.7; margin-top:6px; line-height:1.5}
+  .btnrow{display:flex; gap:10px; margin-top:18px}
+  .primary{flex:1; font-family:system-ui,sans-serif; font-weight:700; font-size:.95rem; padding:14px; border:none; border-radius:12px; background:var(--ink); color:#fff; cursor:pointer}
+  .ghost{font-family:system-ui,sans-serif; font-weight:600; font-size:.9rem; padding:14px 16px; border:1.5px solid var(--line); border-radius:12px; background:#fff; cursor:pointer}
+  .hintbtn{font-family:system-ui,sans-serif; font-size:.78rem; background:none; border:none; color:var(--accent2); text-decoration:underline; cursor:pointer; margin-top:12px; padding:4px}
+  .hintbox{font-family:system-ui,sans-serif; font-size:.85rem; margin-top:10px; padding:9px 12px; background:#fff8ec; border:1px dashed var(--gold); border-radius:10px}
+  /* ---- results ---- */
+  .results{text-align:center}
+  .score{font-size:3.4rem; font-weight:700; color:var(--accent)}
+  .scoresub{font-family:system-ui,sans-serif; opacity:.7; margin-bottom:18px}
+  .stats{display:flex; gap:10px; margin:14px 0 20px; font-family:system-ui,sans-serif}
+  .stat{flex:1; background:var(--soft); border:1.5px solid var(--line); border-radius:13px; padding:13px 6px}
+  .stat .n{font-size:1.5rem; font-weight:700}
+  .stat .l{font-size:.66rem; text-transform:uppercase; letter-spacing:1px; opacity:.6; margin-top:2px}
+  .errlist{text-align:left; font-family:system-ui,sans-serif; margin-top:8px}
+  .errlist h3{font-size:.8rem; text-transform:uppercase; letter-spacing:1px; opacity:.6; margin:18px 0 10px; text-align:center}
+  .erritem{background:var(--soft); border:1.5px solid var(--line); border-left:4px solid var(--bad); border-radius:10px; padding:11px 13px; margin-bottom:9px}
+  .erritem .eq{font-size:.78rem; opacity:.6; margin-bottom:5px}
+  .erritem .mine{font-size:.88rem; color:var(--bad)}
+  .erritem .good{font-size:.95rem; color:var(--ok); font-weight:700; font-family:'Georgia',serif}
+  footer{font-family:system-ui,sans-serif; font-size:.66rem; text-align:center; opacity:.45; padding:14px}
+  .hidden{display:none !important}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎙️ English Voice Coach</h1>
+  <div class="sub">Parle · Traduis · Progresse</div>
+</header>
+
+<div class="wrap">
+  <!-- ======= PICKER ======= -->
+  <section id="picker" class="picker">
+    <h2>Choisis tes cours</h2>
+    <div class="courses" id="courseGrid"></div>
+
+    <div class="modes" id="modeRow">
+      <div class="mc on" data-m="all">Tout</div>
+      <div class="mc" data-m="vocab">Vocabulaire</div>
+      <div class="mc" data-m="grammar">Grammaire</div>
+    </div>
+
+    <button class="go" id="startBtn" disabled>Commencer la session</button>
+    <p class="hint-note" id="micNote">🎤 Pour parler, ouvre ce fichier dans <b>Safari ou Chrome</b> (pas dans l'aperçu de l'app Claude) et autorise le micro. La lecture audio 🔊 et la saisie au clavier marchent partout.</p>
+  </section>
+
+  <!-- ======= SESSION ======= -->
+  <section id="session" class="hidden">
+    <div class="tabs" id="tabRow"></div>
+    <div class="progress"><span id="pgCount"></span><span id="pgScore"></span></div>
+    <div class="bar"><div id="pgBar"></div></div>
+    <div id="cardHost"></div>
+  </section>
+
+  <!-- ======= RESULTS ======= -->
+  <section id="results" class="hidden results">
+    <div class="score" id="rScore"></div>
+    <div class="scoresub" id="rSub"></div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="rOk" style="color:var(--ok)"></div><div class="l">Corrects</div></div>
+      <div class="stat"><div class="n" id="rBad" style="color:var(--bad)"></div><div class="l">Erreurs</div></div>
+      <div class="stat"><div class="n" id="rPct"></div><div class="l">Réussite</div></div>
+    </div>
+    <div class="errlist" id="rErrors"></div>
+    <div class="btnrow">
+      <button class="primary" id="redoErr">Retravailler les erreurs</button>
+    </div>
+    <div class="btnrow">
+      <button class="ghost" style="flex:1" id="redoAll">Recommencer</button>
+      <button class="ghost" style="flex:1" id="backHome">Accueil</button>
+    </div>
+  </section>
+</div>
+
+<footer>Données issues de tes cours · Voix via Web Speech API</footer>
+
+<script>
+// Données extraites des cours PDF (FR <-> EN)
+// Chaque cours: vocab [{en, fr, hint}], sentences [{en, fr}], grammar [{q, options[], answer, why}]
+const COURSES = {
+  "3.1": {
+    title: "Identities",
+    vocab: [
+      {en:"architect", fr:"architecte"},
+      {en:"manager", fr:"directeur / directrice"},
+      {en:"lawyer", fr:"avocat(e)"},
+      {en:"marketing assistant", fr:"assistant(e) marketing"},
+      {en:"sales rep", fr:"commercial(e)"},
+      {en:"intern", fr:"stagiaire"},
+      {en:"student", fr:"étudiant(e)"},
+      {en:"teacher", fr:"enseignant(e)"},
+      {en:"doctor", fr:"médecin"},
+      {en:"designer", fr:"designer"},
+      {en:"married", fr:"marié(e)"},
+      {en:"single", fr:"célibataire"},
+      {en:"boyfriend", fr:"petit-ami / copain"},
+      {en:"girlfriend", fr:"petite-amie / copine"},
+      {en:"Germany", fr:"Allemagne"},
+      {en:"Spain", fr:"Espagne"},
+      {en:"Italy", fr:"Italie"},
+      {en:"Australia", fr:"Australie"},
+      {en:"the U.K.", fr:"le Royaume-Uni"},
+      {en:"the U.S.", fr:"les États-Unis"},
+      {en:"British", fr:"britannique"},
+      {en:"American", fr:"américain(e)"},
+      {en:"Italian", fr:"italien(ne)"},
+      {en:"German", fr:"allemand(e)"},
+      {en:"nice to meet you", fr:"enchanté(e) de vous rencontrer"}
+    ],
+    sentences: [
+      {en:"What's your name?", fr:"Comment t'appelles-tu ?"},
+      {en:"I'm a teacher.", fr:"Je suis enseignant(e)."},
+      {en:"Where are you from?", fr:"D'où viens-tu ?"},
+      {en:"I'm from Canada.", fr:"Je viens du Canada."},
+      {en:"How old are you?", fr:"Quel âge as-tu ?"},
+      {en:"I'm 24 years old.", fr:"J'ai 24 ans."},
+      {en:"He's a businessman.", fr:"C'est un homme d'affaires."},
+      {en:"She isn't a manager.", fr:"Elle n'est pas directrice."},
+      {en:"They aren't students.", fr:"Ils ne sont pas étudiants."},
+      {en:"This is my girlfriend.", fr:"C'est ma petite-amie."},
+      {en:"Are they married?", fr:"Sont-ils mariés ?"},
+      {en:"What's his job?", fr:"Quel est son métier ? (à lui)"}
+    ],
+    grammar: [
+      {q:"___ you from France?", options:["Is","Are","Am","Be"], answer:"Are", why:"Avec 'you', le verbe to be est 'are'."},
+      {q:"He ___ a doctor.", options:["am","are","is","be"], answer:"is", why:"À la 3e personne du singulier (he/she/it), to be = 'is'."},
+      {q:"Forme négative : They ___ teachers.", options:["isn't","amn't","aren't","not"], answer:"aren't", why:"Avec they/we/you, la négation de to be est 'aren't'."},
+      {q:"___ I 24 years old?", options:["Are","Is","Am","Do"], answer:"Am", why:"À la 1re personne 'I', to be = 'am'."},
+      {q:"Contraction de 'She is' :", options:["She're","She's","Shes","She is'"], answer:"She's", why:"is se contracte en 's : she's."},
+      {q:"Quel est le métier d'une femme ? What's ___ job?", options:["his","her","its","their"], answer:"her", why:"'her' = son/sa pour un sujet féminin."}
+    ]
+  },
+  "3.2": {
+    title: "Millionaires",
+    vocab: [
+      {en:"apartment", fr:"appartement"},
+      {en:"bicycle", fr:"vélo"},
+      {en:"boat", fr:"bateau"},
+      {en:"car", fr:"voiture"},
+      {en:"cellphone", fr:"téléphone portable"},
+      {en:"dog", fr:"chien"},
+      {en:"house", fr:"maison"},
+      {en:"television", fr:"télévision"},
+      {en:"watch", fr:"montre"},
+      {en:"motorbike", fr:"moto"},
+      {en:"millionaire", fr:"millionnaire"},
+      {en:"model", fr:"mannequin"},
+      {en:"big", fr:"grand(e)"},
+      {en:"small", fr:"petit(e)"},
+      {en:"beautiful", fr:"beau, belle"},
+      {en:"ugly", fr:"laid(e), moche"},
+      {en:"new", fr:"nouveau, neuf"},
+      {en:"old", fr:"vieux, vieille"},
+      {en:"fast", fr:"rapide"},
+      {en:"slow", fr:"lent(e)"},
+      {en:"expensive", fr:"cher, chère"},
+      {en:"cheap", fr:"bon marché"},
+      {en:"pretty", fr:"joli(e), belle"},
+      {en:"nice", fr:"gentil(le) / sympa"}
+    ],
+    sentences: [
+      {en:"I have a fast car.", fr:"J'ai une voiture rapide."},
+      {en:"He has an ugly dog.", fr:"Il a un chien moche."},
+      {en:"I don't have a car.", fr:"Je n'ai pas de voiture."},
+      {en:"Do you have a dog?", fr:"As-tu un chien ?"},
+      {en:"Does she have a house?", fr:"A-t-elle une maison ?"},
+      {en:"Joseph has a big house.", fr:"Joseph a une grande maison."},
+      {en:"They don't have a boat.", fr:"Ils n'ont pas de bateau."},
+      {en:"He has a new cellphone.", fr:"Il a un nouveau téléphone portable."},
+      {en:"My car isn't fast.", fr:"Ma voiture n'est pas rapide."},
+      {en:"Do you have brothers or sisters?", fr:"As-tu des frères et sœurs ?"}
+    ],
+    grammar: [
+      {q:"She ___ a dog.", options:["have","has","haves","having"], answer:"has", why:"À la 3e personne (he/she/it), have devient 'has'."},
+      {q:"Forme négative : I ___ a car.", options:["don't have","doesn't have","haven't","not have"], answer:"don't have", why:"Avec I/you/we/they on utilise 'don't + have'."},
+      {q:"Question : ___ she have a dog?", options:["Do","Does","Has","Is"], answer:"Does", why:"Avec he/she/it, l'auxiliaire est 'does'."},
+      {q:"Article devant 'apartment' :", options:["a","an","the","-"], answer:"an", why:"Devant une voyelle (a,e,i,o,u) on utilise 'an'."},
+      {q:"Article devant 'fast car' :", options:["a","an","the","-"], answer:"a", why:"Devant une consonne on utilise 'a'."},
+      {q:"Position de l'adjectif : 'a car fast' est-il correct ?", options:["Oui","Non, 'a fast car'","Non, 'fast a car'","Oui en anglais US"], answer:"Non, 'a fast car'", why:"En anglais l'adjectif se place TOUJOURS avant le nom."}
+    ]
+  },
+  "3.3": {
+    title: "My Life",
+    vocab: [
+      {en:"to get up", fr:"se lever"},
+      {en:"to live", fr:"vivre, habiter"},
+      {en:"to like", fr:"aimer"},
+      {en:"to play", fr:"jouer"},
+      {en:"to work", fr:"travailler"},
+      {en:"shy", fr:"timide"},
+      {en:"intelligent", fr:"intelligent(e)"},
+      {en:"sporty", fr:"sportif, sportive"},
+      {en:"red hair", fr:"cheveux roux"},
+      {en:"blonde hair", fr:"cheveux blonds"},
+      {en:"brown eyes", fr:"yeux marron"},
+      {en:"a redhead", fr:"un(e) roux/rousse"},
+      {en:"a date", fr:"un rendez-vous"},
+      {en:"early", fr:"tôt"},
+      {en:"late", fr:"tard"}
+    ],
+    sentences: [
+      {en:"Do you go to the gym?", fr:"Vas-tu à la salle de sport ?"},
+      {en:"Do you like Greek food?", fr:"Aimes-tu la cuisine grecque ?"},
+      {en:"Do you have brown eyes?", fr:"As-tu les yeux marron ?"},
+      {en:"Is he intelligent?", fr:"Est-il intelligent ?"},
+      {en:"Yes, he is.", fr:"Oui, il l'est."},
+      {en:"No, she doesn't.", fr:"Non, elle ne le fait pas."},
+      {en:"She gets up quite late.", fr:"Elle se lève assez tard."},
+      {en:"Does she live in London?", fr:"Vit-elle à Londres ?"},
+      {en:"Is she single?", fr:"Est-elle célibataire ?"},
+      {en:"She has a date.", fr:"Elle a un rendez-vous."}
+    ],
+    grammar: [
+      {q:"Réponse courte : 'Are you intelligent?' → Yes, ___.", options:["I do","I am","I is","you are"], answer:"I am", why:"Avec une question en to be, on répond avec to be : Yes, I am."},
+      {q:"Réponse courte : 'Do you play tennis?' → No, ___.", options:["I'm not","I don't","I doesn't","I am not"], answer:"I don't", why:"Avec une question en 'do', on répond avec do : No, I don't."},
+      {q:"'Does he like sport?' → Yes, ___.", options:["he is","he does","he do","he likes"], answer:"he does", why:"3e personne avec 'does' → réponse 'he does'."},
+      {q:"Question fermée en to be : ___ she sporty?", options:["Do","Does","Is","Are"], answer:"Is", why:"Avec to be à la 3e personne : 'Is she...?'"},
+      {q:"___ she have red hair?", options:["Is","Do","Does","Has"], answer:"Does", why:"have est un verbe ordinaire ici → auxiliaire 'does'."}
+    ]
+  },
+  "3.4": {
+    title: "Routines at Work",
+    vocab: [
+      {en:"hospital", fr:"hôpital"},
+      {en:"kitchen", fr:"cuisine"},
+      {en:"office", fr:"bureau"},
+      {en:"shop", fr:"magasin"},
+      {en:"university", fr:"université"},
+      {en:"chef", fr:"chef (cuisinier)"},
+      {en:"journalist", fr:"journaliste"},
+      {en:"lecturer", fr:"professeur d'université"},
+      {en:"to cook", fr:"cuisiner"},
+      {en:"to design", fr:"dessiner, concevoir"},
+      {en:"to wear", fr:"porter"},
+      {en:"to write", fr:"écrire"},
+      {en:"to act", fr:"jouer (théâtre, cinéma)"},
+      {en:"to look", fr:"sembler, avoir l'air"},
+      {en:"clever", fr:"intelligent(e)"},
+      {en:"patient", fr:"patient(e)"},
+      {en:"hardworking", fr:"travailleur, travailleuse"},
+      {en:"rich", fr:"riche"},
+      {en:"every day", fr:"tous les jours"},
+      {en:"once a week", fr:"une fois par semaine"},
+      {en:"twice a week", fr:"deux fois par semaine"},
+      {en:"three times a week", fr:"trois fois par semaine"},
+      {en:"in the morning", fr:"le matin"},
+      {en:"in the evening", fr:"le soir"},
+      {en:"at the weekend", fr:"le week-end"}
+    ],
+    sentences: [
+      {en:"He works in a school.", fr:"Il travaille dans une école."},
+      {en:"She designs buildings.", fr:"Elle conçoit des bâtiments."},
+      {en:"What do you do?", fr:"Que fais-tu dans la vie ?"},
+      {en:"Where do you work?", fr:"Où travailles-tu ?"},
+      {en:"How do you get to work?", fr:"Comment te rends-tu au travail ?"},
+      {en:"I go by bus.", fr:"J'y vais en bus."},
+      {en:"How often do you see your friends?", fr:"À quelle fréquence vois-tu tes amis ?"},
+      {en:"She works in an office.", fr:"Elle travaille dans un bureau."},
+      {en:"He writes for a newspaper.", fr:"Il écrit pour un journal."},
+      {en:"I read almost every day.", fr:"Je lis presque tous les jours."}
+    ],
+    grammar: [
+      {q:"3e personne : He ___ in a school.", options:["work","works","working","do work"], answer:"works", why:"Au present simple, on ajoute -s à la 3e personne du singulier."},
+      {q:"She ___ buildings.", options:["design","designs","designes","designing"], answer:"designs", why:"3e personne → +s : designs."},
+      {q:"He ___ (go) to work by car.", options:["go","gos","goes","going"], answer:"goes", why:"Verbes en -o prennent -es : go → goes."},
+      {q:"She ___ (study) English.", options:["studys","studies","studyes","study"], answer:"studies", why:"consonne + y → ies : study → studies."},
+      {q:"___ he design clothes?", options:["Do","Does","Is","Has"], answer:"Does", why:"Question 3e personne → auxiliaire 'does' + infinitif."}
+    ]
+  },
+  "3.5": {
+    title: "Perfect Weather",
+    vocab: [
+      {en:"cloudy", fr:"nuageux"},
+      {en:"foggy", fr:"brumeux"},
+      {en:"rainy", fr:"pluvieux"},
+      {en:"snowy", fr:"neigeux"},
+      {en:"stormy", fr:"orageux"},
+      {en:"sunny", fr:"ensoleillé"},
+      {en:"windy", fr:"venteux"},
+      {en:"hot", fr:"chaud"},
+      {en:"warm", fr:"tiède, pas très chaud"},
+      {en:"cool", fr:"frais"},
+      {en:"cold", fr:"froid"},
+      {en:"freezing", fr:"très froid, gelé"},
+      {en:"boiling", fr:"très chaud, bouillant"},
+      {en:"spring", fr:"printemps"},
+      {en:"summer", fr:"été"},
+      {en:"autumn", fr:"automne"},
+      {en:"winter", fr:"hiver"},
+      {en:"always", fr:"toujours"},
+      {en:"usually", fr:"habituellement"},
+      {en:"often", fr:"souvent"},
+      {en:"sometimes", fr:"parfois"},
+      {en:"hardly ever", fr:"presque jamais, rarement"},
+      {en:"never", fr:"jamais"},
+      {en:"go camping", fr:"aller camper"},
+      {en:"go skiing", fr:"aller skier"},
+      {en:"go surfing", fr:"aller surfer"},
+      {en:"go shopping", fr:"aller faire des courses"},
+      {en:"sunbathing", fr:"bronzer, bain de soleil"}
+    ],
+    sentences: [
+      {en:"What's the weather like today?", fr:"Quel temps fait-il aujourd'hui ?"},
+      {en:"It's hot and sunny.", fr:"Il fait chaud et beau."},
+      {en:"It never snows in Colorado.", fr:"Il ne neige jamais au Colorado."},
+      {en:"It's often cold in winter.", fr:"Il fait souvent froid en hiver."},
+      {en:"I like going skiing.", fr:"J'aime aller skier."},
+      {en:"I don't like camping.", fr:"Je n'aime pas le camping."},
+      {en:"She always sunbathes.", fr:"Elle va toujours se faire bronzer."},
+      {en:"What do you usually do on holiday?", fr:"Que fais-tu habituellement pendant les vacances ?"},
+      {en:"It usually rains in April.", fr:"Habituellement il pleut en avril."}
+    ],
+    grammar: [
+      {q:"Météo : ___ sunny today.", options:["He's","It's","Is","They're"], answer:"It's", why:"Pour la météo on utilise toujours 'it' : It's sunny."},
+      {q:"Position : 'It ___ snows in Miami.'", options:["never","snows never","not never","no"], answer:"never", why:"L'adverbe de fréquence se place AVANT un verbe ordinaire."},
+      {q:"Avec to be : 'It ___ cold in winter.'", options:["often is","is often","often","is"], answer:"is often", why:"L'adverbe de fréquence se place APRÈS le verbe to be."},
+      {q:"Après 'I like', le verbe 'go' devient :", options:["go","goes","going","to go"], answer:"going", why:"Après like/don't like, le verbe est au gérondif (+ing)."},
+      {q:"'I like ___ skiing.'", options:["go","going","goes","to go"], answer:"going", why:"like + verbe → gérondif : going."}
+    ]
+  },
+  "4.1": {
+    title: "My Town",
+    vocab: [
+      {en:"castle", fr:"château"},
+      {en:"pub", fr:"pub (bar)"},
+      {en:"club", fr:"discothèque, boîte de nuit"},
+      {en:"hospital", fr:"hôpital"},
+      {en:"library", fr:"bibliothèque"},
+      {en:"shopping centre", fr:"centre commercial"},
+      {en:"market", fr:"marché"},
+      {en:"sports centre", fr:"complexe sportif"},
+      {en:"museum", fr:"musée"},
+      {en:"train station", fr:"gare"},
+      {en:"park", fr:"parc"},
+      {en:"university", fr:"université"},
+      {en:"city", fr:"grande ville"},
+      {en:"town", fr:"ville"},
+      {en:"village", fr:"village"},
+      {en:"countryside", fr:"campagne"},
+      {en:"polluted", fr:"pollué(e)"},
+      {en:"clean", fr:"propre"},
+      {en:"safe", fr:"sûr(e)"},
+      {en:"quiet", fr:"calme, silencieux"},
+      {en:"boring", fr:"ennuyeux"}
+    ],
+    sentences: [
+      {en:"There is a castle in the city.", fr:"Il y a un château dans la ville."},
+      {en:"There are lots of restaurants.", fr:"Il y a beaucoup de restaurants."},
+      {en:"There isn't a university in the city.", fr:"Il n'y a pas d'université dans la ville."},
+      {en:"There aren't any clubs.", fr:"Il n'y a pas de boîtes de nuit."},
+      {en:"What is your town like?", fr:"À quoi ressemble ta ville ?"},
+      {en:"You can go shopping.", fr:"On peut faire les magasins."},
+      {en:"You can't dance.", fr:"On ne peut pas y danser."},
+      {en:"Are there any parks?", fr:"Y a-t-il des parcs ?"},
+      {en:"Where do you live?", fr:"Où vis-tu ?"},
+      {en:"I live in the countryside.", fr:"Je vis à la campagne."}
+    ],
+    grammar: [
+      {q:"Singulier : There ___ a castle.", options:["is","are","be","have"], answer:"is", why:"'There is' au singulier (il y a un...)."},
+      {q:"Pluriel : There ___ lots of shops.", options:["is","are","be","has"], answer:"are", why:"'There are' au pluriel."},
+      {q:"Négatif pluriel : There ___ any clubs.", options:["isn't","aren't","not","haven't"], answer:"aren't", why:"There aren't any... au pluriel négatif."},
+      {q:"Capacité : You ___ go shopping here.", options:["can","cans","can to","could"], answer:"can", why:"'can' + verbe à l'infinitif sans 'to'."},
+      {q:"Après 'can', quelle forme du verbe ?", options:["to go","going","go","goes"], answer:"go", why:"can + base verbale (infinitif sans to) : can go."}
+    ]
+  },
+  "4.2": {
+    title: "At the Airport",
+    vocab: [
+      {en:"airport", fr:"aéroport"},
+      {en:"customs control", fr:"douane"},
+      {en:"customs officer", fr:"douanier"},
+      {en:"departure lounge", fr:"salle d'embarquement"},
+      {en:"flight", fr:"un vol"},
+      {en:"passport", fr:"passeport"},
+      {en:"friendly", fr:"sympa, amical"},
+      {en:"fun", fr:"amusant(e)"},
+      {en:"hard-working", fr:"travailleur, euse"},
+      {en:"honest", fr:"honnête"},
+      {en:"quiet", fr:"calme, silencieux"},
+      {en:"shy", fr:"timide"},
+      {en:"sporty", fr:"sportif, ve"},
+      {en:"unfriendly", fr:"froid, pas sympa"},
+      {en:"boring", fr:"ennuyeux"},
+      {en:"lazy", fr:"paresseux"},
+      {en:"dishonest", fr:"malhonnête"},
+      {en:"loud", fr:"bruyant"},
+      {en:"outgoing", fr:"sociable, extraverti"},
+      {en:"studious", fr:"studieux"},
+      {en:"criminal", fr:"criminel(le)"},
+      {en:"dangerous", fr:"dangereux"},
+      {en:"reward", fr:"récompense"},
+      {en:"wanted", fr:"recherché"}
+    ],
+    sentences: [
+      {en:"What time is your flight?", fr:"À quelle heure est ton vol ?"},
+      {en:"My flight is at 10am.", fr:"Mon vol est à 10h."},
+      {en:"Show your passport to the customs officer.", fr:"Montre ton passeport au douanier."},
+      {en:"He is very friendly and nice.", fr:"Il est très sympa et gentil."},
+      {en:"She's a fun person.", fr:"C'est une personne amusante."},
+      {en:"I'm shy. I hate speaking in public.", fr:"Je suis timide. Je déteste parler en public."},
+      {en:"He is a dangerous criminal.", fr:"C'est un dangereux criminel."},
+      {en:"He is wanted all over the world.", fr:"Il est recherché dans le monde entier."},
+      {en:"Do you have the right documents?", fr:"As-tu les bons papiers d'identité ?"}
+    ],
+    grammar: [
+      {q:"Question fermée to be : ___ you shy?", options:["Do","Are","Is","Have"], answer:"Are", why:"Adjectif de personnalité avec to be : Are you...?"},
+      {q:"___ she friendly?", options:["Do","Does","Is","Has"], answer:"Is", why:"3e personne to be : Is she...?"},
+      {q:"Réponse : 'Is he honest?' → Yes, ___.", options:["he does","he is","he's","he do"], answer:"he is", why:"Question to be → réponse 'he is'."},
+      {q:"Négatif : He ___ unfriendly.", options:["isn't","doesn't","aren't","not"], answer:"isn't", why:"to be 3e pers négatif : isn't."}
+    ]
+  },
+  "4.3": {
+    title: "Holidays",
+    vocab: [
+      {en:"adventure holiday", fr:"vacances aventures"},
+      {en:"beach holiday", fr:"vacances à la plage"},
+      {en:"citybreak", fr:"séjour de 2-3 jours en ville"},
+      {en:"mountain holiday", fr:"vacances à la montagne"},
+      {en:"climbing", fr:"faire de l'escalade"},
+      {en:"sailing", fr:"faire de la voile"},
+      {en:"sightseeing", fr:"faire du tourisme"},
+      {en:"chicken", fr:"poulet"},
+      {en:"chips", fr:"frites"},
+      {en:"ice cream", fr:"glace"},
+      {en:"grilled fish", fr:"poisson grillé"},
+      {en:"tomato soup", fr:"soupe de tomate"},
+      {en:"fruit juice", fr:"jus de fruits"},
+      {en:"hot chocolate", fr:"chocolat chaud"},
+      {en:"red wine", fr:"vin rouge"},
+      {en:"who?", fr:"qui ?"},
+      {en:"what?", fr:"quoi ?"},
+      {en:"why?", fr:"pourquoi ?"},
+      {en:"where?", fr:"où ?"},
+      {en:"when?", fr:"quand ?"},
+      {en:"which?", fr:"quel(le) ?"},
+      {en:"how?", fr:"comment ?"},
+      {en:"how often?", fr:"combien de fois ?"},
+      {en:"how much?", fr:"combien ?"},
+      {en:"what time?", fr:"à quelle heure ?"}
+    ],
+    sentences: [
+      {en:"I really like football.", fr:"J'aime beaucoup le foot."},
+      {en:"I prefer playing volleyball.", fr:"Je préfère jouer au volley."},
+      {en:"I hate drinking tea in summer.", fr:"Je déteste boire du thé l'été."},
+      {en:"Where do you go on holiday?", fr:"Où pars-tu en vacances ?"},
+      {en:"How often do you go there?", fr:"Vas-tu souvent là-bas ?"},
+      {en:"Who do you go with?", fr:"Avec qui y vas-tu ?"},
+      {en:"Why do you go there?", fr:"Pourquoi pars-tu là-bas ?"},
+      {en:"How do you get there?", fr:"Comment t'y rends-tu ?"},
+      {en:"Which do you prefer, the mountains or the beach?", fr:"Lequel préfères-tu : la montagne ou la plage ?"}
+    ],
+    grammar: [
+      {q:"Après 'I like', le verbe play devient :", options:["play","plays","playing","to play"], answer:"playing", why:"like/prefer/hate + gérondif (+ing)."},
+      {q:"Question ouverte : ___ do you go?", options:["Do","Where","Are","Is"], answer:"Where", why:"Les questions ouvertes commencent par un mot interrogatif (where, how...)."},
+      {q:"Ordre : 'Where ___ you go?'", options:["are","do","is","go"], answer:"do", why:"Question word + auxiliaire (do) + sujet + infinitif."},
+      {q:"'Who do you go ___?'", options:["with","avec","by","to"], answer:"with", why:"La préposition se place à la fin de la question en anglais."},
+      {q:"3e personne : Where ___ Rose go?", options:["do","does","is","goes"], answer:"does", why:"3e personne singulier → 'does' + infinitif."}
+    ]
+  },
+  "4.4": {
+    title: "International Family",
+    vocab: [
+      {en:"mother (mum)", fr:"mère (maman)"},
+      {en:"father (dad)", fr:"père (papa)"},
+      {en:"brother", fr:"frère"},
+      {en:"sister", fr:"sœur"},
+      {en:"son", fr:"fils"},
+      {en:"daughter", fr:"fille"},
+      {en:"husband", fr:"mari"},
+      {en:"wife", fr:"femme, épouse"},
+      {en:"parents", fr:"parents"},
+      {en:"children", fr:"enfants"},
+      {en:"siblings", fr:"frères et sœurs"},
+      {en:"grandmother", fr:"grand-mère"},
+      {en:"grandfather", fr:"grand-père"},
+      {en:"grandparents", fr:"grands-parents"},
+      {en:"granddaughter", fr:"petite-fille"},
+      {en:"cousin", fr:"cousin(e)"},
+      {en:"aunt", fr:"tante"},
+      {en:"uncle", fr:"oncle"}
+    ],
+    sentences: [
+      {en:"This is my friend Aaron and his sisters.", fr:"C'est mon ami Aaron et ses sœurs."},
+      {en:"It's his book.", fr:"C'est son livre. (à lui)"},
+      {en:"It's her book.", fr:"C'est son livre. (à elle)"},
+      {en:"These are our cousins and their dog.", fr:"Ce sont nos cousins et leur chien."},
+      {en:"That's Simon's sister.", fr:"C'est la sœur de Simon."},
+      {en:"Julie is Tom's sister.", fr:"Julie est la sœur de Tom."},
+      {en:"My brother's room is too small.", fr:"La chambre de mon frère est trop petite."},
+      {en:"Your mother is beautiful.", fr:"Ta mère est belle."},
+      {en:"My daughter is a lawyer.", fr:"Ma fille est avocate."}
+    ],
+    grammar: [
+      {q:"Pour un homme : It's ___ book.", options:["her","his","its","their"], answer:"his", why:"'his' = son/sa quand le possesseur est masculin."},
+      {q:"Pour une femme : It's ___ book.", options:["her","his","its","our"], answer:"her", why:"'her' = son/sa quand le possesseur est féminin."},
+      {q:"Possession : la sœur de Simon =", options:["the sister of Simon","Simon sister","Simon's sister","sister Simon's"], answer:"Simon's sister", why:"On ajoute 's au possesseur, qui se place avant l'objet."},
+      {q:"Pluriel possessif : la chambre de mes frères =", options:["my brother's room","my brothers' room","my brothers room","brothers my room"], answer:"my brothers' room", why:"Pluriel déjà en -s → on ajoute juste l'apostrophe : brothers'."},
+      {q:"'our' signifie :", options:["leur","notre/nos","votre","son"], answer:"notre/nos", why:"our = notre/nos (1re personne du pluriel)."}
+    ]
+  },
+  "4.5": {
+    title: "Flatmates",
+    vocab: [
+      {en:"balcony", fr:"balcon"},
+      {en:"bathroom", fr:"salle de bain"},
+      {en:"bedroom", fr:"chambre"},
+      {en:"dining room", fr:"salle à manger"},
+      {en:"garden", fr:"jardin"},
+      {en:"kitchen", fr:"cuisine"},
+      {en:"living room / lounge", fr:"salon"},
+      {en:"flat / apartment", fr:"appartement"},
+      {en:"flatmate", fr:"colocataire"},
+      {en:"pay the rent", fr:"payer le loyer"},
+      {en:"move in", fr:"emménager"},
+      {en:"dream house", fr:"maison de rêve"},
+      {en:"window", fr:"fenêtre"},
+      {en:"bath", fr:"baignoire"},
+      {en:"oven", fr:"four"},
+      {en:"shower", fr:"douche"},
+      {en:"sofa / couch", fr:"canapé"},
+      {en:"dishwasher", fr:"lave-vaisselle"},
+      {en:"wardrobe / closet", fr:"armoire, garde-robe"},
+      {en:"fridge", fr:"frigo, réfrigérateur"},
+      {en:"washing machine", fr:"machine à laver"},
+      {en:"swimming pool", fr:"piscine"},
+      {en:"studio flat", fr:"studio"}
+    ],
+    sentences: [
+      {en:"I've got a nice flat.", fr:"J'ai un joli appartement."},
+      {en:"It's got a big lounge.", fr:"Il a un grand salon."},
+      {en:"It hasn't got a balcony.", fr:"Il n'a pas de balcon."},
+      {en:"Have you got a dining room?", fr:"As-tu une salle à manger ?"},
+      {en:"Has Miranda got a garden?", fr:"Miranda a-t-elle un jardin ?"},
+      {en:"I live in a flat in London.", fr:"Je vis dans un appartement à Londres."},
+      {en:"I always pay the rent on time.", fr:"Je paie mon loyer toujours à l'heure."},
+      {en:"When can I move in?", fr:"Quand puis-je emménager ?"},
+      {en:"We haven't got a swimming pool.", fr:"Nous n'avons pas de piscine."}
+    ],
+    grammar: [
+      {q:"'I ___ got a nice flat.'", options:["has","have","'ve","am"], answer:"'ve", why:"have got se contracte : I've got."},
+      {q:"3e personne : It ___ got a balcony.", options:["have","has","'ve","is"], answer:"has", why:"À la 3e personne : has got (it's got)."},
+      {q:"Négatif : It ___ got a garden.", options:["haven't","hasn't","isn't","doesn't"], answer:"hasn't", why:"3e personne négatif : hasn't got."},
+      {q:"Question : ___ you got a dining room?", options:["Do","Have","Has","Are"], answer:"Have", why:"have got → question avec 'Have you got...?'"},
+      {q:"Réponse à 'Have you got a TV?' → Yes, ___.", options:["I do","I have","I've","I am"], answer:"I have", why:"On utilise la forme NON contractée dans les réponses courtes : Yes, I have."}
+    ]
+  },
+  "5.1": {
+    title: "Reality Island",
+    vocab: [
+      {en:"to build", fr:"construire"},
+      {en:"to drink", fr:"boire"},
+      {en:"to eat", fr:"manger"},
+      {en:"to fight", fr:"se battre, se disputer"},
+      {en:"to fish", fr:"pêcher"},
+      {en:"to happen", fr:"se passer, se produire"},
+      {en:"to have fun", fr:"s'amuser"},
+      {en:"to jump", fr:"sauter"},
+      {en:"to look for", fr:"chercher"},
+      {en:"to ride", fr:"monter à, faire de"},
+      {en:"to sing", fr:"chanter"},
+      {en:"to wash", fr:"se laver"},
+      {en:"quietly", fr:"silencieusement"},
+      {en:"badly", fr:"mal"},
+      {en:"slowly", fr:"lentement"},
+      {en:"carefully", fr:"attentivement, prudemment"},
+      {en:"loudly", fr:"fort"},
+      {en:"calmly", fr:"calmement"},
+      {en:"happily", fr:"joyeusement"},
+      {en:"angrily", fr:"furieusement"},
+      {en:"dangerously", fr:"dangereusement"},
+      {en:"well", fr:"bien"},
+      {en:"fast", fr:"vite, rapidement"},
+      {en:"high", fr:"haut"}
+    ],
+    sentences: [
+      {en:"What are you doing?", fr:"Que fais-tu ? (à cet instant)"},
+      {en:"I'm building a treehouse.", fr:"Je suis en train de construire une cabane."},
+      {en:"He's building a house.", fr:"Il construit une maison."},
+      {en:"They're watching television.", fr:"Ils regardent la télé."},
+      {en:"Are you drinking tea?", fr:"Es-tu en train de boire du thé ?"},
+      {en:"I'm not drinking tea.", fr:"Je ne bois pas de thé."},
+      {en:"She's swimming in the sea.", fr:"Elle nage dans la mer."},
+      {en:"He's speaking slowly.", fr:"Il parle lentement."},
+      {en:"They're talking angrily.", fr:"Ils se parlent avec colère."},
+      {en:"Why are you driving so fast?", fr:"Pourquoi conduis-tu si vite ?"}
+    ],
+    grammar: [
+      {q:"Present continuous : I ___ building.", options:["am","is","are","be"], answer:"am", why:"Present continuous = to be + verbe-ing. Avec I → am."},
+      {q:"She ___ swimming.", options:["am","is","are","be"], answer:"is", why:"3e personne : is + ing."},
+      {q:"Gérondif de 'swim' :", options:["swiming","swimming","swiming","swimmig"], answer:"swimming", why:"On double la consonne finale : swim → swimming."},
+      {q:"Gérondif de 'drive' :", options:["driveing","driving","drivving","drivin"], answer:"driving", why:"Verbe en -e : on retire le e → driving."},
+      {q:"Adverbe de 'slow' :", options:["slowy","slowly","slowily","slow"], answer:"slowly", why:"adjectif + -ly = adverbe : slow → slowly."},
+      {q:"Adverbe de 'happy' :", options:["happyly","happily","happly","happyly"], answer:"happily", why:"-y → -ily : happy → happily."},
+      {q:"Adverbe irrégulier de 'good' :", options:["goodly","welly","well","gooder"], answer:"well", why:"good → well (irrégulier)."}
+    ]
+  },
+  "5.2": {
+    title: "Fashion Victim",
+    vocab: [
+      {en:"suit", fr:"costume"},
+      {en:"dress", fr:"robe"},
+      {en:"coat", fr:"manteau"},
+      {en:"jacket", fr:"veste"},
+      {en:"shirt", fr:"chemise"},
+      {en:"t-shirt", fr:"t-shirt"},
+      {en:"shoes", fr:"chaussures"},
+      {en:"trousers", fr:"pantalon"},
+      {en:"skirt", fr:"jupe"},
+      {en:"gloves", fr:"gants"},
+      {en:"tie", fr:"cravate"},
+      {en:"hat", fr:"chapeau"},
+      {en:"boots", fr:"bottes"},
+      {en:"jumper / sweater", fr:"pull"},
+      {en:"scarf", fr:"écharpe"},
+      {en:"ripped jeans", fr:"jean déchiré"},
+      {en:"casual clothes", fr:"vêtements décontractés"},
+      {en:"smart clothes", fr:"vêtements élégants"},
+      {en:"designer clothes", fr:"vêtements de marque"},
+      {en:"to want", fr:"vouloir"},
+      {en:"to need", fr:"avoir besoin"},
+      {en:"to own", fr:"posséder"},
+      {en:"to seem", fr:"sembler, paraître"}
+    ],
+    sentences: [
+      {en:"I always wear black.", fr:"Je porte toujours du noir."},
+      {en:"John sometimes wears a suit.", fr:"John porte parfois un costume."},
+      {en:"Today I have a job interview, so I'm wearing a suit.", fr:"Aujourd'hui j'ai un entretien, donc je porte un costume."},
+      {en:"Why are you wearing sporty clothes?", fr:"Pourquoi portes-tu des vêtements de sport ?"},
+      {en:"You usually wear smart clothes.", fr:"Habituellement tu portes des vêtements élégants."},
+      {en:"I'm looking for a job right now.", fr:"Je recherche actuellement un emploi."},
+      {en:"She owns some Gucci sunglasses.", fr:"Elle possède des lunettes Gucci."},
+      {en:"I want a new dress.", fr:"Je veux une nouvelle robe."},
+      {en:"How often do you wear a skirt?", fr:"À quelle fréquence portes-tu des jupes ?"}
+    ],
+    grammar: [
+      {q:"Habitude → quel temps ? 'I ___ black every day.'", options:["wear","am wearing","wears","wearing"], answer:"wear", why:"Habitude/régularité → present simple : I wear."},
+      {q:"Action en cours → 'Today I ___ a suit.'", options:["wear","am wearing","wears","wore"], answer:"am wearing", why:"Action en ce moment → present continuous."},
+      {q:"'want' au present continuous : I ___ a dress.", options:["am wanting","want","wanting","wants"], answer:"want", why:"'want' est un verbe abstrait : pas de forme -ing. On dit 'I want'."},
+      {q:"'own' (posséder) accepte-t-il -ing ?", options:["Oui : owning","Non : own","Oui : is owning","Non : owns only"], answer:"Non : own", why:"Les verbes de possession ne s'emploient pas au continuous : 'She owns'."},
+      {q:"'I'm working part time' exprime :", options:["une habitude permanente","une période actuelle de sa vie","le futur lointain","le passé"], answer:"une période actuelle de sa vie", why:"Le present continuous décrit une action sur une période présente."}
+    ]
+  },
+  "5.3": {
+    title: "Future Plan",
+    vocab: [
+      {en:"tonight", fr:"ce soir"},
+      {en:"tomorrow", fr:"demain"},
+      {en:"next weekend", fr:"le weekend prochain"},
+      {en:"next week", fr:"la semaine prochaine"},
+      {en:"next year", fr:"l'an prochain"},
+      {en:"in the morning", fr:"le matin"},
+      {en:"in the afternoon", fr:"l'après-midi"},
+      {en:"in the evening", fr:"le soir"},
+      {en:"at night", fr:"la nuit"},
+      {en:"at the weekend", fr:"le weekend"},
+      {en:"midday / noon", fr:"midi"},
+      {en:"midnight", fr:"minuit"},
+      {en:"half past", fr:"et demi"},
+      {en:"a quarter past", fr:"et quart"},
+      {en:"a quarter to", fr:"moins le quart"},
+      {en:"a.m.", fr:"du matin"},
+      {en:"p.m.", fr:"de l'après-midi / du soir"},
+      {en:"first / 1st", fr:"premier"},
+      {en:"second / 2nd", fr:"deuxième"},
+      {en:"third / 3rd", fr:"troisième"},
+      {en:"fifth / 5th", fr:"cinquième"},
+      {en:"twentieth / 20th", fr:"vingtième"}
+    ],
+    sentences: [
+      {en:"At 15:00 tomorrow I'm flying to Spain.", fr:"Demain à 15h, je décolle pour l'Espagne."},
+      {en:"We're going to the beach on Sunday.", fr:"Nous allons à la plage dimanche."},
+      {en:"I'm working at home all day tomorrow.", fr:"Demain je travaille à la maison toute la journée."},
+      {en:"I'm visiting my Mum tomorrow evening.", fr:"Je vais chez ma mère demain soir."},
+      {en:"The film starts at half past six.", fr:"Le film commence à six heures et demie."},
+      {en:"What's the time?", fr:"Quelle heure est-il ?"},
+      {en:"It's a quarter to two.", fr:"Il est deux heures moins le quart."},
+      {en:"When is your birthday?", fr:"Quand a lieu ton anniversaire ?"},
+      {en:"Christmas is on the 25th of December.", fr:"Noël est le 25 décembre."}
+    ],
+    grammar: [
+      {q:"Projet futur planifié : 'Tomorrow I ___ to Spain.'", options:["fly","am flying","flew","flies"], answer:"am flying", why:"Un plan futur déjà fixé s'exprime au present continuous."},
+      {q:"Date : My birthday is ___ the 8th of August.", options:["in","at","on","to"], answer:"on", why:"'on' s'utilise pour les jours et dates."},
+      {q:"Période large : I go jogging ___ the morning.", options:["in","at","on","to"], answer:"in", why:"'in' pour les périodes générales (matin, après-midi, soir)."},
+      {q:"Moment précis : I work ___ the weekend / ___ night.", options:["in","on","at","to"], answer:"at", why:"'at' pour night, weekend, et l'heure précise."},
+      {q:"6:30 se dit :", options:["half to six","half past six","quarter past six","six half"], answer:"half past six", why:"et demi = half past."}
+    ]
+  },
+  "5.4": {
+    title: "Party Time",
+    vocab: [
+      {en:"apple", fr:"pomme"},
+      {en:"carrot", fr:"carotte"},
+      {en:"grape", fr:"raisin"},
+      {en:"mushroom", fr:"champignon"},
+      {en:"potato", fr:"patate"},
+      {en:"strawberry", fr:"fraise"},
+      {en:"meat", fr:"viande"},
+      {en:"fish", fr:"poisson"},
+      {en:"bread", fr:"pain"},
+      {en:"cheese", fr:"fromage"},
+      {en:"sausage", fr:"saucisse"},
+      {en:"egg", fr:"œuf"},
+      {en:"pasta", fr:"pâtes"},
+      {en:"rice", fr:"riz"},
+      {en:"oil", fr:"huile"},
+      {en:"butter", fr:"beurre"},
+      {en:"a loaf of bread", fr:"une miche de pain"},
+      {en:"a piece of advice", fr:"un conseil"},
+      {en:"advice", fr:"conseil(s)"},
+      {en:"furniture", fr:"meuble(s)"},
+      {en:"information", fr:"information(s)"},
+      {en:"money", fr:"argent"},
+      {en:"news", fr:"nouvelle(s)"},
+      {en:"equipment", fr:"matériel"}
+    ],
+    sentences: [
+      {en:"There are some sausages.", fr:"Il y a des saucisses."},
+      {en:"I'd like some rice.", fr:"Je voudrais du riz."},
+      {en:"I don't have any milk.", fr:"Je n'ai pas de lait."},
+      {en:"Do you have any time?", fr:"As-tu le temps ?"},
+      {en:"I don't eat much meat.", fr:"Je ne mange pas beaucoup de viande."},
+      {en:"I don't eat many vegetables.", fr:"Je ne mange pas beaucoup de légumes."},
+      {en:"How much does it cost?", fr:"Combien ça coûte ?"},
+      {en:"How many people are coming?", fr:"Combien de personnes viennent ?"},
+      {en:"I'll give you some advice.", fr:"Je vais te donner des conseils."},
+      {en:"Can I have two kilograms of potatoes?", fr:"Puis-je avoir deux kilos de pommes de terre ?"}
+    ],
+    grammar: [
+      {q:"Phrase affirmative : There are ___ sausages.", options:["any","some","much","many"], answer:"some", why:"'some' s'utilise dans les phrases affirmatives."},
+      {q:"Phrase négative : I don't have ___ milk.", options:["some","any","much of","a"], answer:"any", why:"'any' s'utilise dans les phrases négatives et les questions."},
+      {q:"Uncountable : I don't drink ___ water.", options:["many","much","a lot","few"], answer:"much", why:"'much' avec les noms indénombrables (water, rice...)."},
+      {q:"Countable : I don't eat ___ grapes.", options:["much","many","a little","few of"], answer:"many", why:"'many' avec les noms dénombrables (grapes, people...)."},
+      {q:"'How ___ people are coming?'", options:["much","many","a lot","some"], answer:"many", why:"how many + dénombrable (people)."},
+      {q:"'information' est :", options:["dénombrable","indénombrable","toujours pluriel","un verbe"], answer:"indénombrable", why:"information est uncountable : on dit 'some information', jamais 'informations'."}
+    ]
+  },
+  "5.5": {
+    title: "Famous Lives",
+    vocab: [
+      {en:"actor", fr:"acteur"},
+      {en:"actress", fr:"actrice"},
+      {en:"artist", fr:"artiste"},
+      {en:"comedian", fr:"comédien(ne)"},
+      {en:"scientist", fr:"scientifique"},
+      {en:"singer", fr:"chanteur, se"},
+      {en:"writer", fr:"écrivain(e)"},
+      {en:"primary school", fr:"école primaire"},
+      {en:"high school", fr:"lycée"},
+      {en:"school days", fr:"jours de classe"},
+      {en:"child", fr:"enfant"},
+      {en:"favourite subject", fr:"matière préférée"},
+      {en:"troublemaker", fr:"perturbateur, chahuteur"},
+      {en:"good at / bad at", fr:"doué / mauvais en"},
+      {en:"crazy", fr:"fou"},
+      {en:"friendly", fr:"amical, sympa"},
+      {en:"helpful", fr:"d'une aide précieuse"},
+      {en:"inspiring", fr:"source d'inspiration"},
+      {en:"naughty", fr:"polisson(ne)"},
+      {en:"well-behaved", fr:"sage"},
+      {en:"tattoo", fr:"tatouage"},
+      {en:"skyscraper", fr:"gratte-ciel"},
+      {en:"factory", fr:"usine"},
+      {en:"earrings", fr:"boucles d'oreilles"}
+    ],
+    sentences: [
+      {en:"It was warm and sunny.", fr:"Il faisait chaud et beau."},
+      {en:"He was tall and handsome.", fr:"Il était grand et beau."},
+      {en:"I was at school yesterday.", fr:"J'étais à l'école hier."},
+      {en:"We were in Seattle last year.", fr:"L'année dernière nous étions à Seattle."},
+      {en:"Was he an actor?", fr:"Était-il acteur ?"},
+      {en:"He wasn't an actor. He was a singer.", fr:"Il n'était pas acteur. Il était chanteur."},
+      {en:"There was a beautiful house here once.", fr:"Il y avait une belle maison ici autrefois."},
+      {en:"There were a lot of houses here once.", fr:"Il y avait beaucoup de maisons ici autrefois."},
+      {en:"Was there internet when you were a child?", fr:"Y avait-il internet quand tu étais enfant ?"},
+      {en:"My favourite teacher was Mr. Parsons.", fr:"Mon prof préféré était M. Parsons."}
+    ],
+    grammar: [
+      {q:"Passé de to be : I ___ at school.", options:["was","were","is","am"], answer:"was", why:"1re et 3e personne du singulier au passé : was."},
+      {q:"We ___ in Seattle.", options:["was","were","are","is"], answer:"were", why:"we/you/they au passé : were."},
+      {q:"Négatif : He ___ an actor.", options:["weren't","wasn't","isn't","not was"], answer:"wasn't", why:"3e personne négatif passé : wasn't."},
+      {q:"Singulier : There ___ a house here.", options:["was","were","is","are"], answer:"was", why:"there was = il y avait (singulier)."},
+      {q:"Pluriel : There ___ many houses.", options:["was","were","is","are"], answer:"were", why:"there were = il y avait (pluriel)."},
+      {q:"Question : ___ you angry yesterday?", options:["Was","Were","Did","Are"], answer:"Were", why:"Avec 'you' au passé : Were you...?"}
+    ]
+  }
+};
+
+</script>
+<script>
+/* ============ STATE ============ */
+const S = {
+  selected:new Set(),
+  mode:'all',
+  tab:'vocab',          // current tab
+  tabsAvail:[],
+  queue:[],             // current question list
+  idx:0,
+  answered:false,
+  ok:0, bad:0,
+  errors:[],            // {tab,prompt,mine,good,why}
+  recognizing:false
+};
+
+/* speech */
+const synth = window.speechSynthesis;
+let enVoice = null;
+function pickVoice(){
+  const vs = synth.getVoices();
+  enVoice = vs.find(v=>/en[-_]GB/i.test(v.lang)) || vs.find(v=>/^en/i.test(v.lang)) || null;
+}
+if(synth){ pickVoice(); synth.onvoiceschanged = pickVoice; }
+function speak(text){
+  if(!synth) return;
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-GB'; if(enVoice) u.voice=enVoice; u.rate=.92;
+  synth.speak(u);
+}
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recog = null;
+if(SR){
+  recog = new SR();
+  recog.lang='en-US'; recog.interimResults=false; recog.maxAlternatives=3;
+}
+
+/* ============ NORMALISE / COMPARE ============ */
+function norm(s){
+  return (s||'').toLowerCase()
+    .replace(/[’']/g,"'")
+    .replace(/[.,!?;:"]/g,'')
+    .replace(/\bi'm\b/g,'i am').replace(/\byou're\b/g,'you are')
+    .replace(/\bhe's\b/g,'he is').replace(/\bshe's\b/g,'she is').replace(/\bit's\b/g,'it is')
+    .replace(/\bwe're\b/g,'we are').replace(/\bthey're\b/g,'they are')
+    .replace(/\bdon't\b/g,'do not').replace(/\bdoesn't\b/g,'does not')
+    .replace(/\bisn't\b/g,'is not').replace(/\baren't\b/g,'are not')
+    .replace(/\bwasn't\b/g,'was not').replace(/\bweren't\b/g,'were not')
+    .replace(/\bhasn't\b/g,'has not').replace(/\bhaven't\b/g,'have not')
+    .replace(/\bcan't\b/g,'cannot')
+    .replace(/\bi've\b/g,'i have').replace(/\bwe've\b/g,'we have')
+    .replace(/\s+/g,' ').trim();
+}
+function levenshtein(a,b){
+  const m=a.length,n=b.length,d=Array.from({length:m+1},()=>[]);
+  for(let i=0;i<=m;i++)d[i][0]=i; for(let j=0;j<=n;j++)d[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+function closeEnough(got,want){
+  const a=norm(got),b=norm(want);
+  if(a===b) return true;
+  const dist=levenshtein(a,b), tol=Math.max(1,Math.floor(b.length*0.12));
+  return dist<=tol;
+}
+
+/* ============ BUILD PICKER ============ */
+const grid = document.getElementById('courseGrid');
+const order = Object.keys(COURSES);
+order.forEach(k=>{
+  const c=COURSES[k];
+  const b=document.createElement('button');
+  b.className='cbtn'; b.dataset.k=k;
+  b.innerHTML=`<span class="ck">✓</span><div class="num">${k}</div><div class="nm">${c.title}</div>`;
+  b.onclick=()=>{
+    if(S.selected.has(k)){S.selected.delete(k);b.classList.remove('on');}
+    else{S.selected.add(k);b.classList.add('on');}
+    document.getElementById('startBtn').disabled = S.selected.size===0;
+  };
+  grid.appendChild(b);
+});
+document.querySelectorAll('#modeRow .mc').forEach(m=>{
+  m.onclick=()=>{document.querySelectorAll('#modeRow .mc').forEach(x=>x.classList.remove('on'));m.classList.add('on');S.mode=m.dataset.m;};
+});
+if(!SR){
+  document.getElementById('micNote').innerHTML='⚠️ La reconnaissance vocale n\'est pas dispo sur ce navigateur — tu pourras taper tes réponses. La lecture audio 🔊 reste disponible.';
+}
+// Détecte si on tourne dans un cadre isolé (aperçu app Claude) où le micro est bloqué
+try{
+  if(window.self!==window.top){
+    const n=document.getElementById('micNote');
+    n.innerHTML='⚠️ <b>Tu es dans l\'aperçu intégré : le micro est bloqué ici.</b><br>Télécharge le fichier et ouvre-le dans Safari ou Chrome pour activer la voix. Tout le reste (clavier + 🔊) marche.';
+    n.style.color='#9e2e2e'; n.style.opacity='1'; n.style.border='1px dashed #d94f4f'; n.style.padding='10px'; n.style.borderRadius='10px';
+  }
+}catch(_){}
+
+/* ============ START ============ */
+document.getElementById('startBtn').onclick=()=>{
+  const tabs=[];
+  if(S.mode==='all') tabs.push('vocab','sentence','grammar','qcm');
+  else if(S.mode==='vocab') tabs.push('vocab','qcm');
+  else if(S.mode==='grammar') tabs.push('grammar');
+  S.tabsAvail=tabs;
+  S.tab=tabs[0];
+  buildTabs();
+  loadQueue();
+  show('session');
+  renderCard();
+};
+
+const TAB_LABEL={vocab:'Vocab 🎤',sentence:'Phrases 🎤',grammar:'Grammaire',qcm:'QCM rapide'};
+function buildTabs(){
+  const r=document.getElementById('tabRow'); r.innerHTML='';
+  S.tabsAvail.forEach(t=>{
+    const d=document.createElement('div');
+    d.className='tab'+(t===S.tab?' on':''); d.textContent=TAB_LABEL[t];
+    d.onclick=()=>{ if(t===S.tab) return; S.tab=t; document.querySelectorAll('#tabRow .tab').forEach(x=>x.classList.toggle('on',x.textContent===TAB_LABEL[t])); loadQueue(); renderCard(); };
+    r.appendChild(d);
+  });
+}
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function loadQueue(){
+  let items=[];
+  const sel=[...S.selected];
+  if(S.tab==='vocab'){
+    sel.forEach(k=>COURSES[k].vocab.forEach(v=>items.push({type:'vocab',en:v.en,fr:v.fr})));
+  }else if(S.tab==='sentence'){
+    sel.forEach(k=>COURSES[k].sentences.forEach(v=>items.push({type:'sentence',en:v.en,fr:v.fr})));
+  }else if(S.tab==='grammar'){
+    sel.forEach(k=>COURSES[k].grammar.forEach(g=>items.push({type:'grammar',...g})));
+  }else if(S.tab==='qcm'){
+    // build multiple-choice from vocab: show FR -> pick EN
+    let pool=[]; sel.forEach(k=>COURSES[k].vocab.forEach(v=>pool.push(v)));
+    pool=shuffle(pool);
+    pool.forEach(v=>{
+      const distract=shuffle(pool.filter(x=>x.en!==v.en)).slice(0,3).map(x=>x.en);
+      const opts=shuffle([v.en,...distract]);
+      items.push({type:'qcm',prompt:v.fr,options:opts,answer:v.en});
+    });
+  }
+  S.queue=shuffle(items);
+  S.idx=0; S.ok=0; S.bad=0; S.errors=[]; S.answered=false;
+}
+
+/* ============ RENDER ============ */
+function show(id){['picker','session','results'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
+
+function updateProgress(){
+  document.getElementById('pgCount').textContent=`Question ${Math.min(S.idx+1,S.queue.length)} / ${S.queue.length}`;
+  document.getElementById('pgScore').textContent=`✓ ${S.ok}  ✗ ${S.bad}`;
+  document.getElementById('pgBar').style.width=(S.queue.length?(S.idx/S.queue.length*100):0)+'%';
+}
+
+function renderCard(){
+  if(S.idx>=S.queue.length){ return finish(); }
+  S.answered=false;
+  updateProgress();
+  const q=S.queue[S.idx];
+  const host=document.getElementById('cardHost');
+  if(q.type==='vocab'||q.type==='sentence') renderTranslate(q,host);
+  else renderMCQ(q,host);
+}
+
+/* ---- translation (typed + voice) ---- */
+function renderTranslate(q,host){
+  const isS=q.type==='sentence';
+  host.innerHTML=`
+    <div class="card">
+      <div class="qlabel">${isS?'Traduis la phrase':'Traduis le mot'} · FR → EN</div>
+      <div class="prompt ${isS?'small':''}">${q.fr}</div>
+      <div class="sub2">Tape ta réponse, ou parle 🎤</div>
+      <input class="ans" id="ansIn" autocomplete="off" autocapitalize="off" placeholder="en anglais...">
+      <div class="speakrow">
+        <button class="mic" id="micBtn">${SR?'🎤 Parler':'🎤 indispo'}</button>
+        <button class="listen" id="hearBtn" title="Écouter la réponse">🔊</button>
+      </div>
+      <div class="heard" id="heard"></div>
+      <div id="fbHost"></div>
+      <button class="primary" id="checkBtn" style="margin-top:16px">Vérifier</button>
+    </div>`;
+  const input=document.getElementById('ansIn');
+  input.focus();
+  input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ S.answered?next():check(); }});
+  document.getElementById('checkBtn').onclick=()=> S.answered?next():check();
+  document.getElementById('hearBtn').onclick=()=>speak(q.en);
+  const mic=document.getElementById('micBtn');
+  if(!SR){ mic.disabled=true; } else mic.onclick=()=>startListen(q,input);
+
+  function check(){
+    const val=input.value.trim();
+    if(!val){ input.focus(); return; }
+    grade(q, val, closeEnough(val,q.en));
+  }
+}
+
+function startListen(q,input){
+  if(!recog||S.recognizing) return;
+  const mic=document.getElementById('micBtn');
+  const heard=document.getElementById('heard');
+  S.recognizing=true; mic.classList.add('rec'); mic.textContent='● écoute…'; heard.textContent='';
+  recog.onresult=(e)=>{
+    const alts=[...e.results[0]].map(r=>r.transcript);
+    const best=alts[0];
+    input.value=best;
+    const good=alts.some(a=>closeEnough(a,q.en));
+    heard.innerHTML=`J'ai entendu : <b>${best}</b>`;
+    stop();
+    grade(q,best,good);
+  };
+  recog.onerror=(e)=>{
+    let msg;
+    switch(e.error){
+      case 'not-allowed':
+      case 'service-not-allowed':
+        msg="🚫 Micro bloqué. Si tu es dans l'aperçu de l'app Claude, le micro est interdit ici : <b>télécharge le fichier et ouvre-le dans Safari ou Chrome</b>, puis autorise le micro.";
+        break;
+      case 'no-speech':
+        msg="🔇 Je n'ai rien entendu — parle plus fort et réessaie.";
+        break;
+      case 'audio-capture':
+        msg="🎙️ Aucun micro détecté sur l'appareil.";
+        break;
+      case 'network':
+        msg="📡 Problème réseau (la reconnaissance Google a besoin d'internet).";
+        break;
+      default:
+        msg="Micro non capté ("+e.error+") — réessaie ou tape la réponse.";
+    }
+    heard.innerHTML=msg; stop();
+  };
+  recog.onend=()=>stop();
+  try{ recog.start(); }
+  catch(err){
+    heard.innerHTML="🚫 Impossible de lancer le micro ici. Ouvre le fichier dans <b>Safari ou Chrome</b> (hors de l'app Claude) et autorise le micro.";
+    stop();
+  }
+  // Si rien ne se passe après 1s (sandbox silencieux), on prévient
+  setTimeout(()=>{ if(S.recognizing && heard.textContent==='') heard.innerHTML="⏳ En attente du micro… s'il ne réagit pas, ouvre le fichier dans <b>Safari/Chrome</b> hors de l'app Claude."; }, 1200);
+  function stop(){S.recognizing=false;mic.classList.remove('rec');mic.textContent='🎤 Parler';}
+}
+
+/* ---- MCQ (grammar + qcm) ---- */
+function renderMCQ(q,host){
+  const isG=q.type==='grammar';
+  host.innerHTML=`
+    <div class="card">
+      <div class="qlabel">${isG?'Grammaire':'Reconnais le mot · FR → EN'}</div>
+      <div class="prompt ${q.prompt.length>34?'small':''}">${isG?q.q:q.prompt}</div>
+      ${isG?'':'<div class="sub2">Choisis la bonne traduction</div>'}
+      <div class="opts" id="opts"></div>
+      <div id="fbHost"></div>
+      <div class="btnrow" id="mcqBtns" style="display:none">
+        <button class="primary" id="nextBtn">Suivant</button>
+      </div>
+    </div>`;
+  const wrap=document.getElementById('opts');
+  q.options.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='opt'; b.textContent=opt;
+    b.onclick=()=>{
+      if(S.answered) return;
+      const good=opt===q.answer;
+      [...wrap.children].forEach(c=>{
+        if(c.textContent===q.answer)c.classList.add('correct');
+        else if(c===b)c.classList.add('wrong');
+        else c.classList.add('dim');
+        c.style.pointerEvents='none';
+      });
+      grade(q, opt, good, isG?q.why:('Bonne réponse : '+q.answer));
+      document.getElementById('mcqBtns').style.display='flex';
+    };
+    wrap.appendChild(b);
+  });
+  const nb=document.getElementById('nextBtn'); if(nb) nb.onclick=next;
+}
+
+/* ---- grade & feedback ---- */
+function grade(q, mine, good, customWhy){
+  S.answered=true;
+  if(good)S.ok++; else { S.bad++; S.errors.push({tab:S.tab, prompt:(q.fr||q.q||q.prompt), mine, good:(q.en||q.answer), why:customWhy||q.why||''}); }
+  const fb=document.getElementById('fbHost');
+  const correct=q.en||q.answer;
+  fb.innerHTML=`
+    <div class="feedback">
+      <div class="verdict ${good?'ok':'bad'}">${good?'✅ Correct !':'❌ Pas tout à fait'}</div>
+      ${good?'':`<div class="corr">✅ ${correct}</div>`}
+      ${(customWhy||q.why)?`<div class="why">💡 ${customWhy||q.why}</div>`:''}
+    </div>`;
+  // auto-speak english answer for ear training
+  if(q.en||q.type==='qcm') speak(correct);
+  const cb=document.getElementById('checkBtn'); if(cb) cb.textContent='Suivant →';
+  if(good){
+    // small delay then move on for translation typed cards handled by button; keep manual control
+  }
+}
+
+function next(){ S.idx++; renderCard(); }
+
+/* ============ RESULTS ============ */
+function finish(){
+  updateProgress();
+  const total=S.ok+S.bad;
+  const pct= total? Math.round(S.ok/total*100):0;
+  document.getElementById('rScore').textContent=`${S.ok}/${total}`;
+  let msg = pct>=90?'Excellent ! Niveau solide 💪' : pct>=70?'Bien joué, ça progresse !' : pct>=50?'Pas mal — continue à pratiquer.' : 'Courage, la répétition paie !';
+  document.getElementById('rSub').textContent=msg;
+  document.getElementById('rOk').textContent=S.ok;
+  document.getElementById('rBad').textContent=S.bad;
+  document.getElementById('rPct').textContent=pct+'%';
+  const el=document.getElementById('rErrors');
+  if(S.errors.length){
+    el.innerHTML='<h3>À retravailler</h3>'+S.errors.map(e=>`
+      <div class="erritem">
+        <div class="eq">${e.prompt}</div>
+        <div class="mine">Ta réponse : ${e.mine||'—'}</div>
+        <div class="good">✅ ${e.good}</div>
+      </div>`).join('');
+    document.getElementById('redoErr').style.display='';
+  }else{
+    el.innerHTML='<h3>🎉 Aucune erreur — parfait !</h3>';
+    document.getElementById('redoErr').style.display='none';
+  }
+  show('results');
+}
+
+document.getElementById('redoErr').onclick=()=>{
+  const errQs=S.errors.map(e=>{
+    // rebuild question objects from stored data
+    if(e.tab==='grammar'){
+      // find matching grammar q
+      for(const k of S.selected){const g=COURSES[k].grammar.find(x=>x.q===e.prompt); if(g)return{type:'grammar',...g};}
+    }
+    if(e.tab==='qcm'){
+      let pool=[];[...S.selected].forEach(k=>COURSES[k].vocab.forEach(v=>pool.push(v)));
+      const v=pool.find(x=>x.fr===e.prompt)||{fr:e.prompt,en:e.good};
+      const distract=shuffle(pool.filter(x=>x.en!==v.en)).slice(0,3).map(x=>x.en);
+      return{type:'qcm',prompt:v.fr,options:shuffle([v.en,...distract]),answer:v.en};
+    }
+    const type = e.tab==='sentence'?'sentence':'vocab';
+    return{type, fr:e.prompt, en:e.good};
+  }).filter(Boolean);
+  S.queue=shuffle(errQs); S.idx=0; S.ok=0; S.bad=0; S.errors=[]; S.answered=false;
+  show('session'); renderCard();
+};
+document.getElementById('redoAll').onclick=()=>{ loadQueue(); show('session'); renderCard(); };
+document.getElementById('backHome').onclick=()=>{ show('picker'); };
+</script>
+</body>
+</html>
