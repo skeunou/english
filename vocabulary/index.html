@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My English Vocabulary Glossary</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --bg2: #f0efe9;
+    --bg3: #ffffff;
+    --text: #1a1a18;
+    --text2: #5a5a55;
+    --text3: #9a9a93;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --accent: #3c34b9;
+    --accent-bg: #eeedfe;
+    --accent-text: #26215c;
+    --green: #0f6e56;
+    --green-bg: #e1f5ee;
+    --green-text: #04342c;
+    --amber: #854f0b;
+    --amber-bg: #faeeda;
+    --amber-text: #412402;
+    --coral: #993c1d;
+    --coral-bg: #faece7;
+    --coral-text: #4a1b0c;
+    --pink: #993556;
+    --pink-bg: #fbeaf0;
+    --pink-text: #4b1528;
+    --teal: #0f6e56;
+    --teal-bg: #e1f5ee;
+    --blue: #185fa5;
+    --blue-bg: #e6f1fb;
+    --blue-text: #042c53;
+    --gray: #5f5e5a;
+    --gray-bg: #f1efe8;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg2: #252523;
+      --bg3: #2c2c2a;
+      --text: #e8e8e2;
+      --text2: #a8a8a0;
+      --text3: #686860;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.18);
+      --accent-bg: #3c3489;
+      --accent-text: #cecbf6;
+      --green-bg: #085041;
+      --green-text: #9fe1cb;
+      --amber-bg: #633806;
+      --amber-text: #fac775;
+      --coral-bg: #712b13;
+      --coral-text: #f5c4b3;
+      --pink-bg: #72243e;
+      --pink-text: #f4c0d1;
+      --blue-bg: #0c447c;
+      --blue-text: #b5d4f4;
+      --gray-bg: #444441;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--bg3);
+    border-bottom: 0.5px solid var(--border2);
+    padding: 1.2rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+    min-width: 200px;
+  }
+
+  header h1 span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text2);
+    margin-left: 8px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-box input {
+    padding: 7px 12px 7px 34px;
+    border: 0.5px solid var(--border2);
+    border-radius: 8px;
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 14px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-box input:focus { border-color: var(--accent); }
+
+  .search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  .btn {
+    padding: 7px 14px;
+    border: 0.5px solid var(--border2);
+    border-radius: 8px;
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .btn:hover { background: var(--bg3); border-color: var(--accent); }
+
+  .btn.active {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .btn-reveal {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green-text);
+    font-weight: 600;
+  }
+
+  .btn-reveal:hover { opacity: 0.85; }
+
+  select {
+    padding: 7px 12px;
+    border: 0.5px solid var(--border2);
+    border-radius: 8px;
+    background: var(--bg2);
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .hide-mode-bar {
+    display: none;
+    background: var(--amber-bg);
+    border-bottom: 0.5px solid var(--amber);
+    padding: 8px 2rem;
+    font-size: 13px;
+    color: var(--amber-text);
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hide-mode-bar.visible { display: flex; }
+
+  .hide-mode-bar strong { font-weight: 600; }
+
+  .stats-bar {
+    padding: 10px 2rem;
+    background: var(--bg2);
+    border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+    color: var(--text2);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stats-bar b { color: var(--text); font-weight: 600; }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 4rem;
+  }
+
+  .theme-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .theme-pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 0.5px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .theme-pill:hover { border-color: var(--accent); color: var(--accent-text); background: var(--accent-bg); }
+
+  .theme-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .theme-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--border2);
+  }
+
+  .theme-icon {
+    font-size: 22px;
+  }
+
+  .theme-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .theme-count {
+    font-size: 12px;
+    background: var(--bg2);
+    color: var(--text2);
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 0.5px solid var(--border);
+  }
+
+  .subcat {
+    margin-bottom: 1.2rem;
+  }
+
+  .subcat-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text3);
+    margin-bottom: 6px;
+    padding-left: 2px;
+  }
+
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 6px;
+  }
+
+  .vocab-card {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    transition: border-color 0.15s;
+    cursor: default;
+  }
+
+  .vocab-card:hover { border-color: var(--border2); }
+
+  .vocab-card .fr {
+    font-size: 14px;
+    color: var(--text2);
+    flex: 1;
+    min-width: 0;
+  }
+
+  .vocab-card .en {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: right;
+    flex: 1;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .vocab-card .en.hidden {
+    background: var(--bg2);
+    border-radius: 4px;
+    color: transparent;
+    user-select: none;
+    border: 0.5px dashed var(--border2);
+    padding: 1px 8px;
+    font-size: 13px;
+  }
+
+  .vocab-card .en.hidden:hover {
+    background: var(--amber-bg);
+    color: var(--amber-text);
+    border-color: var(--amber);
+  }
+
+  .course-tag {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--accent-bg);
+    color: var(--accent-text);
+    white-space: nowrap;
+    font-weight: 500;
+    align-self: center;
+  }
+
+  .no-results {
+    text-align: center;
+    color: var(--text3);
+    padding: 3rem;
+    font-size: 15px;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 1rem; }
+    main { padding: 1rem 1rem 3rem; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>My English Vocabulary <span id="total-count"></span></h1>
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Search…" oninput="filterVocab()">
+    </div>
+    <select id="filter-course" onchange="filterVocab()">
+      <option value="">All courses</option>
+      <option value="3.1">3.1 Identities</option>
+      <option value="3.2">3.2 Millionaires</option>
+      <option value="3.3">3.3 My Life</option>
+      <option value="3.4">3.4 Routines at Work</option>
+      <option value="3.5">3.5 Perfect Weather</option>
+      <option value="4.1">4.1 My Town</option>
+      <option value="4.2">4.2 At the Airport</option>
+      <option value="4.3">4.3 Holidays</option>
+      <option value="4.4">4.4 International Family</option>
+      <option value="4.5">4.5 Flatmates</option>
+      <option value="5.1">5.1 Reality Island</option>
+      <option value="5.2">5.2 Fashion Victim</option>
+      <option value="5.3">5.3 Future Plans</option>
+      <option value="5.4">5.4 Party Time</option>
+      <option value="5.5">5.5 Famous Lives</option>
+    </select>
+    <button class="btn" id="btn-hide" onclick="toggleHideMode()">👁 Hide English</button>
+    <button class="btn" id="btn-reveal-all" onclick="revealAll()" style="display:none">✅ Reveal all</button>
+  </div>
+</header>
+
+<div class="hide-mode-bar" id="hide-bar">
+  <strong>🧠 Practice mode on!</strong>
+  The English words are hidden. Click any word to reveal it individually, or use "Reveal all" to show everything.
+</div>
+
+<div class="stats-bar" id="stats-bar">
+  <span>Showing <b id="shown-count">0</b> words</span>
+</div>
+
+<main>
+  <div class="theme-nav" id="theme-nav"></div>
+  <div id="glossary"></div>
+</main>
+
+<script>
+const VOCAB = [
+  // ===================== 1. PEOPLE & IDENTITY =====================
+  { en: "architect", fr: "architecte", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "manager", fr: "directeur / directrice", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "computer games designer", fr: "designer de jeux vidéo", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "marketing assistant", fr: "assistant(e) marketing", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "lawyer", fr: "avocat(e)", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "sales rep", fr: "commercial(e)", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "intern", fr: "stagiaire", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "student", fr: "étudiant(e)", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "teacher", fr: "enseignant(e)", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "programmer", fr: "programmeur", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "doctor", fr: "médecin", theme: "people", subcat: "Jobs", course: "3.1" },
+  { en: "actor / actress", fr: "acteur / actrice", theme: "people", subcat: "Jobs", course: "3.2" },
+  { en: "millionaire", fr: "millionnaire", theme: "people", subcat: "Jobs", course: "3.2" },
+  { en: "model", fr: "mannequin", theme: "people", subcat: "Jobs", course: "3.2" },
+  { en: "chef", fr: "chef cuisinier", theme: "people", subcat: "Jobs", course: "3.4" },
+  { en: "footballer", fr: "footballeur", theme: "people", subcat: "Jobs", course: "3.4" },
+  { en: "journalist", fr: "journaliste", theme: "people", subcat: "Jobs", course: "3.4" },
+  { en: "lecturer", fr: "professeur(e) d'université", theme: "people", subcat: "Jobs", course: "3.4" },
+  { en: "artist", fr: "artiste", theme: "people", subcat: "Jobs", course: "5.5" },
+  { en: "comedian", fr: "comédien(ne)", theme: "people", subcat: "Jobs", course: "5.5" },
+  { en: "scientist", fr: "scientifique", theme: "people", subcat: "Jobs", course: "5.5" },
+  { en: "singer", fr: "chanteur/chanteuse", theme: "people", subcat: "Jobs", course: "5.5" },
+  { en: "writer", fr: "écrivain(e)", theme: "people", subcat: "Jobs", course: "5.5" },
+  { en: "married", fr: "marié(e)", theme: "people", subcat: "Relationships", course: "3.1" },
+  { en: "single", fr: "célibataire", theme: "people", subcat: "Relationships", course: "3.1" },
+  { en: "boyfriend", fr: "petit-ami / copain", theme: "people", subcat: "Relationships", course: "3.1" },
+  { en: "girlfriend", fr: "petite-amie / copine", theme: "people", subcat: "Relationships", course: "3.1" },
+  { en: "nice to meet you", fr: "enchanté(e) de vous rencontrer", theme: "people", subcat: "Relationships", course: "3.1" },
+  { en: "mother (mum)", fr: "mère (maman)", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "father (dad)", fr: "père (papa)", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "brother / sister", fr: "frère / sœur", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "son", fr: "fils", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "daughter", fr: "fille", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "husband", fr: "mari / époux", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "wife", fr: "femme / épouse", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "cousin", fr: "cousin(e)", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "grandmother", fr: "grand-mère", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "grandfather", fr: "grand-père", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "grandson", fr: "petit-fils", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "granddaughter", fr: "petite-fille", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "uncle", fr: "oncle", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "aunt", fr: "tante", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "siblings", fr: "frères et sœurs", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "child / children", fr: "enfant / enfants", theme: "people", subcat: "Family", course: "4.4" },
+  { en: "child", fr: "enfant", theme: "people", subcat: "School", course: "5.5" },
+  { en: "primary school", fr: "école primaire", theme: "people", subcat: "School", course: "5.5" },
+  { en: "high school", fr: "lycée", theme: "people", subcat: "School", course: "5.5" },
+  { en: "school days", fr: "jours de classe", theme: "people", subcat: "School", course: "5.5" },
+  { en: "favourite subject", fr: "matière préférée", theme: "people", subcat: "School", course: "5.5" },
+  { en: "favourite teacher", fr: "prof préféré(e)", theme: "people", subcat: "School", course: "5.5" },
+  { en: "troublemaker", fr: "perturbateur/chahuteur", theme: "people", subcat: "School", course: "5.5" },
+
+  // ===================== 2. PERSONALITY & APPEARANCE =====================
+  { en: "friendly / nice", fr: "sympa / amical(e)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "unfriendly / horrible", fr: "pas sympa / horrible", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "shy", fr: "timide", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "outgoing", fr: "extraverti(e) / sociable", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "quiet", fr: "silencieux(se) / calme", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "loud", fr: "bruyant(e)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "sporty", fr: "sportif(ve)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "studious", fr: "studieux(se)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "hard-working", fr: "travailleur(se)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "lazy", fr: "paresseux(se)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "honest", fr: "honnête", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "dishonest", fr: "malhonnête", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "happy", fr: "heureux(se)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "sad", fr: "triste", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "fun", fr: "amusant(e)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "boring", fr: "ennuyeux(se)", theme: "personality", subcat: "Personality", course: "4.2" },
+  { en: "clever", fr: "intelligent(e)", theme: "personality", subcat: "Personality", course: "3.4" },
+  { en: "patient", fr: "patient(e)", theme: "personality", subcat: "Personality", course: "3.4" },
+  { en: "rich", fr: "riche", theme: "personality", subcat: "Personality", course: "3.4" },
+  { en: "famous", fr: "célèbre", theme: "personality", subcat: "Personality", course: "3.2" },
+  { en: "good at / bad at", fr: "doué(e) en / mauvais(e) en", theme: "personality", subcat: "School Adjectives", course: "5.5" },
+  { en: "crazy", fr: "fou / folle", theme: "personality", subcat: "School Adjectives", course: "5.5" },
+  { en: "helpful", fr: "utile / serviable", theme: "personality", subcat: "School Adjectives", course: "5.5" },
+  { en: "inspiring", fr: "source d'inspiration", theme: "personality", subcat: "School Adjectives", course: "5.5" },
+  { en: "naughty", fr: "polisson(ne) / vilain(e)", theme: "personality", subcat: "School Adjectives", course: "5.5" },
+  { en: "well-behaved", fr: "sage", theme: "personality", subcat: "School Adjectives", course: "5.5" },
+  { en: "tall", fr: "grand(e)", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "short", fr: "petit(e)", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "medium-height", fr: "de taille moyenne", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "fat", fr: "gros(se)", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "thin / slim", fr: "maigre / mince", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "blonde hair", fr: "cheveux blonds", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "brown hair", fr: "cheveux châtains", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "long hair / short hair", fr: "cheveux longs / courts", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "straight hair / curly hair", fr: "cheveux lisses / bouclés", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "blue / green / brown eyes", fr: "yeux bleus / verts / marron", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "young", fr: "jeune", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+  { en: "old", fr: "vieux / vieille", theme: "personality", subcat: "Physical Appearance", course: "4.4" },
+
+  // ===================== 3. DAILY LIFE & ROUTINE =====================
+  { en: "get up", fr: "se lever", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "have breakfast", fr: "prendre le petit-déjeuner", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "read the newspaper", fr: "lire le journal", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "start work", fr: "commencer le travail", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "have a break", fr: "faire / prendre une pause", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "have lunch", fr: "déjeuner", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "get home", fr: "rentrer à la maison", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "have dinner", fr: "dîner", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "go out", fr: "sortir", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "watch TV", fr: "regarder la télévision", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "see my friends", fr: "voir mes amis", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "go jogging", fr: "aller courir", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "go to work", fr: "aller au travail", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "play in a band", fr: "jouer dans un groupe de musique", theme: "daily", subcat: "Daily Routine", course: "3.3" },
+  { en: "always", fr: "toujours", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "usually", fr: "habituellement", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "often", fr: "souvent", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "sometimes", fr: "parfois", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "rarely", fr: "rarement", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "hardly ever", fr: "presque jamais", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "never", fr: "jamais", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "every day", fr: "tous les jours", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "every evening", fr: "tous les soirs", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "once a week", fr: "une fois par semaine", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "twice a month", fr: "deux fois par mois", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "three times a year", fr: "trois fois par an", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "on Saturdays", fr: "le samedi", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "at the weekend", fr: "le week-end", theme: "daily", subcat: "Frequency", course: "3.3" },
+  { en: "in the morning", fr: "le matin", theme: "daily", subcat: "Time of day", course: "3.4" },
+  { en: "in the evening", fr: "le soir", theme: "daily", subcat: "Time of day", course: "3.4" },
+  { en: "at night", fr: "la nuit", theme: "daily", subcat: "Time of day", course: "5.3" },
+  { en: "in the afternoon", fr: "l'après-midi", theme: "daily", subcat: "Time of day", course: "5.3" },
+  { en: "midday / noon", fr: "midi", theme: "daily", subcat: "Time of day", course: "5.3" },
+  { en: "midnight", fr: "minuit", theme: "daily", subcat: "Time of day", course: "5.3" },
+
+  // ===================== 4. WORKPLACE =====================
+  { en: "hospital", fr: "hôpital", theme: "workplace", subcat: "Workplaces", course: "3.4" },
+  { en: "kitchen", fr: "cuisine", theme: "workplace", subcat: "Workplaces", course: "3.4" },
+  { en: "office", fr: "bureau", theme: "workplace", subcat: "Workplaces", course: "3.4" },
+  { en: "restaurant", fr: "restaurant", theme: "workplace", subcat: "Workplaces", course: "3.4" },
+  { en: "school", fr: "école", theme: "workplace", subcat: "Workplaces", course: "3.4" },
+  { en: "shop", fr: "magasin", theme: "workplace", subcat: "Workplaces", course: "3.4" },
+  { en: "university", fr: "université", theme: "workplace", subcat: "Workplaces", course: "3.4" },
+  { en: "act", fr: "jouer (théâtre, cinéma)", theme: "workplace", subcat: "Work Verbs", course: "3.4" },
+  { en: "cook", fr: "cuisiner", theme: "workplace", subcat: "Work Verbs", course: "3.4" },
+  { en: "design", fr: "dessiner, concevoir", theme: "workplace", subcat: "Work Verbs", course: "3.4" },
+  { en: "wear", fr: "porter (des vêtements)", theme: "workplace", subcat: "Work Verbs", course: "3.4" },
+  { en: "work", fr: "travailler", theme: "workplace", subcat: "Work Verbs", course: "3.4" },
+  { en: "write", fr: "écrire", theme: "workplace", subcat: "Work Verbs", course: "3.4" },
+
+  // ===================== 5. HOME & HOUSING =====================
+  { en: "flat / apartment", fr: "appartement", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "pay the rent", fr: "payer le loyer", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "live with...", fr: "vivre avec quelqu'un", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "move in", fr: "emménager", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "flatmate", fr: "colocataire", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "dream house", fr: "maison de rêve", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "studio flat", fr: "studio", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "window", fr: "fenêtre", theme: "home", subcat: "Housing", course: "4.5" },
+  { en: "balcony", fr: "balcon", theme: "home", subcat: "Rooms", course: "4.5" },
+  { en: "bathroom", fr: "salle de bain", theme: "home", subcat: "Rooms", course: "4.5" },
+  { en: "bedroom", fr: "chambre", theme: "home", subcat: "Rooms", course: "4.5" },
+  { en: "dining room", fr: "salle à manger", theme: "home", subcat: "Rooms", course: "4.5" },
+  { en: "garden", fr: "jardin", theme: "home", subcat: "Rooms", course: "4.5" },
+  { en: "kitchen", fr: "cuisine", theme: "home", subcat: "Rooms", course: "4.5" },
+  { en: "living room / lounge", fr: "salon", theme: "home", subcat: "Rooms", course: "4.5" },
+  { en: "bath", fr: "baignoire", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "bed", fr: "lit", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "chair", fr: "chaise", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "coffee table", fr: "table basse", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "dishwasher", fr: "lave-vaisselle", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "DVD player", fr: "lecteur DVD", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "fridge / refrigerator", fr: "frigo / réfrigérateur", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "oven", fr: "four", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "pictures", fr: "cadres / photos", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "shower", fr: "douche", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "sofa / couch", fr: "canapé", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "table", fr: "table", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "wardrobe / closet", fr: "garde-robe / armoire", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "washing machine", fr: "machine à laver", theme: "home", subcat: "Furniture", course: "4.5" },
+  { en: "games room", fr: "salle de jeux", theme: "home", subcat: "Luxury", course: "4.5" },
+  { en: "home cinema", fr: "home-cinéma", theme: "home", subcat: "Luxury", course: "4.5" },
+  { en: "home gym", fr: "salle de sport à domicile", theme: "home", subcat: "Luxury", course: "4.5" },
+  { en: "jacuzzi", fr: "jacuzzi / spa", theme: "home", subcat: "Luxury", course: "4.5" },
+  { en: "swimming pool", fr: "piscine", theme: "home", subcat: "Luxury", course: "4.5" },
+  { en: "wide screen TV", fr: "TV grand écran", theme: "home", subcat: "Luxury", course: "4.5" },
+
+  // ===================== 6. TOWN & PLACES =====================
+  { en: "castle", fr: "château", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "pub", fr: "pub (bar)", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "club", fr: "discothèque / boîte de nuit", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "library", fr: "bibliothèque", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "shopping centre", fr: "centre commercial", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "market", fr: "marché", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "sports centre", fr: "complexe sportif", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "museum", fr: "musée", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "train station", fr: "gare", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "park", fr: "parc", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "city", fr: "grande ville", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "town", fr: "ville", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "village", fr: "village", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "countryside", fr: "campagne", theme: "town", subcat: "Places in Town", course: "4.1" },
+  { en: "big", fr: "grand(e)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "small", fr: "petit(e)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "boring", fr: "ennuyeux(se)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "interesting", fr: "intéressant(e)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "clean", fr: "propre", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "nice", fr: "joli(e) / sympa", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "old", fr: "vieux / vieille / historique", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "quiet", fr: "calme / silencieux(se)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "safe", fr: "sûr(e) / en sécurité", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "polluted", fr: "pollué(e)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "horrible", fr: "horrible / moche", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "modern", fr: "moderne", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "noisy", fr: "bruyant(e)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "dangerous", fr: "dangereux(se)", theme: "town", subcat: "Describing a Place", course: "4.1" },
+  { en: "beautiful", fr: "beau / belle / magnifique", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+  { en: "chaotic", fr: "chaotique", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+  { en: "crowded", fr: "bondé(e)", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+  { en: "cultural", fr: "culturel(le)", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+  { en: "historical", fr: "historique", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+  { en: "exciting", fr: "passionnant(e)", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+  { en: "dirty", fr: "sale", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+  { en: "ugly", fr: "laid(e)", theme: "town", subcat: "Describing a Place", course: "Focus 4.5" },
+
+  // ===================== 7. TRAVEL & AIRPORT =====================
+  { en: "airport", fr: "aéroport", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "customs control", fr: "douane", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "customs officer", fr: "douanier", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "departure lounge", fr: "salle d'embarquement", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "flight", fr: "vol", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "passport", fr: "passeport", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "documents", fr: "papiers d'identité", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "international", fr: "international(e)", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "arrest", fr: "arrêter", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "criminal", fr: "criminel(le)", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "dangerous", fr: "dangereux(se)", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "reward", fr: "récompense", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "wanted", fr: "recherché", theme: "travel", subcat: "Airport", course: "4.2" },
+  { en: "adventure holiday", fr: "vacances aventure", theme: "travel", subcat: "Holidays", course: "4.3" },
+  { en: "sightseeing holiday", fr: "vacances touristiques", theme: "travel", subcat: "Holidays", course: "4.3" },
+  { en: "beach holiday", fr: "vacances à la plage", theme: "travel", subcat: "Holidays", course: "4.3" },
+  { en: "summer holiday", fr: "vacances d'été", theme: "travel", subcat: "Holidays", course: "4.3" },
+  { en: "city break", fr: "séjour de 2-3 jours en ville", theme: "travel", subcat: "Holidays", course: "4.3" },
+  { en: "winter holiday", fr: "vacances d'hiver", theme: "travel", subcat: "Holidays", course: "4.3" },
+  { en: "mountain holiday", fr: "vacances à la montagne", theme: "travel", subcat: "Holidays", course: "4.3" },
+  { en: "camping", fr: "faire du camping / camper", theme: "travel", subcat: "Activities", course: "4.3" },
+  { en: "climbing", fr: "faire de l'escalade", theme: "travel", subcat: "Activities", course: "4.3" },
+  { en: "sailing", fr: "faire de la voile", theme: "travel", subcat: "Activities", course: "4.3" },
+  { en: "sightseeing", fr: "faire du tourisme", theme: "travel", subcat: "Activities", course: "4.3" },
+  { en: "skiing", fr: "skier", theme: "travel", subcat: "Activities", course: "4.3" },
+  { en: "sunbathing", fr: "prendre le soleil / bronzer", theme: "travel", subcat: "Activities", course: "4.3" },
+  { en: "surfing", fr: "faire du surf / surfer", theme: "travel", subcat: "Activities", course: "4.3" },
+  { en: "jetskiing", fr: "faire du jet-ski", theme: "travel", subcat: "Activities", course: "3.5" },
+  { en: "shopping", fr: "faire du shopping", theme: "travel", subcat: "Activities", course: "3.5" },
+
+  // ===================== 8. WEATHER & SEASONS =====================
+  { en: "cloudy", fr: "nuageux(se)", theme: "weather", subcat: "Weather", course: "3.5" },
+  { en: "foggy", fr: "brumeux(se)", theme: "weather", subcat: "Weather", course: "3.5" },
+  { en: "rainy", fr: "pluvieux(se)", theme: "weather", subcat: "Weather", course: "3.5" },
+  { en: "snowy", fr: "neigeux(se)", theme: "weather", subcat: "Weather", course: "3.5" },
+  { en: "stormy", fr: "orageux(se)", theme: "weather", subcat: "Weather", course: "3.5" },
+  { en: "sunny", fr: "ensoleillé(e)", theme: "weather", subcat: "Weather", course: "3.5" },
+  { en: "windy", fr: "venteux(se)", theme: "weather", subcat: "Weather", course: "3.5" },
+  { en: "boiling", fr: "très chaud / bouillant", theme: "weather", subcat: "Temperature", course: "3.5" },
+  { en: "hot", fr: "chaud", theme: "weather", subcat: "Temperature", course: "3.5" },
+  { en: "warm", fr: "tiède / pas très froid", theme: "weather", subcat: "Temperature", course: "3.5" },
+  { en: "cool", fr: "frais", theme: "weather", subcat: "Temperature", course: "3.5" },
+  { en: "cold", fr: "froid", theme: "weather", subcat: "Temperature", course: "3.5" },
+  { en: "freezing", fr: "très froid / gelé", theme: "weather", subcat: "Temperature", course: "3.5" },
+  { en: "spring", fr: "printemps", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "summer", fr: "été", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "autumn / fall", fr: "automne", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "winter", fr: "hiver", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "season", fr: "saison", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "month", fr: "mois", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "January", fr: "janvier", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "February", fr: "février", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "March", fr: "mars", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "April", fr: "avril", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "May", fr: "mai", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "June", fr: "juin", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "July", fr: "juillet", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "August", fr: "août", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "September", fr: "septembre", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "October", fr: "octobre", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "November", fr: "novembre", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+  { en: "December", fr: "décembre", theme: "weather", subcat: "Seasons & Months", course: "3.5" },
+
+  // ===================== 9. FOOD & DRINKS =====================
+  { en: "apple", fr: "pomme", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "banana", fr: "banane", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "grape", fr: "raisin", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "melon", fr: "melon", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "orange", fr: "orange", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "strawberry", fr: "fraise", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "beans", fr: "haricots verts", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "carrot", fr: "carotte", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "mushroom", fr: "champignon", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "potato", fr: "pomme de terre", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "salad", fr: "salade", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "tomato", fr: "tomate", theme: "food", subcat: "Fruit & Vegetables", course: "5.4" },
+  { en: "meat", fr: "viande", theme: "food", subcat: "Meat & Fish", course: "5.4" },
+  { en: "fish", fr: "poisson", theme: "food", subcat: "Meat & Fish", course: "5.4" },
+  { en: "hamburger", fr: "hamburger", theme: "food", subcat: "Meat & Fish", course: "5.4" },
+  { en: "sausage", fr: "saucisse", theme: "food", subcat: "Meat & Fish", course: "5.4" },
+  { en: "chicken", fr: "poulet", theme: "food", subcat: "Meat & Fish", course: "4.3" },
+  { en: "butter", fr: "beurre", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "bread", fr: "pain", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "cheese", fr: "fromage", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "chocolate", fr: "chocolat", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "cereal", fr: "céréales", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "egg", fr: "œuf", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "milk", fr: "lait", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "oil", fr: "huile", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "pasta", fr: "pâtes", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "rice", fr: "riz", theme: "food", subcat: "Staples", course: "5.4" },
+  { en: "casserole", fr: "ragoût / daube", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "green beans", fr: "haricots verts", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "chips", fr: "frites", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "chocolate cake", fr: "gâteau au chocolat", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "prawn cocktail", fr: "cocktail de crevettes", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "fruit salad", fr: "salade de fruits", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "grilled fish", fr: "poisson grillé", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "tuna salad", fr: "salade de thon", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "tomato soup", fr: "soupe de tomate", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "grilled vegetables", fr: "légumes grillés", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "ice cream", fr: "glace", theme: "food", subcat: "Dishes", course: "4.3" },
+  { en: "coke", fr: "coca(-cola)", theme: "food", subcat: "Drinks", course: "5.4" },
+  { en: "coffee", fr: "café", theme: "food", subcat: "Drinks", course: "5.4" },
+  { en: "beer", fr: "bière", theme: "food", subcat: "Drinks", course: "5.4" },
+  { en: "water", fr: "eau", theme: "food", subcat: "Drinks", course: "5.4" },
+  { en: "wine", fr: "vin", theme: "food", subcat: "Drinks", course: "5.4" },
+  { en: "orange juice", fr: "jus d'orange", theme: "food", subcat: "Drinks", course: "5.4" },
+  { en: "apple juice", fr: "jus de pomme", theme: "food", subcat: "Drinks", course: "5.4" },
+  { en: "red wine", fr: "vin rouge", theme: "food", subcat: "Drinks", course: "4.3" },
+  { en: "white wine", fr: "vin blanc", theme: "food", subcat: "Drinks", course: "4.3" },
+  { en: "hot chocolate", fr: "chocolat chaud", theme: "food", subcat: "Drinks", course: "4.3" },
+  { en: "iced tea", fr: "thé glacé", theme: "food", subcat: "Drinks", course: "4.3" },
+  { en: "fruit juice", fr: "jus de fruits", theme: "food", subcat: "Drinks", course: "4.3" },
+  { en: "a loaf of bread", fr: "une miche de pain", theme: "food", subcat: "Quantities", course: "5.4" },
+  { en: "a bottle of wine", fr: "une bouteille de vin", theme: "food", subcat: "Quantities", course: "5.4" },
+  { en: "a can of coke", fr: "une canette de coca", theme: "food", subcat: "Quantities", course: "5.4" },
+  { en: "a piece of...", fr: "un morceau de...", theme: "food", subcat: "Quantities", course: "5.4" },
+  { en: "a litre of water", fr: "un litre d'eau", theme: "food", subcat: "Quantities", course: "5.4" },
+
+  // ===================== 10. FASHION & CLOTHES =====================
+  { en: "boots", fr: "bottes", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "coat", fr: "manteau", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "jacket", fr: "veste", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "sunglasses", fr: "lunettes de soleil", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "scarf", fr: "écharpe", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "shirt", fr: "chemise", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "sandals", fr: "sandales", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "t-shirt", fr: "t-shirt", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "top", fr: "haut", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "shoes", fr: "chaussures", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "ripped jeans", fr: "jean déchiré", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "trousers / pants", fr: "pantalon", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "blouse", fr: "chemisier", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "shorts", fr: "short", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "skirt", fr: "jupe", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "gloves", fr: "gants", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "tie", fr: "cravate", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "belt", fr: "ceinture", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "hat", fr: "chapeau", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "suit", fr: "costume", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "dress", fr: "robe", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "trainers / sneakers", fr: "baskets", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "jumper / sweater", fr: "pull-over", theme: "fashion", subcat: "Clothes", course: "5.2" },
+  { en: "a sporty look", fr: "un look sportif", theme: "fashion", subcat: "Styles", course: "5.2" },
+  { en: "a smart look", fr: "un look élégant", theme: "fashion", subcat: "Styles", course: "5.2" },
+  { en: "an elegant look", fr: "un look élégant / chic", theme: "fashion", subcat: "Styles", course: "5.2" },
+  { en: "a glamorous look", fr: "un look glamour", theme: "fashion", subcat: "Styles", course: "5.2" },
+  { en: "a casual look", fr: "un look décontracté", theme: "fashion", subcat: "Styles", course: "5.2" },
+  { en: "fashionable", fr: "à la mode", theme: "fashion", subcat: "Styles", course: "5.2" },
+  { en: "unfashionable", fr: "démodé(e) / pas à la mode", theme: "fashion", subcat: "Styles", course: "5.2" },
+  { en: "make up", fr: "maquillage", theme: "fashion", subcat: "Accessories", course: "5.5" },
+  { en: "earrings", fr: "boucles d'oreilles", theme: "fashion", subcat: "Accessories", course: "5.5" },
+  { en: "tattoo", fr: "tatouage", theme: "fashion", subcat: "Accessories", course: "5.5" },
+
+  // ===================== 11. GRAMMAR WORDS =====================
+  { en: "big", fr: "grand(e)", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "small", fr: "petit(e)", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "beautiful", fr: "beau / belle", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "ugly", fr: "laid(e) / moche", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "new", fr: "nouveau / nouvelle", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "fast", fr: "rapide", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "slow", fr: "lent(e)", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "expensive", fr: "cher / chère / coûteux", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "cheap", fr: "bon marché / pas cher", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "good", fr: "bien / bon(ne)", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "pretty / nice", fr: "joli(e) / belle", theme: "grammar", subcat: "Adjectives", course: "3.2" },
+  { en: "very", fr: "très", theme: "grammar", subcat: "Modifiers", course: "4.4" },
+  { en: "quite", fr: "assez / plutôt", theme: "grammar", subcat: "Modifiers", course: "4.4" },
+  { en: "too", fr: "trop", theme: "grammar", subcat: "Modifiers", course: "4.4" },
+  { en: "angrily", fr: "furieusement / avec colère", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "badly", fr: "mal", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "calmly", fr: "calmement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "carefully", fr: "prudemment / attentivement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "dangerously", fr: "dangereusement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "fast", fr: "rapidement / vite", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "happily", fr: "joyeusement / gaiement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "high", fr: "haut", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "loudly", fr: "fort", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "lovingly", fr: "tendrement / amoureusement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "quietly", fr: "doucement / silencieusement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "sadly", fr: "tristement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "slowly", fr: "lentement / doucement", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "well", fr: "bien", theme: "grammar", subcat: "Adverbs", course: "5.1" },
+  { en: "advice", fr: "conseil(s)", theme: "grammar", subcat: "Uncountables", course: "5.4" },
+  { en: "equipment", fr: "matériel", theme: "grammar", subcat: "Uncountables", course: "5.4" },
+  { en: "furniture", fr: "meuble(s)", theme: "grammar", subcat: "Uncountables", course: "5.4" },
+  { en: "information", fr: "information(s)", theme: "grammar", subcat: "Uncountables", course: "5.4" },
+  { en: "money", fr: "argent", theme: "grammar", subcat: "Uncountables", course: "5.4" },
+  { en: "news", fr: "nouvelle(s) / info(s)", theme: "grammar", subcat: "Uncountables", course: "5.4" },
+  { en: "paper", fr: "papier", theme: "grammar", subcat: "Uncountables", course: "5.4" },
+  { en: "who?", fr: "qui ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "what?", fr: "quoi ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "why?", fr: "pourquoi ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "where?", fr: "où ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "when?", fr: "quand ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "which?", fr: "quel(le) ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "how?", fr: "comment ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "how often?", fr: "combien de fois ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "how much?", fr: "combien ? (quantité)", theme: "grammar", subcat: "Question Words", course: "4.3" },
+  { en: "what time?", fr: "à quelle heure ?", theme: "grammar", subcat: "Question Words", course: "4.3" },
+
+  // ===================== 12. POSSESSIONS =====================
+  { en: "apartment", fr: "appartement", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "bicycle", fr: "vélo", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "boat", fr: "bateau", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "car", fr: "voiture", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "cellphone", fr: "téléphone portable", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "dog", fr: "chien", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "house", fr: "maison", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "television", fr: "télévision", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "watch", fr: "montre", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "motorbike", fr: "moto", theme: "possessions", subcat: "Objects", course: "3.2" },
+  { en: "horse", fr: "cheval", theme: "possessions", subcat: "Objects", course: "5.5" },
+  { en: "factory", fr: "usine", theme: "possessions", subcat: "Objects", course: "5.5" },
+  { en: "skyscraper", fr: "gratte-ciel", theme: "possessions", subcat: "Objects", course: "5.5" },
+  { en: "air conditioning", fr: "climatisation", theme: "possessions", subcat: "Objects", course: "5.5" },
+
+  // ===================== 13. COUNTRIES & NATIONALITIES =====================
+  { en: "Argentina / Argentinian", fr: "Argentine / argentin(e)", theme: "countries", subcat: "Countries & Nationalities", course: "3.1" },
+  { en: "Australia / Australian", fr: "Australie / australien(ne)", theme: "countries", subcat: "Countries & Nationalities", course: "3.1" },
+  { en: "Germany / German", fr: "Allemagne / allemand(e)", theme: "countries", subcat: "Countries & Nationalities", course: "3.1" },
+  { en: "Italy / Italian", fr: "Italie / italien(ne)", theme: "countries", subcat: "Countries & Nationalities", course: "3.1" },
+  { en: "Spain / Spanish", fr: "Espagne / espagnol(e)", theme: "countries", subcat: "Countries & Nationalities", course: "3.1" },
+  { en: "the U.K. / British", fr: "Royaume-Uni / britannique", theme: "countries", subcat: "Countries & Nationalities", course: "3.1" },
+  { en: "the U.S. / American", fr: "États-Unis / américain(e)", theme: "countries", subcat: "Countries & Nationalities", course: "3.1" },
+  { en: "France / French", fr: "France / français(e)", theme: "countries", subcat: "Countries & Nationalities", course: "5.5" },
+  { en: "Poland / Polish", fr: "Pologne / polonais(e)", theme: "countries", subcat: "Countries & Nationalities", course: "5.5" },
+  { en: "Sweden / Swedish", fr: "Suède / suédois(e)", theme: "countries", subcat: "Countries & Nationalities", course: "5.5" },
+
+  // ===================== 14. VERBS (REALITY ISLAND + GENERAL) =====================
+  { en: "build", fr: "construire", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "do yoga", fr: "faire du yoga", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "drink", fr: "boire", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "eat", fr: "manger", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "fight", fr: "se battre / se disputer", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "fish", fr: "pêcher", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "happen", fr: "se passer / se produire", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "have fun", fr: "s'amuser", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "jump", fr: "sauter", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "look (for)", fr: "chercher", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "phone", fr: "téléphoner / appeler", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "ride", fr: "monter à / faire de", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "sing", fr: "chanter", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "wash", fr: "(se) laver", theme: "verbs", subcat: "Action Verbs", course: "5.1" },
+  { en: "have breakfast / lunch / dinner", fr: "prendre le petit-déj / déjeuner / dîner", theme: "verbs", subcat: "Have Expressions", course: "3.2" },
+  { en: "have a party", fr: "faire une fête", theme: "verbs", subcat: "Have Expressions", course: "3.2" },
+  { en: "have a break", fr: "faire une pause", theme: "verbs", subcat: "Have Expressions", course: "3.2" },
+  { en: "have a coffee", fr: "prendre un café", theme: "verbs", subcat: "Have Expressions", course: "3.2" },
+  { en: "have a shower", fr: "prendre une douche", theme: "verbs", subcat: "Have Expressions", course: "3.2" },
+];
+
+const THEMES = {
+  people:       { label: "People & Identity",       icon: "👤" },
+  personality:  { label: "Personality & Appearance", icon: "💬" },
+  daily:        { label: "Daily Life & Routine",     icon: "📅" },
+  workplace:    { label: "Workplace",                icon: "💼" },
+  home:         { label: "Home & Housing",           icon: "🏠" },
+  town:         { label: "Town & Places",            icon: "🏙️" },
+  travel:       { label: "Travel & Holidays",        icon: "✈️" },
+  weather:      { label: "Weather & Seasons",        icon: "🌦️" },
+  food:         { label: "Food & Drinks",            icon: "🍽️" },
+  fashion:      { label: "Fashion & Clothes",        icon: "👗" },
+  grammar:      { label: "Grammar Words",            icon: "📝" },
+  possessions:  { label: "Possessions & Objects",   icon: "🎁" },
+  countries:    { label: "Countries & Nationalities",icon: "🌍" },
+  verbs:        { label: "Key Verbs",                icon: "⚡" },
+};
+
+let hideMode = false;
+
+function toggleHideMode() {
+  hideMode = !hideMode;
+  const btn = document.getElementById('btn-hide');
+  const bar = document.getElementById('hide-bar');
+  const btnReveal = document.getElementById('btn-reveal-all');
+
+  if (hideMode) {
+    btn.textContent = '👁 Show English';
+    btn.classList.add('active');
+    bar.classList.add('visible');
+    btnReveal.style.display = 'inline-block';
+    document.querySelectorAll('.en').forEach(el => {
+      el.classList.add('hidden');
+      el.title = 'Click to reveal';
+    });
+  } else {
+    btn.textContent = '👁 Hide English';
+    btn.classList.remove('active');
+    bar.classList.remove('visible');
+    btnReveal.style.display = 'none';
+    document.querySelectorAll('.en').forEach(el => {
+      el.classList.remove('hidden');
+      el.title = '';
+    });
+  }
+}
+
+function revealAll() {
+  document.querySelectorAll('.en.hidden').forEach(el => {
+    el.classList.remove('hidden');
+    el.title = '';
+  });
+}
+
+function toggleWord(el) {
+  if (el.classList.contains('hidden')) {
+    el.classList.remove('hidden');
+    el.title = '';
+  }
+}
+
+function filterVocab() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const course = document.getElementById('filter-course').value;
+  let count = 0;
+
+  document.querySelectorAll('.vocab-card').forEach(card => {
+    const en = card.dataset.en;
+    const fr = card.dataset.fr;
+    const c = card.dataset.course;
+    const matchSearch = !search || en.includes(search) || fr.includes(search);
+    const matchCourse = !course || c === course;
+    const visible = matchSearch && matchCourse;
+    card.style.display = visible ? '' : 'none';
+    if (visible) count++;
+  });
+
+  document.getElementById('shown-count').textContent = count;
+
+  document.querySelectorAll('.subcat').forEach(s => {
+    const any = Array.from(s.querySelectorAll('.vocab-card')).some(c => c.style.display !== 'none');
+    s.style.display = any ? '' : 'none';
+  });
+
+  document.querySelectorAll('.theme-section').forEach(s => {
+    const any = Array.from(s.querySelectorAll('.vocab-card')).some(c => c.style.display !== 'none');
+    s.style.display = any ? '' : 'none';
+  });
+
+  const hasResults = count > 0;
+  let noRes = document.getElementById('no-results');
+  if (!hasResults && !noRes) {
+    noRes = document.createElement('div');
+    noRes.id = 'no-results';
+    noRes.className = 'no-results';
+    noRes.textContent = 'No words found. Try a different search.';
+    document.getElementById('glossary').appendChild(noRes);
+  } else if (hasResults && noRes) {
+    noRes.remove();
+  }
+}
+
+function buildGlossary() {
+  const nav = document.getElementById('theme-nav');
+  const glossary = document.getElementById('glossary');
+
+  let totalWords = VOCAB.length;
+  document.getElementById('total-count').textContent = `— ${totalWords} words`;
+  document.getElementById('shown-count').textContent = totalWords;
+
+  Object.entries(THEMES).forEach(([themeKey, themeInfo]) => {
+    const themeWords = VOCAB.filter(w => w.theme === themeKey);
+    if (themeWords.length === 0) return;
+
+    const pill = document.createElement('a');
+    pill.className = 'theme-pill';
+    pill.href = `#theme-${themeKey}`;
+    pill.textContent = `${themeInfo.icon} ${themeInfo.label}`;
+    nav.appendChild(pill);
+
+    const section = document.createElement('div');
+    section.className = 'theme-section';
+    section.id = `theme-${themeKey}`;
+
+    const header = document.createElement('div');
+    header.className = 'theme-header';
+    header.innerHTML = `
+      <span class="theme-icon">${themeInfo.icon}</span>
+      <span class="theme-title">${themeInfo.label}</span>
+      <span class="theme-count">${themeWords.length} words</span>
+    `;
+    section.appendChild(header);
+
+    const subcats = [...new Set(themeWords.map(w => w.subcat))];
+
+    subcats.forEach(subcatName => {
+      const words = themeWords.filter(w => w.subcat === subcatName);
+      const subcatDiv = document.createElement('div');
+      subcatDiv.className = 'subcat';
+
+      subcatDiv.innerHTML = `<div class="subcat-title">${subcatName}</div>`;
+
+      const grid = document.createElement('div');
+      grid.className = 'vocab-grid';
+
+      words.forEach(word => {
+        const card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.dataset.en = word.en.toLowerCase();
+        card.dataset.fr = word.fr.toLowerCase();
+        card.dataset.course = word.course;
+        card.innerHTML = `
+          <span class="fr">${word.fr}</span>
+          <span class="en" onclick="toggleWord(this)" title="">${word.en}</span>
+          <span class="course-tag">${word.course}</span>
+        `;
+        grid.appendChild(card);
+      });
+
+      subcatDiv.appendChild(grid);
+      section.appendChild(subcatDiv);
+    });
+
+    glossary.appendChild(section);
+  });
+}
+
+buildGlossary();
+</script>
+</body>
+</html>
