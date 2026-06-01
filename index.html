@@ -3,87 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English — Mon Univers</title>
+<title>English — Mes Outils</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#1a1c2e; --paper:#f4f1ea; --line:#dcd6ca;
-    --sport:#e85d3d; --english:#2b7a78; --mtc:#9a8c98;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{
-    font-family:system-ui,-apple-system,sans-serif; background:var(--paper); color:var(--ink);
-    min-height:100vh; display:flex; flex-direction:column; align-items:center;
-    padding:32px 18px;
-    background-image:radial-gradient(circle at 15% 10%, rgba(232,93,61,.08), transparent 40%),
-                     radial-gradient(circle at 85% 90%, rgba(43,122,120,.08), transparent 42%);
-  }
-  .back{align-self:flex-start;margin-bottom:8px;font-size:.85rem;color:var(--ink);opacity:.6;text-decoration:none}
-  .back:hover{opacity:1}
-  header{text-align:center; margin:24px 0 36px}
-  header h1{font-family:Georgia,serif; font-size:1.9rem; letter-spacing:.5px}
-  header p{font-size:.8rem; opacity:.6; margin-top:8px; letter-spacing:2px; text-transform:uppercase}
-  .grid{width:100%; max-width:440px; display:flex; flex-direction:column; gap:16px}
-  .card{
-    display:block; text-decoration:none; color:inherit; position:relative;
-    background:#fff; border:1.5px solid var(--line); border-radius:20px;
-    padding:26px 22px; transition:transform .12s, box-shadow .2s;
-    box-shadow:0 6px 18px rgba(26,28,46,.06); overflow:hidden;
-  }
-  .card:active{transform:scale(.98)}
-  .card .accent{position:absolute; left:0; top:0; bottom:0; width:6px}
-  .card.sport .accent{background:var(--sport)}
-  .card.english .accent{background:var(--english)}
-  .card.mtc .accent{background:var(--mtc)}
-  .card .emoji{font-size:2.2rem; margin-bottom:10px; display:block}
-  .card h2{font-family:Georgia,serif; font-size:1.4rem; margin-bottom:4px}
-  .card .desc{font-size:.85rem; opacity:.65; line-height:1.5}
-  .card .arrow{position:absolute; right:22px; top:50%; transform:translateY(-50%); font-size:1.3rem; opacity:.4}
-  .card.disabled{opacity:.55; cursor:not-allowed; box-shadow:none}
-  .card.disabled .arrow{display:none}
-  .badge{
-    position:absolute; right:20px; top:20px; font-size:.62rem; font-weight:700;
-    text-transform:uppercase; letter-spacing:1px; background:var(--mtc); color:#fff;
-    padding:4px 9px; border-radius:20px;
-  }
-  footer{margin-top:auto; padding-top:32px; font-size:.66rem; opacity:.4; text-align:center}
+:root{
+  --bg:#0d0d0f; --surf:#141416; --surf2:#1c1c20; --bdr:#2a2a30;
+  --acc:#e8ff47; --acc2:#ff6b35; --warn:#ff9500; --txt:#f0f0f0;
+  --mut:#6b6b78; --grn:#4ade80; --red:#f87171; --purp:#a78bfa; --blue:#38bdf8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+body{display:flex;flex-direction:column;align-items:center;padding:30px 20px 60px;
+  background:radial-gradient(circle at 30% 0%,rgba(56,189,248,.06),transparent 50%),
+             radial-gradient(circle at 80% 100%,rgba(232,255,71,.05),transparent 50%),var(--bg)}
+
+.back{align-self:flex-start;font-size:12px;color:var(--mut);text-decoration:none;letter-spacing:1px;margin-bottom:30px;padding:6px 10px;border-radius:6px;border:1px solid transparent;transition:.2s}
+.back:hover{color:var(--acc);border-color:var(--bdr)}
+
+header{text-align:center;margin:20px 0 50px;animation:fadeIn .6s ease}
+.hello{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,64px);letter-spacing:4px;line-height:1;color:var(--txt)}
+h1 .accent{color:var(--blue)}
+.subtitle{font-size:14px;color:var(--mut);margin-top:14px;max-width:520px;line-height:1.5}
+
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;max-width:760px;width:100%}
+.tool-card{position:relative;background:var(--surf);border:1px solid var(--bdr);border-left:4px solid var(--accent-color);border-radius:12px;padding:24px;text-decoration:none;color:inherit;transition:.25s;display:flex;flex-direction:column;gap:12px;animation:fadeUp .5s ease backwards}
+.tool-card:nth-child(1){animation-delay:.1s}
+.tool-card:nth-child(2){animation-delay:.2s}
+.tool-card:hover{border-color:var(--accent-color);transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+
+.tool-card.c1{--accent-color:var(--blue)}
+.tool-card.c2{--accent-color:var(--acc2)}
+
+.t-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.t-icon{font-size:30px;line-height:1}
+.t-tag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-color);padding:3px 9px;border:1px solid var(--accent-color);border-radius:10px;background:rgba(255,255,255,.02)}
+.t-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--txt);line-height:1.1}
+.t-desc{font-size:13px;color:var(--mut);line-height:1.5;flex:1}
+.t-foot{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--mut)}
+.t-arrow{color:var(--accent-color);font-size:18px;transition:.2s}
+.tool-card:hover .t-arrow{transform:translateX(4px)}
+
+footer{margin-top:60px;font-size:11px;color:var(--mut);letter-spacing:1px;text-align:center}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+@media (max-width:600px){
+  body{padding:24px 16px 40px}
+  header{margin-bottom:36px}
+  h1{font-size:38px;letter-spacing:2px}
+  .tool-card{padding:20px}
+}
 </style>
 </head>
 <body>
-  <a class="back" href="https://skeunou.github.io/">← Mes Univers</a>
 
-  <header>
-    <h1>English</h1>
-    <p>Mon apprentissage</p>
-  </header>
+<a class="back" href="https://skeunou.github.io/">← MES UNIVERS</a>
 
-  <div class="grid">
+<header>
+  <div class="hello">Mon apprentissage</div>
+  <h1>ENGLISH <span class="accent">TOOLS</span></h1>
+  <div class="subtitle">Mes outils pour apprendre et entretenir l'anglais.</div>
+</header>
 
-    <a class="card sport" href="https://skeunou.github.io/lv-tools/">
-      <span class="accent"></span>
-      <span class="emoji">🏋️</span>
-      <h2>LV TOOL</h2>
-      <div class="desc">Mes outils de sport et d'entraînement</div>
-      <span class="arrow">→</span>
-    </a>
+<main class="tools">
 
-    <a class="card english" href="https://skeunou.github.io/english/">
-      <span class="accent"></span>
-      <span class="emoji">🎙️</span>
-      <h2>English</h2>
-      <div class="desc">Mon apprentissage de l'anglais — coach vocal & vocabulaire</div>
-      <span class="arrow">→</span>
-    </a>
-
-    <div class="card mtc disabled">
-      <span class="accent"></span>
-      <span class="badge">Bientôt</span>
-      <span class="emoji">🌿</span>
-      <h2>MTC</h2>
-      <div class="desc">Médecine Traditionnelle Chinoise — cours à venir</div>
+  <a href="vocabulary/" class="tool-card c1">
+    <div class="t-head">
+      <div class="t-icon">📚</div>
+      <div class="t-tag">Lexique</div>
     </div>
+    <div class="t-name">VOCABULAIRE</div>
+    <div class="t-desc">Mon glossaire personnel — mots, expressions, traductions et révisions.</div>
+    <div class="t-foot">
+      <span>Glossaire</span>
+      <span class="t-arrow">→</span>
+    </div>
+  </a>
 
-  </div>
+  <a href="coach/" class="tool-card c2">
+    <div class="t-head">
+      <div class="t-icon">🎙️</div>
+      <div class="t-tag">Oral</div>
+    </div>
+    <div class="t-name">COACH VOCAL</div>
+    <div class="t-desc">Interrogation orale interactive — prononciation et compréhension.</div>
+    <div class="t-foot">
+      <span>Voice Coach</span>
+      <span class="t-arrow">→</span>
+    </div>
+  </a>
 
-  <footer>Portail personnel</footer>
+</main>
+
+<footer>Construit sur mesure · Données locales · Aucune pub</footer>
+
 </body>
 </html>
