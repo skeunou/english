@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Room — English Thrillers (A2–B1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c; --paper:#f3ecdd; --paper2:#ece3d0; --text:#1d2026;
+    --muted:#736a58; --line:#d8cdb6; --amber:#c9772a;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#15181d;--paper2:#1b1f25;--text:#d9d2c2;--muted:#8c8472;--line:#2c313a;--amber:#e0944a;}
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--text);font-family:'Lora',Georgia,serif;}
+  header{
+    background:var(--ink);color:#efe7d6;padding:3.4rem 1.5rem 2.8rem;position:relative;overflow:hidden;
+  }
+  header::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(900px 300px at 80% -10%, rgba(201,119,42,.20), transparent 60%);}
+  header .kick{position:relative;font-family:'Oswald',sans-serif;letter-spacing:.4em;text-transform:uppercase;
+    font-size:.72rem;color:var(--amber);margin-bottom:1rem;}
+  header h1{position:relative;font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:clamp(2.6rem,11vw,4.4rem);line-height:.95;margin:0;letter-spacing:.01em;}
+  header p{position:relative;margin:1.2rem 0 0;max-width:34ch;color:#cabf9f;line-height:1.6;font-size:1.02rem;}
+  main{max-width:46rem;margin:0 auto;padding:2.4rem 1.2rem 4rem;}
+  .shelf{display:grid;gap:1.4rem;}
+  .book{
+    display:block;text-decoration:none;color:inherit;
+    background:var(--paper2);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    transition:transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .book:hover{transform:translateY(-3px);border-color:var(--amber);box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  .book .top{display:flex;align-items:stretch;gap:0;}
+  .book .spine{width:8px;flex:none;}
+  .book .pad{padding:1.3rem 1.4rem;flex:1;}
+  .book .label{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:.68rem;}
+  .book h2{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:1.55rem;
+    margin:.4rem 0 .5rem;line-height:1.05;}
+  .book p{margin:0 0 .9rem;color:var(--muted);line-height:1.55;font-size:.98rem;}
+  .book .meta{font-family:'Oswald',sans-serif;letter-spacing:.08em;font-size:.72rem;color:var(--muted);text-transform:uppercase;}
+  .book .go{display:inline-block;margin-top:.9rem;font-family:'Oswald',sans-serif;letter-spacing:.1em;
+    text-transform:uppercase;font-size:.74rem;color:var(--amber);}
+  .tipbar{margin:2.4rem 0 0;background:var(--paper2);border-left:3px solid var(--amber);border-radius:0 12px 12px 0;
+    padding:1.1rem 1.2rem;}
+  .tipbar h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.9rem;margin:0 0 .5rem;}
+  .tipbar p{margin:0;line-height:1.65;font-size:1rem;}
+  footer{max-width:46rem;margin:0 auto;padding:0 1.2rem 3rem;color:var(--muted);font-size:.86rem;text-align:center;}
+</style>
+</head>
+<body>
+<header>
+  <div class="kick">My English · Reading Room</div>
+  <h1>Thrillers<br>for Learners</h1>
+  <p>Three full stories at your level (A2–B1). Tap any <strong>bold word</strong> to see the French, change the text size, and read in night mode. Perfect for the holidays.</p>
+</header>
+
+<main>
+  <div class="shelf">
+
+    <a class="book" href="the-grey-suitcase.html">
+      <div class="top">
+        <div class="spine" style="background:#c9772a;"></div>
+        <div class="pad">
+          <div class="label" style="color:#c9772a;">Mystery · Suspense</div>
+          <h2>The Grey Suitcase</h2>
+          <p>An ordinary man takes the 8:15 train. A frightened stranger gives him a suitcase — and runs. Fake police, a hidden truth, and one clever question.</p>
+          <div class="meta">10 chapters · ~40 pages</div>
+          <span class="go">Read now →</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="book" href="the-finish-line.html">
+      <div class="top">
+        <div class="spine" style="background:#d8472f;"></div>
+        <div class="pad">
+          <div class="label" style="color:#d8472f;">Sport · Doping</div>
+          <h2>The Finish Line</h2>
+          <p>Mia runs to win. Then a man offers her money to lose, and the favourite collapses on the track. A thriller from the world of running and the gym.</p>
+          <div class="meta">13 chapters · ~50 pages · sport vocabulary</div>
+          <span class="go" style="color:#d8472f;">Read now →</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="book" href="night-shift.html">
+      <div class="top">
+        <div class="spine" style="background:#1d8f86;"></div>
+        <div class="pad">
+          <div class="label" style="color:#1d8f86;">Medical · Mystery</div>
+          <h2>Night Shift</h2>
+          <p>On Ward 7, the recovering patients keep dying in the night. Nurse Nora is the only one who notices — and the only one nobody believes. Hospital vocabulary throughout.</p>
+          <div class="meta">13 chapters · ~50 pages · nursing vocabulary</div>
+          <span class="go" style="color:#1d8f86;">Read now →</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="tipbar">
+    <h3>How to read these 📖</h3>
+    <p>Don't translate every word! Read for the story and guess unknown words from context. If a word really blocks you, tap it for the French. The goal is to read a lot, easily, and enjoy it — that's how vocabulary truly sticks.</p>
+  </div>
+</main>
+
+<footer>
+  Made for Laurent · English reading practice · Happy holidays 🌴
+</footer>
+</body>
+</html>
