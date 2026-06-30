@@ -386,6 +386,7 @@
       <option value="5.3">5.3 Future Plans</option>
       <option value="5.4">5.4 Party Time</option>
       <option value="5.5">5.5 Famous Lives</option>
+      <option value="Focus 4.5">⭐ Focus 4-5 (Révisions)</option>
     </select>
     <button class="btn" id="btn-hide" onclick="toggleHideMode()">👁 Hide English</button>
     <button class="btn" id="btn-reveal-all" onclick="revealAll()" style="display:none">✅ Reveal all</button>
@@ -934,7 +935,55 @@ const VOCAB = [
   // --- Corps & Santé ---
   { en: "heart beats", fr: "battements de cœur", theme: "people", subcat: "Body & Health", course: "Perso" },
   { en: "heart rate", fr: "rythme cardiaque", theme: "people", subcat: "Body & Health", course: "Perso" },
-];
+
+  // ===================== FOCUS 4-5 (Révisions) =====================
+  { en: "bar", fr: "bar", theme: "town", subcat: "Places", course: "Focus 4.5" },
+  { en: "football", fr: "le football", theme: "daily", subcat: "Sports & Activities", course: "Focus 4.5" },
+  { en: "swimming", fr: "la natation", theme: "daily", subcat: "Sports & Activities", course: "Focus 4.5" },
+  { en: "yoga", fr: "le yoga", theme: "daily", subcat: "Sports & Activities", course: "Focus 4.5" },
+  { en: "tennis", fr: "le tennis", theme: "daily", subcat: "Sports & Activities", course: "Focus 4.5" },
+  { en: "ice-skating", fr: "le patinage sur glace", theme: "daily", subcat: "Sports & Activities", course: "Focus 4.5" },
+  { en: "to train", fr: "s'entraîner", theme: "daily", subcat: "Sports & Activities", course: "Focus 4.5" },
+  { en: "to go running", fr: "aller courir", theme: "daily", subcat: "Sports & Activities", course: "Focus 4.5" },
+  { en: "should / shouldn't", fr: "devrait / ne devrait pas (conseil)", theme: "grammar", subcat: "Modal Verbs", course: "Focus 4.5" },
+  { en: "can / can't", fr: "peut / ne peut pas (capacité)", theme: "grammar", subcat: "Modal Verbs", course: "Focus 4.5" },
+  { en: "could", fr: "pourrait (poli / suggestion)", theme: "grammar", subcat: "Modal Verbs", course: "Focus 4.5" },
+  { en: "must", fr: "doit absolument (conseil fort)", theme: "grammar", subcat: "Modal Verbs", course: "Focus 4.5" },
+  { en: "Shall we...?", fr: "Et si on... ? / On...?", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "Why don't we...?", fr: "Pourquoi ne pas... ?", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "Let's...", fr: "Allons... / Faisons...", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "Sounds great!", fr: "Ça a l'air super !", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "Good plan!", fr: "Bonne idée !", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "I'd rather not", fr: "Je préférerais pas", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "I'd prefer to...", fr: "Je préférerais...", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "Are you free?", fr: "Es-tu libre ?", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "When shall we meet?", fr: "Quand est-ce qu'on se retrouve ?", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "...instead", fr: "...à la place / plutôt", theme: "grammar", subcat: "Arranging to Go Out", course: "Focus 4.5" },
+  { en: "What's your advice?", fr: "Quel est ton conseil ?", theme: "grammar", subcat: "Giving Advice", course: "Focus 4.5" },
+  { en: "How about (+ing)...?", fr: "Et si... ? / Pourquoi pas... ?", theme: "grammar", subcat: "Giving Advice", course: "Focus 4.5" },
+  { en: "Why don't you...?", fr: "Pourquoi ne... pas ?", theme: "grammar", subcat: "Giving Advice", course: "Focus 4.5" },
+  { en: "You could...", fr: "Tu pourrais...", theme: "grammar", subcat: "Giving Advice", course: "Focus 4.5" },
+  { en: "high heels", fr: "talons hauts", theme: "fashion", subcat: "Describing a Catwalk", course: "Focus 4.5" },
+  { en: "evening dress", fr: "robe de soirée", theme: "fashion", subcat: "Describing a Catwalk", course: "Focus 4.5" },
+  { en: "summer dress", fr: "robe d'été", theme: "fashion", subcat: "Describing a Catwalk", course: "Focus 4.5" },
+  { en: "cardigan", fr: "gilet / cardigan", theme: "fashion", subcat: "Describing a Catwalk", course: "Focus 4.5" },
+  { en: "leather jacket", fr: "veste en cuir", theme: "fashion", subcat: "Describing a Catwalk", course: "Focus 4.5" },
+  { en: "catwalk / runway", fr: "podium (défilé de mode)", theme: "fashion", subcat: "Describing a Catwalk", course: "Focus 4.5" },
+  { en: "gold", fr: "doré(e)", theme: "fashion", subcat: "Patterns & Designs", course: "Focus 4.5" },
+  { en: "flower pattern", fr: "motif fleuri", theme: "fashion", subcat: "Patterns & Designs", course: "Focus 4.5" },
+  { en: "animal print", fr: "imprimé animal", theme: "fashion", subcat: "Patterns & Designs", course: "Focus 4.5" },
+  { en: "spots / spotty", fr: "à pois", theme: "fashion", subcat: "Patterns & Designs", course: "Focus 4.5" },
+  { en: "striped / stripy", fr: "à rayures", theme: "fashion", subcat: "Patterns & Designs", course: "Focus 4.5" },
+  { en: "plaid", fr: "à carreaux", theme: "fashion", subcat: "Patterns & Designs", course: "Focus 4.5" },
+  { en: "colourful", fr: "coloré(e)", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+  { en: "dark", fr: "foncé(e) / sombre", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+  { en: "elegant", fr: "élégant(e)", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+  { en: "glamorous", fr: "glamour", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+  { en: "strange", fr: "étrange", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+  { en: "old-fashioned", fr: "démodé(e)", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+  { en: "casual", fr: "décontracté(e)", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+  { en: "formal", fr: "habillé(e) / formel(le)", theme: "fashion", subcat: "Describing Clothes", course: "Focus 4.5" },
+]
 
 const THEMES = {
   people:       { label: "People & Identity",       icon: "👤" },
