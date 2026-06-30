@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Grey Suitcase — A Thriller for English Learners (A2–B1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c;
+    --ink2:#20242b;
+    --paper:#f3ecdd;
+    --paper2:#ece3d0;
+    --text:#1d2026;
+    --muted:#736a58;
+    --amber:#c9772a;
+    --amber-soft:#e7cfa6;
+    --rust:#9d3320;
+    --line:#d8cdb6;
+    --fs:1.14rem;
+    --lh:1.85;
+  }
+  body.night{
+    --paper:#15181d;
+    --paper2:#1b1f25;
+    --text:#d9d2c2;
+    --muted:#8c8472;
+    --line:#2c313a;
+    --amber:#e0944a;
+    --amber-soft:#3a3324;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:'Lora',Georgia,serif;
+    transition:background .3s,color .3s;
+  }
+
+  /* ---------- top progress + toolbar ---------- */
+  #bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--amber);z-index:50;transition:width .1s linear;}
+  #tools{
+    position:fixed;top:0;right:0;left:0;z-index:40;
+    display:flex;gap:.4rem;justify-content:flex-end;align-items:center;
+    padding:.5rem .8rem;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  #tools button{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.04em;
+    border:1px solid var(--line);background:transparent;color:var(--muted);
+    border-radius:999px;padding:.32rem .7rem;font-size:.74rem;cursor:pointer;
+    text-transform:uppercase;transition:.15s;
+  }
+  #tools button:hover,#tools button:focus-visible{border-color:var(--amber);color:var(--amber);outline:none;}
+  #tools .spacer{flex:1;}
+  #tools .brand{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;font-size:.72rem;color:var(--muted);text-transform:uppercase;}
+
+  /* ---------- cover ---------- */
+  .cover{
+    background:var(--ink);
+    color:#efe7d6;
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:3rem 1.6rem 2.4rem;
+    position:relative;overflow:hidden;
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(1200px 380px at 75% -8%, rgba(201,119,42,.22), transparent 60%),
+      radial-gradient(700px 320px at 8% 108%, rgba(157,51,32,.20), transparent 55%);
+  }
+  .cover .kick{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.42em;
+    text-transform:uppercase;font-size:.74rem;color:var(--amber);
+    position:relative;margin-bottom:1.4rem;
+  }
+  .cover h1{
+    font-family:'Oswald',sans-serif;font-weight:700;
+    font-size:clamp(3.4rem,17vw,7rem);line-height:.92;letter-spacing:.01em;
+    margin:0;text-transform:uppercase;position:relative;
+  }
+  .cover h1 .sm{display:block;font-weight:300;font-size:.34em;letter-spacing:.36em;color:#c8bda6;margin-top:.9rem;}
+  .cover .tag{
+    position:relative;margin-top:2.2rem;max-width:30ch;
+    font-style:italic;color:#cabf9f;font-size:1.05rem;line-height:1.6;
+  }
+  .cover .rule{position:relative;width:62px;height:3px;background:var(--amber);margin:1.8rem 0;}
+  .cover .meta{position:relative;font-family:'Oswald',sans-serif;letter-spacing:.16em;font-size:.72rem;text-transform:uppercase;color:#94886e;}
+  .cover .hint{
+    position:relative;margin-top:2.6rem;display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.82rem;color:#cdbf9d;font-style:normal;
+  }
+  .cover .hint b{
+    font-family:'Lora',serif;font-weight:600;color:var(--ink);background:var(--amber-soft);
+    border-bottom:2px dotted var(--amber);border-radius:3px;padding:0 .25rem;
+  }
+  body.night .cover .hint b{color:#efe7d6;background:#3a3324;}
+  .scrolldown{position:relative;margin-top:2.4rem;font-family:'Oswald',sans-serif;letter-spacing:.2em;font-size:.7rem;text-transform:uppercase;color:#94886e;animation:bob 2.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  /* ---------- reading column ---------- */
+  main{max-width:38rem;margin:0 auto;padding:3.4rem 1.5rem 6rem;}
+  .chapter{padding-top:2.4rem;}
+  .chapter-head{margin:0 0 1.8rem;text-align:center;}
+  .chapter-head .no{
+    font-family:'Oswald',sans-serif;font-weight:300;letter-spacing:.5em;
+    text-transform:uppercase;font-size:.8rem;color:var(--amber);
+  }
+  .chapter-head .ti{
+    font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
+    letter-spacing:.02em;font-size:1.9rem;line-height:1.05;margin-top:.5rem;color:var(--text);
+  }
+  .chapter-head .dash{width:42px;height:2px;background:var(--line);margin:1.2rem auto 0;}
+  .chapter p{font-size:var(--fs);line-height:var(--lh);margin:0 0 1.15rem;}
+  .chapter p.first::first-letter{
+    font-family:'Oswald',sans-serif;font-weight:700;
+    float:left;font-size:3.4rem;line-height:.74;padding:.3rem .6rem .1rem 0;color:var(--amber);
+  }
+  .chapter p.sep{text-align:center;color:var(--muted);letter-spacing:.5em;margin:1.6rem 0;}
+
+  /* tappable vocabulary */
+  .w{
+    color:inherit;border-bottom:2px dotted var(--amber);
+    cursor:pointer;position:relative;font-weight:500;white-space:nowrap;
+  }
+  .w .fr{
+    display:none;font-style:italic;font-weight:400;color:var(--amber);
+    font-size:.82em;margin-left:.3em;white-space:normal;
+  }
+  .w.show{border-bottom-style:solid;background:var(--amber-soft);border-radius:3px;padding:0 .15em;}
+  .w.show .fr{display:inline;}
+  .w.show .fr::before{content:"— ";}
+
+  /* end-of-chapter new words box */
+  .words{
+    margin:2.6rem 0 1rem;border:1px solid var(--line);border-radius:14px;
+    background:var(--paper2);padding:1.1rem 1.2rem 1.2rem;
+  }
+  .words h4{
+    font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
+    letter-spacing:.14em;font-size:.74rem;color:var(--amber);margin:0 0 .7rem;
+  }
+  .words dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.3rem .9rem;font-size:.95rem;}
+  .words dt{font-weight:600;}
+  .words dd{margin:0;color:var(--muted);font-style:italic;}
+
+  .chapter-end{text-align:center;color:var(--muted);letter-spacing:.4em;font-family:'Oswald',sans-serif;font-size:.7rem;text-transform:uppercase;margin:2.4rem 0 0;}
+
+  /* final pages */
+  .epilogue{border-top:1px solid var(--line);margin-top:3rem;padding-top:2.4rem;}
+  .the-end{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.3em;text-align:center;font-size:1.6rem;color:var(--amber);margin:3rem 0;}
+  .note{background:var(--paper2);border-left:3px solid var(--amber);border-radius:0 12px 12px 0;padding:1.2rem 1.3rem;margin:1.6rem 0;}
+  .note h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.95rem;margin:0 0 .6rem;color:var(--text);}
+  .note p{font-size:1rem;line-height:1.7;margin:0 0 .7rem;}
+  .qbox{margin:1.4rem 0;}
+  .qbox h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.9rem;color:var(--amber);margin:0 0 .6rem;}
+  .qbox ol{margin:0;padding-left:1.3rem;}
+  .qbox li{font-size:1rem;line-height:1.7;margin-bottom:.5rem;}
+
+  ::selection{background:var(--amber);color:#fff;}
+  @media (max-width:420px){ :root{--fs:1.06rem;} .cover h1{letter-spacing:0;} }
+  @media (prefers-reduced-motion:reduce){ .scrolldown{animation:none;} }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="tools">
+  <span class="brand">The Grey Suitcase</span>
+  <span class="spacer"></span>
+  <a href="index.html" style="text-decoration:none"><button>Library</button></a>
+  <button onclick="fs(-1)" aria-label="Smaller text">A−</button>
+  <button onclick="fs(1)" aria-label="Larger text">A+</button>
+  <button id="themeBtn" onclick="toggleTheme()">Night</button>
+</div>
+
+<!-- ============ COVER ============ -->
+<header class="cover">
+  <div class="kick">A Thriller · For English Learners</div>
+  <h1>The Grey<br>Suitcase<span class="sm">A2 – B1</span></h1>
+  <div class="rule"></div>
+  <p class="tag">Daniel takes the 8:15 train every morning. Today, a frightened man gives him a suitcase — and then runs.</p>
+  <div class="meta">Ten chapters · ~40 pages · Read with audio in your head</div>
+  <div class="hint">Tip: tap any <b>bold word</b> to see the French.</div>
+  <div class="scrolldown">↓ Scroll to begin</div>
+</header>
+
+<main id="book">
+
+<!-- ============ CHAPTER 1 ============ -->
+<section class="chapter" id="c1">
+  <div class="chapter-head">
+    <div class="no">Chapter One</div>
+    <div class="ti">The 8:15</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">Daniel Carter <span class="w">always<span class="fr">toujours</span></span> took the 8:15 train. Every morning, from Monday to Friday, he stood on the same <span class="w">platform<span class="fr">le quai</span></span>, near the same coffee machine, and he waited for the same train. He was thirty-four years old. He worked in an office in the city. His job was not exciting, but it was safe, and Daniel liked safe things.</p>
+
+  <p>"What's your job?" people sometimes asked him at parties.</p>
+
+  <p>"I work with numbers," he always said. It was true, but it was also boring, so the conversation usually stopped there. Daniel did not mind. He was a quiet man. He wore a grey jacket, a white shirt, and dark shoes. He looked like a hundred other men on the platform.</p>
+
+  <p>That morning, the weather was cold. It was October, and it was <span class="w">often<span class="fr">souvent</span></span> cold in October. Daniel held his coffee in two hands. The train was three minutes late. He <span class="w">usually<span class="fr">habituellement</span></span> read the news on his phone while he waited, but today his phone battery was dead, so he looked at the people instead.</p>
+
+  <p>And then he saw the man.</p>
+
+  <p>The man stood at the end of the platform. He wore a long <span class="w">grey coat<span class="fr">un manteau gris</span></span> and he carried a <span class="w">suitcase<span class="fr">une valise</span></span> — a small, hard, grey suitcase. Daniel knew this man. He saw him almost every day. The man in the grey coat usually read a book and never spoke to anyone.</p>
+
+  <p>But today the man was different. Today he was not reading. He was watching the doors. His face was white. His eyes moved quickly from left to right, then back again. He was <span class="w">sweating<span class="fr">en train de transpirer</span></span>, even in the cold.</p>
+
+  <p>"He's <span class="w">nervous<span class="fr">nerveux</span></span>," Daniel thought. "Something is wrong."</p>
+
+  <p>The train arrived. The doors opened. People pushed forward, and Daniel pushed forward too. He found a seat by the window. The man in the grey coat got on the same carriage. He did not sit down. He stood by the door, with the suitcase between his feet, and he held the rail with one white hand.</p>
+
+  <p class="sep">• • •</p>
+
+  <p>The train moved out of the station. Outside, the city was grey and wet. Inside, it was warm and quiet. Most people looked at their phones. Nobody looked at the nervous man — nobody except Daniel.</p>
+
+  <p>At the next stop, two men got on. They wore black coats. They were big, and they did not sit down either. They stood at the other end of the carriage and they looked at the man in the grey coat. They did not look away.</p>
+
+  <p>Daniel felt cold inside. He did not understand, but he understood enough. The man in the grey coat was <span class="w">afraid<span class="fr">effrayé / il a peur</span></span> of the two men in black.</p>
+
+  <p>The man in the grey coat moved. Slowly, carefully, he walked down the carriage — toward Daniel. He sat down in the empty seat next to him. He put the grey suitcase on the floor, between his shoes and Daniel's shoes.</p>
+
+  <p>"Don't look at me," the man said quietly. He did not move his lips very much. "Please. Just look at the window."</p>
+
+  <p>Daniel looked at the window. His heart was beating fast.</p>
+
+  <p>"Are you a good man?" the man whispered.</p>
+
+  <p>It was a strange question. Daniel did not know what to say. "I... I think so," he said.</p>
+
+  <p>"I hope so," the man said. "I really hope so. Because I have no more time, and you are the only person here who looked at me like a human. Everyone else looks at their phone."</p>
+
+  <p>"Who are you?" Daniel whispered. "What's happening? Who are those men?"</p>
+
+  <p>"Too many questions," the man said. A small, sad smile. "There's no time for questions now. Listen to me. When the train stops, take the suitcase. Don't open it here. Don't <span class="w">trust<span class="fr">faire confiance à</span></span> the police. Do you understand? <em>Don't trust the police.</em>"</p>
+
+  <p>"What? No — wait, I can't—"</p>
+
+  <p>"There is a note inside," the man said. "Read it. And keep the case <span class="w">safe<span class="fr">en sécurité</span></span>. People will die if you don't."</p>
+
+  <p>The train was slowing down. The next station was coming. The two men in black coats were watching, and now they were walking down the carriage, slowly, toward them.</p>
+
+  <p>"They're coming," Daniel said. "They're—"</p>
+
+  <p>"I know," the man said. He stood up. "Remember: <span class="w">you must not<span class="fr">tu ne dois pas</span></span> open it where people can see. And you <span class="w">should<span class="fr">tu devrais</span></span> stay away from your home tonight. Good luck."</p>
+
+  <p>The doors opened. The man in the grey coat ran. He pushed through the crowd, out onto the platform, and the two men in black ran after him. In one second they were gone. The doors closed again.</p>
+
+  <p>And the grey suitcase was still there, on the floor, between Daniel's shoes.</p>
+
+  <div class="words">
+    <h4>New words — Chapter 1</h4>
+    <dl>
+      <dt>platform</dt><dd>le quai</dd>
+      <dt>a suitcase</dt><dd>une valise</dd>
+      <dt>nervous</dt><dd>nerveux</dd>
+      <dt>afraid</dt><dd>effrayé, qui a peur</dd>
+      <dt>to trust</dt><dd>faire confiance</dd>
+      <dt>safe</dt><dd>en sécurité / sûr</dd>
+      <dt>you must not</dt><dd>tu ne dois pas (interdiction)</dd>
+      <dt>you should</dt><dd>tu devrais (conseil)</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter One</div>
+</section>
+
+<!-- ============ CHAPTER 2 ============ -->
+<section class="chapter" id="c2">
+  <div class="chapter-head">
+    <div class="no">Chapter Two</div>
+    <div class="ti">The Note</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">Daniel sat very still. The train moved on. People around him did not notice anything. A woman read a magazine. A boy listened to music. The world was completely normal, and Daniel was holding a suitcase that did not belong to him.</p>
+
+  <p>"This is not my problem," he told himself. "I should leave it here. I should call the police."</p>
+
+  <p>But the man's voice was in his head: <em>Don't trust the police.</em>
+
+  <p>Daniel looked down at the suitcase. It was old but clean. There was a small brown <span class="w">tag<span class="fr">une étiquette</span></span> on the handle. He turned the tag over. There were two letters on it, written by hand: <strong>V. F.</strong></p>
+
+  <p>The train stopped at his station. For a moment Daniel did not move. Then, slowly, he picked up the suitcase and got off the train.</p>
+
+  <p class="sep">• • •</p>
+
+  <p>His office was a tall, modern building of glass and steel. Daniel said good morning to the security guard, like he did every day. He took the lift to the fourth floor. He sat down at his desk. And the grey suitcase sat under his desk, by his feet, like a small grey animal.</p>
+
+  <p>He could not work. He looked at his computer, but the numbers meant nothing. Every time someone walked past, his heart jumped. At eleven o'clock, his manager stopped at his desk.</p>
+
+  <p>"Daniel, are you all right? You look ill."</p>
+
+  <p>"I'm fine," Daniel said quickly. "I'm just a bit tired."</p>
+
+  <p>"You should drink some water," his manager said, and walked away.</p>
+
+  <p>At lunchtime, Daniel could not wait any longer. He took the suitcase and went into the men's <span class="w">toilet<span class="fr">les toilettes</span></span>. He locked the door of the small room. His hands were shaking. He put the suitcase on the floor and he opened it.</p>
+
+  <p>Inside, there was not much. But what was there made Daniel's mouth go dry.</p>
+
+  <p>There was a thick brown <span class="w">envelope<span class="fr">une enveloppe</span></span>. There was a small black phone — an old, cheap phone. There was a <span class="w">photograph<span class="fr">une photo</span></span> of a large old building. And there was a piece of white paper, folded twice.</p>
+
+  <p>Daniel picked up the envelope. It was heavy. He opened it, just a little, and looked inside.</p>
+
+  <p>Money. The envelope was full of money — fifty-pound notes, more money than Daniel earned in three months.</p>
+
+  <p>"Oh no," he said quietly. "Oh no, no, no."</p>
+
+  <p>He put the envelope down. He did not want to touch it. Then he picked up the note and read it.</p>
+
+  <p class="sep">• • •</p>
+
+  <p style="font-style:italic;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;">
+  "If you are reading this, then I am in danger, or I am dead. I am sorry. I did not want to give this to a stranger, but I had no choice.<br><br>
+  Inside this case is the truth. Powerful people want to destroy it. <strong>Do not trust the police</strong> — some of them work for these people. You cannot know which ones.<br><br>
+  Take the photograph. Meet me at this place — the City Museum — today, at four o'clock. Come alone. If I am not there, wait. Sit on the bench near the big clock.<br><br>
+  The money is for you. Use it to disappear if you must.<br><br>
+  — V."
+  </p>
+
+  <p>Daniel read the note three times. His mind was full of questions. Who was V? What was "the truth"? Why him?</p>
+
+  <p>And then the small black phone <span class="w">rang<span class="fr">a sonné</span></span>.</p>
+
+  <p>The sound was very loud in the small room. Daniel jumped. The phone rang again — a hard, electric sound. He looked at the screen. <em>Unknown number.</em></p>
+
+  <p>His hand moved slowly. He picked up the phone. He pressed the green button. He put it to his ear.</p>
+
+  <p>"Hello?" he said.</p>
+
+  <p>For two seconds, there was nothing. Then a voice — low, tired, and afraid.</p>
+
+  <p>"You have the case," the voice said. "Good. You are still alive. That is also good. Now listen to me very carefully, because they are listening too, and we do not have much time."</p>
+
+  <div class="words">
+    <h4>New words — Chapter 2</h4>
+    <dl>
+      <dt>a tag</dt><dd>une étiquette</dd>
+      <dt>an envelope</dt><dd>une enveloppe</dd>
+      <dt>a photograph</dt><dd>une photo</dd>
+      <dt>to ring (rang)</dt><dd>sonner (a sonné)</dd>
+      <dt>danger</dt><dd>le danger</dd>
+      <dt>a stranger</dt><dd>un inconnu, un étranger</dd>
+      <dt>the truth</dt><dd>la vérité</dd>
+      <dt>to disappear</dt><dd>disparaître</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Two</div>
+</section>
+
+<!-- ============ CHAPTER 3 ============ -->
+<section class="chapter" id="c3">
+  <div class="chapter-head">
+    <div class="no">Chapter Three</div>
+    <div class="ti">The Voice on the Phone</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">"Who are you?" Daniel asked. His voice was a whisper. "Are you V? Are you the man from the train?"</p>
+
+  <p>"Yes. My name is Victor. I'm sorry I gave you the case. I had no time, and you had a kind face." Victor coughed. He did not sound well. "Where are you now?"</p>
+
+  <p>"I'm at work. In the toilet. I opened the case. Victor, there's so much money, and a photo, and—"</p>
+
+  <p>"Don't say the words," Victor said quickly. "Phones are not safe. Just answer me. Did you read the note?"</p>
+
+  <p>"Yes."</p>
+
+  <p>"Then you know about the museum. Four o'clock. <span class="w">Are you free<span class="fr">es-tu libre</span></span> this afternoon?"</p>
+
+  <p>It was a strange, normal question, like an invitation to a coffee. "I... yes," Daniel said. "I can be free."</p>
+
+  <p>"Good. Now, the most important thing. Two men will come for you. Maybe more. They will look normal. One of them will say he is a police <span class="w">officer<span class="fr">un agent / policier</span></span>. He will show you a card. The card will look real. <em>It is not real.</em> Do you understand? You <span class="w">must not<span class="fr">tu ne dois pas</span></span> believe him. You must not go anywhere with him."</p>
+
+  <p>"How will I know?" Daniel said. "How can I know who is real and who is not?"</p>
+
+  <p>"You can't," Victor said simply. "That is the problem. That is why I said: trust nobody. But here is a small key. The real ones ask questions. The fake ones already know the answers. A real police officer will say, 'What did the man on the train say to you?' A fake one will say, 'The man on the train gave you a suitcase. Where is it?' Do you hear the difference? The fake one already knows. <span class="w">Be careful<span class="fr">fais attention</span></span> with people who already know."</p>
+
+  <p>Daniel's head was spinning. "Why me?" he said. "Why don't you go to a newspaper? Why don't you—"</p>
+
+  <p>"Because they are watching the newspapers. They are watching my friends, my family, my home. They are not watching you. You are nobody, Daniel." Victor paused. "I'm sorry. I mean — you are safe because nobody knows you. That is your power. Now I have to go. Four o'clock. The museum. Come al—"</p>
+
+  <p>The line went dead.</p>
+
+  <p>"Victor?" Daniel said. "Victor!"</p>
+
+  <p>Nothing. The screen was black. Daniel stood in the small white room, holding a dead phone in one hand and a museum photograph in the other.</p>
+
+  <p class="sep">• • •</p>
+
+  <p>He closed the suitcase. He went back to his desk. He tried to look normal. But how do you look normal when your whole life has changed in one morning?</p>
+
+  <p>At two o'clock, the man came.</p>
+
+  <p>Daniel saw him from across the office. He was tall, maybe fifty years old. He wore a clean grey <span class="w">suit<span class="fr">un costume</span></span> and a dark blue tie. His shoes were black and shiny. He looked calm and serious, like a man who is never in a hurry. He was talking to Daniel's manager. The manager pointed at Daniel's desk.</p>
+
+  <p>The man in the grey suit walked over. He smiled. It was a polite smile, but his eyes did not smile.</p>
+
+  <p>"Mr. Carter?" he said. "Daniel Carter?"</p>
+
+  <p>"Yes," Daniel said.</p>
+
+  <p>The man took out a card and showed it. <em>Inspector Reed. Metropolitan Police.</em> The card looked completely real.</p>
+
+  <p>"I'm Inspector Reed," the man said. "I'm sorry to come to your work. I just have a few questions. It won't take long." He sat down in the empty chair by Daniel's desk, without asking. "This morning, on the 8:15 train, a man gave you a grey suitcase. I need you to give it to me. Where is it?"</p>
+
+  <p>Daniel's blood went cold.</p>
+
+  <p>The man already knew. He did not ask <em>what happened</em>. He did not ask <em>did you see anything</em>. He said: <em>a man gave you a suitcase. Where is it?</em></p>
+
+  <p><em>The fake ones already know the answers.</em></p>
+
+  <p>Daniel looked at Inspector Reed's calm, serious face, and he understood that he was looking at a very dangerous man.</p>
+
+  <div class="words">
+    <h4>New words — Chapter 3</h4>
+    <dl>
+      <dt>Are you free?</dt><dd>Es-tu libre ?</dd>
+      <dt>a police officer</dt><dd>un policier / agent</dd>
+      <dt>fake</dt><dd>faux, factice</dd>
+      <dt>real</dt><dd>vrai, véritable</dd>
+      <dt>Be careful</dt><dd>Fais attention</dd>
+      <dt>a suit</dt><dd>un costume</dd>
+      <dt>a tie</dt><dd>une cravate</dd>
+      <dt>serious</dt><dd>sérieux</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Three</div>
+</section>
+
+<!-- ============ CHAPTER 4 ============ -->
+<section class="chapter" id="c4">
+  <div class="chapter-head">
+    <div class="no">Chapter Four</div>
+    <div class="ti">The Museum</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">Daniel did not give the man the suitcase.</p>
+
+  <p>"I don't know what you're talking about," he said. His voice was almost steady. "Nobody gave me a suitcase."</p>
+
+  <p>Inspector Reed looked at him for a long moment. "Mr. Carter," he said softly, "this is very important. People could get hurt. You should give me the case now. It's the right thing to do."</p>
+
+  <p>"I'm sorry," Daniel said. "I really don't know what you mean. It was a normal morning. I read the news. I drank my coffee. That's all."</p>
+
+  <p>The lie sat between them. Reed smiled his cold smile again. He stood up slowly.</p>
+
+  <p>"Of course," he said. "My mistake." He put a small white card on the desk. "If you remember anything, call me. Any time. Day or night." He leaned closer, and now his voice was very quiet. "And Daniel — be careful who you talk to. The city is full of dangerous people." Then he walked away.</p>
+
+  <p>Daniel's hands were shaking under the desk. He knew one thing now, completely: he could not stay here. Reed knew where he worked. Reed would come back, or send other men. Victor was right. He had to run.</p>
+
+  <p>At three o'clock, Daniel told his manager he felt ill and went home early. But he did not go home. He took the suitcase, walked to the underground, and went to the City Museum.</p>
+
+  <p class="sep">• • •</p>
+
+  <p>The City Museum was a <span class="w">huge<span class="fr">immense</span></span>, old, <span class="w">historical<span class="fr">historique</span></span> building. It had tall white columns and wide stone steps. Inside, it was big and <span class="w">crowded<span class="fr">bondé</span></span>. Hundreds of people walked slowly past old paintings and old stones. School children in groups laughed and ran. It was warm, and the air smelled of old wood and dust.</p>
+
+  <p>Daniel thought it was a good place to meet. In a crowd, one nervous man is invisible.</p>
+
+  <p>"What is this place like?" he thought, remembering an old English lesson. "It's big. It's old. It's crowded. It's perfect."</p>
+
+  <p>He found the big clock. It was a beautiful old clock, high on the wall above a wide hall. Below it, there was a long wooden <span class="w">bench<span class="fr">un banc</span></span>. Daniel sat down. He held the suitcase tight on his knees. The clock said five minutes to four.</p>
+
+  <p>He waited.</p>
+
+  <p>He watched every person who walked past. A family with a small child. Two old men. A group of tourists with cameras. A young woman in a long <span class="w">dark coat<span class="fr">un manteau foncé</span></span>. Nobody looked at him. Four o'clock came. Then four ten. Then four fifteen.</p>
+
+  <p>Victor did not come.</p>
+
+  <p>Daniel began to feel sick. <em>If I am not there, wait,</em> the note said. So he waited. But every minute, the fear grew. Maybe the two men in black caught Victor. Maybe Victor was already—</p>
+
+  <p>"Don't move," said a soft voice next to him. "And don't look at me."</p>
+
+  <p>Daniel froze. The young woman in the long dark coat was now sitting on the bench, close to him. She looked straight ahead, at the people in the hall. She was maybe thirty. She had short dark hair and a serious, tired face. She was beautiful, but she looked like a person who had not slept for a long time.</p>
+
+  <p>"Who are you?" Daniel whispered. "Where's Victor?"</p>
+
+  <p>"Victor can't come," the woman said quietly. "Victor is my brother. And right now, Victor is in very big trouble." She turned her head, just a little, and looked at Daniel with dark, frightened eyes. "My name is Sara. We don't have much time, and I need you to do exactly what I say."</p>
+
+  <div class="words">
+    <h4>New words — Chapter 4</h4>
+    <dl>
+      <dt>huge</dt><dd>immense, énorme</dd>
+      <dt>historical</dt><dd>historique</dd>
+      <dt>crowded</dt><dd>bondé</dd>
+      <dt>a bench</dt><dd>un banc</dd>
+      <dt>a dark coat</dt><dd>un manteau foncé</dd>
+      <dt>a lie</dt><dd>un mensonge</dd>
+      <dt>trouble</dt><dd>des ennuis</dd>
+      <dt>What is it like?</dt><dd>Comment c'est ? (décrire)</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Four</div>
+</section>
+
+<!-- ============ CHAPTER 5 ============ -->
+<section class="chapter" id="c5">
+  <div class="chapter-head">
+    <div class="no">Chapter Five</div>
+    <div class="ti">Sara's Story</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">"I don't understand any of this," Daniel said. "Please. Just tell me what's happening."</p>
+
+  <p>Sara looked at the big clock, then at the doors, then back at the people. She never stopped watching.</p>
+
+  <p>"My brother Victor is a <span class="w">journalist<span class="fr">un journaliste</span></span>," she said. "A good one. For two years, he was working on one big story. A story about a very rich, very powerful man. His name is Grant. Maybe you know the name."</p>
+
+  <p>Daniel did know the name. Everybody knew the name. Charles Grant was on television, in the newspapers, at football matches with famous people. He owned buildings, companies, a newspaper. He was going to be a politician. People said he would be important one day — very important.</p>
+
+  <p>"Grant looks clean," Sara said. "He smiles. He gives money to hospitals. But Victor found the truth. Grant is not clean. He took millions of pounds that were not his. He hurt people who said no to him. Two people who tried to talk are now dead. The police said it was an <span class="w">accident<span class="fr">un accident</span></span>. It was not an accident."</p>
+
+  <p>"And Victor can prove this?" Daniel said.</p>
+
+  <p>"Victor can prove all of it," Sara said. "Names, dates, numbers, bank accounts. Everything. He spent two years collecting it. It's all on one small <span class="w">memory card<span class="fr">une carte mémoire</span></span> — a card smaller than your finger. And that card," she said, looking at the suitcase on his knees, "is somewhere inside that case."</p>
+
+  <p>Daniel looked down at the grey suitcase. It felt heavier now.</p>
+
+  <p>"Grant has friends everywhere," Sara went on. "In big companies. In the government. And yes — in the police. That's why Victor said: don't trust them. The man who came to your work today, the man with the grey suit—"</p>
+
+  <p>"Inspector Reed."</p>
+
+  <p>"That's not his real name," Sara said. "He's not a real inspector. He works for Grant. He <span class="w">hunts<span class="fr">il traque / chasse</span></span> people. He's very good at it. And now he's hunting you."</p>
+
+  <p>Daniel felt cold again. "Why did Victor give the case to <em>me</em>? A stranger on a train?"</p>
+
+  <p>"Because they were closing in," Sara said. "This morning, Reed's men followed Victor onto the train. Victor knew they would catch him. So he did the only thing he could do: he gave the truth to a random person — a person with no connection to him, a person Grant could never find. He gave it to you and he ran, to take them away from you." Sara's voice shook. "He ran so they would follow <em>him</em> and not <em>you</em>. And it worked. They caught him this afternoon. They have him now."</p>
+
+  <p>"They <em>have</em> him?" Daniel said. "Where? Is he—"</p>
+
+  <p>"He's alive," Sara said. "For now. Grant doesn't want him dead yet. Grant wants the case first. He wants the memory card. While we have it, Victor is alive, because we have something to trade." She finally turned and looked at Daniel fully. "Do you understand now? You are holding my brother's life on your knees."</p>
+
+  <p>Daniel did not know what to say. A few hours ago, his biggest problem was a dead phone battery.</p>
+
+  <p>"Why are you telling <em>me</em> all this?" he said at last. "You could take the case and go. I would give it to you right now."</p>
+
+  <p>For the first time, Sara almost smiled. "Because I can't do this alone," she said. "And because Victor chose you. He looked at a whole train of people, and he chose your face. Victor is the best person I know. If he trusted you, then I trust you too." She stood up suddenly and put out her hand. "So. Are you with me, Daniel Carter? Yes or no?"</p>
+
+  <p>Daniel looked at her hand. He thought about his safe, boring life. He thought about the 8:15 train, and the man with the kind face who chose him.</p>
+
+  <p>He stood up and took her hand. "Yes," he said. "I'm with you."</p>
+
+  <p>And at that exact moment, across the crowded hall, the tall man in the grey suit walked in through the museum doors — and he was not alone.</p>
+
+  <div class="words">
+    <h4>New words — Chapter 5</h4>
+    <dl>
+      <dt>a journalist</dt><dd>un journaliste</dd>
+      <dt>powerful</dt><dd>puissant</dd>
+      <dt>to prove</dt><dd>prouver</dd>
+      <dt>a memory card</dt><dd>une carte mémoire</dd>
+      <dt>to hunt</dt><dd>traquer, chasser</dd>
+      <dt>to trade</dt><dd>échanger</dd>
+      <dt>alive</dt><dd>vivant</dd>
+      <dt>to trust</dt><dd>faire confiance</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Five</div>
+</section>
+
+<!-- ============ CHAPTER 6 ============ -->
+<section class="chapter" id="c6">
+  <div class="chapter-head">
+    <div class="no">Chapter Six</div>
+    <div class="ti">Run</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">"They're here," Daniel said quietly. "Sara. They're here."</p>
+
+  <p>Sara did not turn around fast. She looked slowly, like a normal person, and she saw them too. Reed, in his grey suit. And two other men in dark coats, big and silent. They were standing by the doors, and they were watching the crowd. They had not seen Daniel and Sara yet — but they would, in seconds.</p>
+
+  <p>"Don't run," Sara whispered. "If we run, they'll see us. Walk. Walk slowly. This way."</p>
+
+  <p>They walked. Not too fast, not too slow, like two friends in a museum. Daniel held the suitcase close to his body. His heart was beating so loudly he was sure everyone could hear it. They walked past a wall of old paintings. They walked through a room full of <span class="w">statues<span class="fr">des statues</span></span>. Behind them, Daniel heard a hard voice.</p>
+
+  <p>"There. The grey case. <em>Go.</em>"</p>
+
+  <p>"Now," Sara said. "Now we run."</p>
+
+  <p>And they ran.</p>
+
+  <p class="sep">• • •</p>
+
+  <p>They ran through the museum. School children shouted as they pushed past. A guard called, "Hey! No running!" but they did not stop. Sara was fast. She knew the building — she turned left, then right, then down some stairs Daniel did not see.</p>
+
+  <p>"This way! There's a side door!" she called.</p>
+
+  <p>Behind them, the men were coming. Daniel could hear their feet on the stone floor. He did not look back. <em>Don't look back. Just run.</em></p>
+
+  <p>They went through a small door and out into the cold afternoon. They were in a busy street now, full of people, cars, buses, noise. The light was grey. It was beginning to rain.</p>
+
+  <p>"The market," Sara said, breathing hard. "Come on. We can lose them in the market."</p>
+
+  <p>They ran into a busy street <span class="w">market<span class="fr">un marché</span></span>. There were hundreds of people. There were sellers shouting prices. There were tables full of fruit, clothes, phones, flowers. The air smelled of food and rain. Daniel and Sara pushed through the crowd, between the tables, under the colourful covers.</p>
+
+  <p>Daniel looked back, just once. He saw Reed, far behind, pushing through the people. Reed's calm face was gone now. He looked angry. He was shouting something to the other men.</p>
+
+  <p>"In here!" Sara pulled Daniel by the arm. They went between two market tables, behind a wall of hanging coats and dresses, and out the other side, into a small dark street.</p>
+
+  <p>At the end of the street, a red bus was at a bus stop. The doors were open. A few people were getting on.</p>
+
+  <p>"The bus!" Sara said. "Quick!"</p>
+
+  <p>They ran the last few metres. They jumped onto the bus just as the doors were closing. The bus moved away. Daniel fell into a seat, holding the suitcase on his knees, breathing hard. Sara sat next to him. Through the window, at the end of the dark street, Daniel saw Reed run out of the market — too late. The bus turned a corner, and Reed disappeared.</p>
+
+  <p>For a long moment, neither of them spoke. They just breathed.</p>
+
+  <p>"Are you okay?" Sara said finally.</p>
+
+  <p>Daniel started to laugh. He could not stop it. It was not a happy laugh — it was the laugh of a man who is very, very frightened. "No," he said. "No, I'm not okay. This morning I was a normal person. Now I'm running from fake police on a bus with a dead man's money. I'm not okay at all."</p>
+
+  <p>Sara almost smiled. "Welcome to my life," she said. "Now — we need a safe place for tonight. Somewhere they won't look. I have an idea."</p>
+
+  <div class="words">
+    <h4>New words — Chapter 6</h4>
+    <dl>
+      <dt>statues</dt><dd>des statues</dd>
+      <dt>a market</dt><dd>un marché</dd>
+      <dt>a seller</dt><dd>un vendeur</dd>
+      <dt>to push (through)</dt><dd>pousser, se frayer un chemin</dd>
+      <dt>angry</dt><dd>en colère</dd>
+      <dt>to breathe</dt><dd>respirer</dd>
+      <dt>to lose someone</dt><dd>semer quelqu'un</dd>
+      <dt>a corner</dt><dd>un coin / un angle de rue</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Six</div>
+</section>
+
+<!-- ============ CHAPTER 7 ============ -->
+<section class="chapter" id="c7">
+  <div class="chapter-head">
+    <div class="no">Chapter Seven</div>
+    <div class="ti">Room 14</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">The hotel was small, old, and cheap. It was on a quiet street, far from the centre. There was no computer at the desk — only an old book and a tired man who did not ask many questions.</p>
+
+  <p>"We'd like a room for one night, please," Sara said.</p>
+
+  <p>"Single or <span class="w">double<span class="fr">double / pour deux</span></span>?" the man asked.</p>
+
+  <p>"Double. Two beds."</p>
+
+  <p>"That's forty pounds. <span class="w">Cash<span class="fr">en espèces / liquide</span></span>?"</p>
+
+  <p>Sara paid with the money from the envelope. The man did not ask for their names. He gave them a key — a real metal key, not a card. "Room 14," he said. "First floor. Breakfast is at eight. There isn't much, just toast and coffee."</p>
+
+  <p>"That's fine," Sara said. "Thank you."</p>
+
+  <p>Room 14 was small. There was a window with thin curtains, two narrow beds, an old chair, and a bathroom the size of a cupboard. But the door had a strong lock, and the window looked out onto a quiet back street. Sara checked the window, then the door, then the window again. Daniel understood: she always checked. She never stopped.</p>
+
+  <p>"It's not the Ritz," Sara said, "but it's safe. Nobody knows we're here. We can think."</p>
+
+  <p>Daniel put the grey suitcase on one of the beds. "Okay," he said. "Let's look at it properly. The memory card. Let's find it, so at least we know what we're carrying."</p>
+
+  <p>They opened the case together. Daniel took everything out, one by one, and put it on the bed. The brown envelope of money. The dead black phone. The photograph of the museum. The note. And then — nothing.</p>
+
+  <p>"That's all," Daniel said. "That's everything."</p>
+
+  <p>Sara's face went white. "No," she said. "No, that's not possible. The card has to be here. Victor said — the card is in the case. Look again. Look in the corners, in the lining, everywhere."</p>
+
+  <p>They looked everywhere. They felt every corner of the suitcase. They opened the envelope and counted every note. They looked inside the dead phone. There was no memory card. The most important thing in the world — the thing two people had died for, the thing keeping Victor alive — was not there.</p>
+
+  <p>Sara sat down on the bed. She put her head in her hands.</p>
+
+  <p>"It's gone," she said quietly. "Without the card, we have nothing. We can't prove anything. We can't trade for Victor. We've got <em>nothing.</em>"</p>
+
+  <p>Daniel did not say anything. He was looking at the photograph of the museum. He was thinking. Victor was a careful, clever man. Victor knew that Reed might catch him. Victor knew the case might be opened. So would Victor really put the most important thing in the world inside the case, where anyone could find it?</p>
+
+  <p>"Sara," Daniel said slowly. "Why did Victor send us to the museum?"</p>
+
+  <p>"To meet him," Sara said. "Obviously."</p>
+
+  <p>"But he knew he might not come. The note says, 'If I am not there, wait.' He even told us <em>exactly</em> where to sit. 'Sit on the bench near the big clock.'" Daniel held up the photograph. "Sara. This is a photo of the museum. Why a museum? Why <em>that</em> bench, near <em>that</em> clock?"</p>
+
+  <p>Sara lifted her head slowly. Her dark eyes opened wide.</p>
+
+  <p>"He didn't send us to the museum to meet him," she whispered. "He sent us to the museum because..."</p>
+
+  <p>"Because the card was never in the case," Daniel said. "The case was just to carry the money, the note, and the photo. The card is in the museum. He hid it there. And he told us exactly where to look."</p>
+
+  <p>"The bench," Sara said. "By the clock."</p>
+
+  <p>They looked at each other. For the first time all day, there was something new in the room: not fear, but hope.</p>
+
+  <p>And then Sara's own phone rang.</p>
+
+  <div class="words">
+    <h4>New words — Chapter 7</h4>
+    <dl>
+      <dt>double (room)</dt><dd>chambre pour deux</dd>
+      <dt>cash</dt><dd>espèces, liquide</dd>
+      <dt>a key</dt><dd>une clé</dd>
+      <dt>a lock</dt><dd>une serrure</dd>
+      <dt>curtains</dt><dd>des rideaux</dd>
+      <dt>clever</dt><dd>malin, intelligent</dd>
+      <dt>to hide (hid)</dt><dd>cacher (a caché)</dd>
+      <dt>hope</dt><dd>l'espoir</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Seven</div>
+</section>
+
+<!-- ============ CHAPTER 8 ============ -->
+<section class="chapter" id="c8">
+  <div class="chapter-head">
+    <div class="no">Chapter Eight</div>
+    <div class="ti">Who Do You Trust?</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">Sara looked at her phone. "Unknown number," she said. She looked at Daniel. "It could be them."</p>
+
+  <p>"Or it could be Victor," Daniel said.</p>
+
+  <p>She answered. "Hello?" She listened. Her face changed. "Yes," she said. "Yes, I understand." She turned away from Daniel, toward the window, and spoke more quietly. Daniel could only hear pieces. "...no, I have it... yes, he's with me... no, he doesn't know... tomorrow... yes... I'll bring them both."</p>
+
+  <p>She ended the call. For a moment she did not turn around.</p>
+
+  <p>Daniel's heart was beating again, but in a different way now. Cold. Slow. <em>He doesn't know. I'll bring them both.</em></p>
+
+  <p>"Who was that?" he said.</p>
+
+  <p>"That was a friend," Sara said. She turned around. Her face was calm — too calm. "Someone who can help us. Don't worry."</p>
+
+  <p>"What did you mean, 'he doesn't know'?" Daniel said. "What don't I know, Sara?"</p>
+
+  <p>"It's nothing. It's—"</p>
+
+  <p>"Don't lie to me." Daniel stood up. His back was against the door. "I've trusted you all day. I ran from the police for you. I'm in a hotel room with a stranger and a dead man's money for you. So please. The truth. Who was on the phone?"</p>
+
+  <p>Sara was quiet for a long moment. Then she did something Daniel did not expect. She reached into her coat, and she took out a photograph — an old one, soft at the corners. She held it out to him.</p>
+
+  <p>Daniel took it. It was a photo of a party. Rich people in fine clothes. And there, in the middle, smiling — was Sara. She was wearing a beautiful, <span class="w">elegant<span class="fr">élégant</span></span> evening dress. And next to her, with his arm around her, smiling at the camera, was a man Daniel knew from a hundred newspapers and television screens.</p>
+
+  <p>Charles Grant.</p>
+
+  <p>Daniel's mouth went dry. "You know him," he said. "You <em>know</em> Grant. You're—" He looked at the door behind him. "You work for him."</p>
+
+  <p>"I <em>worked</em> for him," Sara said. "Listen to me, Daniel—"</p>
+
+  <p>"You brought me here," Daniel said. "'I'll bring them both.' That's me. You're going to give me to him. And Victor — there is no Victor, is there? This was all a—"</p>
+
+  <p>"Daniel, stop." Sara's voice was hard now, but her eyes were not. Her eyes were full of pain. "Sit down. Please. And let me tell you the whole truth. Then you can decide. If you want to walk out that door, I won't stop you. But please — two minutes."</p>
+
+  <p>Daniel did not sit down. But he did not open the door either. "Two minutes," he said.</p>
+
+  <p>"Three years ago, I worked for Charles Grant," Sara said. "I was his assistant. I organised his parties, his meetings, his life. I thought he was wonderful. I thought he was the best man in the world." She laughed, but there was no happiness in it. "Then, slowly, I started to see things. Money in the wrong places. People who said no to him, and then disappeared. One day I saw a document I should not have seen. And I understood what kind of man he really was."</p>
+
+  <p>"So you went to the police?" Daniel said.</p>
+
+  <p>"I went to a journalist," Sara said. "A young, honest journalist who was already asking questions about Grant. I gave him everything I knew. That journalist," she said quietly, "was Victor. That's how I met my 'brother.'"</p>
+
+  <p>Daniel blinked. "He's not your brother."</p>
+
+  <p>"No. I'm sorry I lied about that. But he is the closest thing to family I have now. We've been hiding, working, running for two years. I said 'brother' because it was simple, and because there was no time." She looked at the photograph in Daniel's hand. "Grant doesn't know I turned against him. Not for sure. He still thinks maybe I'm loyal. That's our only weapon. That phone call — that was a man inside Grant's house. He still thinks I'm on Grant's side. He told me where they're keeping Victor."</p>
+
+  <p>Daniel looked at her for a long time. He thought about Reed at the museum, hunting them. He thought about Sara checking the window again and again. He thought about her tired, frightened eyes.</p>
+
+  <p>"How do I know," he said slowly, "that <em>this</em> story is the true one? How do I know which Sara is real?"</p>
+
+  <p>Sara nodded, as if it was a fair question. "You don't," she said. "Just like Victor said. You can't be sure. But ask yourself: if I worked for Grant, why did I run from Reed today? Why am I in this cheap hotel and not in a warm office? Why is the money almost gone?" She held out her hand again, just like in the museum. "I can't prove I'm good, Daniel. I can only ask you to trust me one more time. Tomorrow we get the card. Tomorrow we get Victor back. And then this ends."</p>
+
+  <p>Outside, the rain ran down the window. Daniel looked at the photograph one last time. Then he gave it back to her.</p>
+
+  <p>"Okay," he said. "One more time."</p>
+
+  <div class="words">
+    <h4>New words — Chapter 8</h4>
+    <dl>
+      <dt>elegant</dt><dd>élégant</dd>
+      <dt>an assistant</dt><dd>un(e) assistant(e)</dd>
+      <dt>a document</dt><dd>un document</dd>
+      <dt>honest</dt><dd>honnête</dd>
+      <dt>loyal</dt><dd>loyal, fidèle</dd>
+      <dt>a weapon</dt><dd>une arme</dd>
+      <dt>to turn against</dt><dd>se retourner contre</dd>
+      <dt>pain</dt><dd>la douleur</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Eight</div>
+</section>
+
+<!-- ============ CHAPTER 9 ============ -->
+<section class="chapter" id="c9">
+  <div class="chapter-head">
+    <div class="no">Chapter Nine</div>
+    <div class="ti">The Exchange</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">In the morning, they went back to the museum.</p>
+
+  <p>It was a normal Saturday. The museum was crowded again, full of families and tourists. Daniel and Sara walked to the big clock, and they sat on the long wooden bench, in the exact place the note had said.</p>
+
+  <p>"Now what?" Daniel whispered.</p>
+
+  <p>"Now we think like Victor," Sara said. She put her hand under the bench, slowly, carefully, and she felt the wood. Daniel did the same. They felt every centimetre. And then, near the back leg of the bench, under the old wood, Daniel's fingers found something — something small, hard, and flat, held with tape.</p>
+
+  <p>He pulled it off, gently. It was a tiny plastic bag. Inside the bag was a memory card, smaller than his finger.</p>
+
+  <p>"That's it," Sara breathed. "Daniel, that's it. That's everything."</p>
+
+  <p>Daniel closed his hand around the little card. Two years of work. Two lives lost. One man in a cell, waiting. All of it, in his hand.</p>
+
+  <p class="sep">• • •</p>
+
+  <p>Sara made a call. Then she told Daniel the plan.</p>
+
+  <p>"I called Grant's man," she said. "I told him I have the card, and that I want to trade it for Victor. Tonight. They've agreed. The meeting is at an old <span class="w">car park<span class="fr">un parking</span></span> by the river. Nine o'clock."</p>
+
+  <p>"Are you free tonight?" Daniel said. It was a small joke. Neither of them laughed.</p>
+
+  <p>"There's a problem," Sara said. "You understand the problem, don't you? Grant will never let Victor go. And he'll never let us go. We're not going to a trade. We're going to a trap. The moment we give them the card, Reed will kill all three of us."</p>
+
+  <p>"Then why are we going?"</p>
+
+  <p>"Because Victor is there," Sara said simply. "And I won't leave him."</p>
+
+  <p>Daniel was quiet. He looked at the little memory card in his hand. He looked at the people in the museum, walking past, free and safe, with their normal lives and their normal problems. And slowly, an idea grew in his head — a careful, clever idea, the kind of idea a man who works with numbers might have.</p>
+
+  <p>"Sara," he said. "Victor told me something on the phone. He said the real police ask questions, and the fake ones already know the answers." He paused. "What if not <em>all</em> the police work for Grant? What if we just need to find one — one real, honest officer — and give them the proof <em>before</em> tonight?"</p>
+
+  <p>"It's too dangerous," Sara said. "If we go to the wrong officer, we're dead. We can't know who's real."</p>
+
+  <p>"No," Daniel agreed. "We can't know. But there's a way to test it. And I think I know how." He stood up. "I need a computer. And I need you to trust me, the way I trusted you. Can you do that?"</p>
+
+  <p>Sara looked at this quiet, ordinary man — the man with the kind face that Victor had chosen on a train — and she saw that he was not so ordinary after all.</p>
+
+  <p>"What are you going to do?" she said.</p>
+
+  <p>Daniel smiled, for the first time in two days. "I'm going to ask the right questions," he said.</p>
+
+  <div class="words">
+    <h4>New words — Chapter 9</h4>
+    <dl>
+      <dt>a car park</dt><dd>un parking</dd>
+      <dt>tape</dt><dd>du ruban adhésif</dd>
+      <dt>to agree</dt><dd>être d'accord, accepter</dd>
+      <dt>a trap</dt><dd>un piège</dd>
+      <dt>to test</dt><dd>tester</dd>
+      <dt>a cell</dt><dd>une cellule</dd>
+      <dt>the river</dt><dd>la rivière / le fleuve</dd>
+      <dt>ordinary</dt><dd>ordinaire</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Nine</div>
+</section>
+
+<!-- ============ CHAPTER 10 ============ -->
+<section class="chapter" id="c10">
+  <div class="chapter-head">
+    <div class="no">Chapter Ten</div>
+    <div class="ti">The Right Questions</div>
+    <div class="dash"></div>
+  </div>
+
+  <p class="first">The car park by the river was old, dark, and empty. It was nine o'clock at night. The rain had stopped, but the ground was still wet and shiny. One weak yellow light burned over the door. Somewhere below, the river moved slowly in the dark.</p>
+
+  <p>Daniel and Sara stood in the middle of the empty space. Daniel held the grey suitcase. Sara stood very close to him. Neither of them spoke.</p>
+
+  <p>Then, from the shadows, three men came forward.</p>
+
+  <p>The first was Reed, in a long dark coat now, not a suit. The second was one of the big silent men. And the third man held the arm of a fourth person — a thin, tired man with grey hair, his hands tied, his face bruised but alive.</p>
+
+  <p>"Victor," Sara said softly.</p>
+
+  <p>"Sara." Victor's voice was weak. "You shouldn't have come. You should have run."</p>
+
+  <p>"You know I couldn't do that," she said.</p>
+
+  <p>Reed walked forward into the yellow light. He was calm again, the calm of a man who thinks he has already won. "Well," he said. "The whole family. How nice. Now — let's be quick and sensible. You give me the memory card. I give you the journalist. Everybody's happy." He smiled. "Where's the card, Mr. Carter?"</p>
+
+  <p>Daniel did not move. "First, you let Victor walk to us," he said. "Then you get the card."</p>
+
+  <p>Reed laughed softly. "You're not in a position to make rules, Daniel. You're an accountant. You should be at home, watching television." He took one step closer. "The card. <em>Now.</em>"</p>
+
+  <p>Daniel looked at Reed. His heart was beating hard, but his voice was steady. "Can I ask you a question first, Inspector?" he said. "Just one. What did the man on the train say to me?"</p>
+
+  <p>Reed stopped. "What?"</p>
+
+  <p>"It's a simple question," Daniel said. "Yesterday morning, a man on a train spoke to me. You're a police inspector. So tell me — what did he say? What were his exact words?"</p>
+
+  <p>"I don't have time for games," Reed said. But something had changed in his face.</p>
+
+  <p>"You don't know," Daniel said. "Because you weren't really listening to <em>solve a crime</em>. You only wanted the case. A real officer would ask <em>me</em> what happened. You never did. You always already knew." Daniel raised his voice now, and he was not speaking to Reed any more. He turned his head toward the dark shadows of the car park. "Isn't that right, Detective Khan?"</p>
+
+  <p>For one second, nothing happened. Reed's face went white.</p>
+
+  <p>Then the whole car park filled with light. Bright white lights came on from every side. Doors opened. Loud, clear voices shouted: "<em>POLICE! Don't move! Hands where we can see them! POLICE!</em>"</p>
+
+  <p>They came from everywhere — ten, fifteen real police officers, in real uniforms, with cars and lights and dogs. Reed turned to run, but there was nowhere to go. In a few seconds, it was over. Reed and his two men were on the ground, in handcuffs, shouting that there was a mistake.</p>
+
+  <p>There was no mistake.</p>
+
+  <p class="sep">• • •</p>
+
+  <p>A tall woman in a long coat walked toward Daniel. She had a kind, intelligent, tired face. She showed her card — and this time, Daniel knew it was real, because she had spent the last six hours proving it.</p>
+
+  <p>"Detective Inspector Khan," she said. "You did well, Mr. Carter. Most people, when they're afraid, do something stupid. You did something clever. You asked us a question first."</p>
+
+  <p>Earlier that day, this was Daniel's plan. He did not give the proof to one officer and hope. Instead, he sent a copy of one small file — just one, the smallest one — to <em>five</em> different police officers, anonymously, with one line: <em>"Ask Charles Grant about this. Then watch what happens."</em> Four officers did nothing. They were Grant's. But one officer — Detective Inspector Khan — started asking questions, real questions, the kind that frighten powerful men. So Daniel knew. She was the real one. He gave her everything.</p>
+
+  <p>The card held more than enough. By midnight, it was on its way to every newspaper in the country — every newspaper except Grant's.</p>
+
+  <p>"What happens now?" Daniel asked.</p>
+
+  <p>"Now," said DI Khan, "Charles Grant has a very bad morning. And a very bad year." She almost smiled. "Go home, Mr. Carter. Get some sleep. You're safe now."</p>
+
+  <p class="sep">• • •</p>
+
+  <p>Victor sat on the back step of an ambulance, a blanket around his shoulders, drinking hot tea. Sara sat next to him. When Daniel came over, Victor looked up and smiled — the same kind, tired smile from the train.</p>
+
+  <p>"I chose the right face," Victor said quietly. "On the train. I knew it."</p>
+
+  <p>"You nearly got me killed," Daniel said.</p>
+
+  <p>"Yes," Victor said. "I'm sorry. And thank you. Both at the same time." He held out his hand, and Daniel shook it. "You're a good man, Daniel Carter. I asked you that on the train. Now I know the answer."</p>
+
+  <p class="sep">• • •</p>
+
+  <p>On Monday morning, Daniel Carter took the 8:15 train.</p>
+
+  <p>He stood on the same platform, near the same coffee machine. The weather was cold; it was still October. His phone had battery now, but he did not look at it. Instead, he looked at the people. An old man with a newspaper. A tired mother with a child. A young man watching the doors, nervous about something — a job interview, maybe, or a difficult day.</p>
+
+  <p>Daniel looked at them all, and for the first time in many years, he really <em>saw</em> them. Every person on the platform had a whole life — full of fear and hope and secrets he would never know.</p>
+
+  <p>The train arrived. The doors opened. Daniel got on, and found a seat by the window.</p>
+
+  <p>His phone buzzed. One message. From a number he had saved two days ago.</p>
+
+  <p style="font-style:italic;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:.9rem 1.1rem;">
+  <strong>Sara:</strong> Victor's home and safe. Grant was arrested this morning — it's on every front page. We owe you everything. <br><br>
+  Are you free on Saturday? Let's meet for coffee. You choose the place.
+  </p>
+
+  <p>Daniel looked out of the window at the grey city, and he smiled. Then he typed his answer.</p>
+
+  <p style="font-style:italic;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:.9rem 1.1rem;">
+  <strong>Daniel:</strong> Yes, I'm free. How about the museum? I know a nice bench near a big clock. 🙂
+  </p>
+
+  <div class="words">
+    <h4>New words — Chapter 10</h4>
+    <dl>
+      <dt>a shadow</dt><dd>une ombre</dd>
+      <dt>tied (hands)</dt><dd>attaché(es), lié(es)</dd>
+      <dt>an accountant</dt><dd>un comptable</dd>
+      <dt>to solve (a crime)</dt><dd>résoudre (un crime)</dd>
+      <dt>handcuffs</dt><dd>des menottes</dd>
+      <dt>a copy</dt><dd>une copie</dd>
+      <dt>anonymously</dt><dd>anonymement</dd>
+      <dt>a secret</dt><dd>un secret</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Ten</div>
+</section>
+
+<!-- ============ EPILOGUE / STUDY ============ -->
+<section class="chapter epilogue" id="end">
+  <div class="the-end">The End</div>
+
+  <div class="note">
+    <h3>A note from your tutor 📚</h3>
+    <p>Well done — you just read a whole book in English! Don't worry if you didn't understand every single word. Good readers <em>guess</em> from the story and keep going. That's exactly the skill you need for real novels.</p>
+    <p>Notice how the story used the grammar from your <strong>Focus 4-5</strong> lessons: frequency adverbs (<em>always, usually, often</em>), modal verbs for advice and danger (<em>you should, you must not, could I…?</em>), question words (<em>who, what, where, why</em>), the present continuous for tense action (<em>they're coming, the fans are cheering</em>), and "Are you free…? Let's meet…" for arranging to go out. You met them all in a real context — that's how words and grammar truly stick.</p>
+  </div>
+
+  <div class="qbox">
+    <h3>Comprehension — can you answer?</h3>
+    <ol>
+      <li>Why did Victor give the suitcase to Daniel, a complete stranger?</li>
+      <li>How did Daniel know that "Inspector Reed" was not a real police officer?</li>
+      <li>Where did Victor hide the real memory card, and how did Daniel work it out?</li>
+      <li>What clever trick did Daniel use to find one <em>honest</em> police officer?</li>
+      <li>At the end, why do you think Daniel suggests meeting at the museum?</li>
+    </ol>
+  </div>
+
+  <div class="qbox">
+    <h3>Talk or write about it 🗣️</h3>
+    <ol>
+      <li>Daniel was a "safe, boring" man at the start. How did he change by the end? Use the past simple.</li>
+      <li>Imagine <em>you</em> are on the 8:15 train and the man gives <em>you</em> the suitcase. What would you do? Use modal verbs: <em>"I should…", "I must…", "I could…"</em></li>
+    </ol>
+  </div>
+
+  <div class="note">
+    <h3>Want more? 🎯</h3>
+    <p>Tell me if this level felt easy, just right, or hard, and I can write the next story a little simpler or a little harder. I can also write a <em>sequel</em> ("The Second Card"), or turn the new words above into a quiz, or add them to your glossary.</p>
+  </div>
+</section>
+</main>
+
+<script>
+/* progress bar */
+var bar=document.getElementById('bar');
+function onScroll(){
+  var h=document.documentElement;
+  var max=h.scrollHeight-h.clientHeight;
+  var p=max>0?(h.scrollTop/max)*100:0;
+  bar.style.width=p+'%';
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+
+/* tap to reveal French */
+document.addEventListener('click',function(e){
+  var w=e.target.closest('.w');
+  if(w){ w.classList.toggle('show'); }
+});
+
+/* font size */
+var sizes=[0.96,1.06,1.14,1.24,1.36,1.5];
+var si=2;
+function fs(d){
+  si=Math.max(0,Math.min(sizes.length-1,si+d));
+  document.documentElement.style.setProperty('--fs',sizes[si]+'rem');
+}
+
+/* theme */
+function toggleTheme(){
+  document.body.classList.toggle('night');
+  document.getElementById('themeBtn').textContent=document.body.classList.contains('night')?'Day':'Night';
+}
+onScroll();
+</script>
+</body>
+</html>
