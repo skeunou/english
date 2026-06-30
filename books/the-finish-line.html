@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Finish Line — A Thriller for English Learners (A2–B1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c;
+    --ink2:#20242b;
+    --paper:#f3ecdd;
+    --paper2:#ece3d0;
+    --text:#1d2026;
+    --muted:#736a58;
+    --amber:#d8472f;
+    --amber-soft:#f1cdc1;
+    --rust:#9d3320;
+    --line:#d8cdb6;
+    --fs:1.14rem;
+    --lh:1.85;
+  }
+  body.night{
+    --paper:#15181d;
+    --paper2:#1b1f25;
+    --text:#d9d2c2;
+    --muted:#8c8472;
+    --line:#2c313a;
+    --amber:#ef7e5f;
+    --amber-soft:#3a3324;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:'Lora',Georgia,serif;
+    transition:background .3s,color .3s;
+  }
+
+  /* ---------- top progress + toolbar ---------- */
+  #bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--amber);z-index:50;transition:width .1s linear;}
+  #tools{
+    position:fixed;top:0;right:0;left:0;z-index:40;
+    display:flex;gap:.4rem;justify-content:flex-end;align-items:center;
+    padding:.5rem .8rem;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  #tools button{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.04em;
+    border:1px solid var(--line);background:transparent;color:var(--muted);
+    border-radius:999px;padding:.32rem .7rem;font-size:.74rem;cursor:pointer;
+    text-transform:uppercase;transition:.15s;
+  }
+  #tools button:hover,#tools button:focus-visible{border-color:var(--amber);color:var(--amber);outline:none;}
+  #tools .spacer{flex:1;}
+  #tools .brand{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;font-size:.72rem;color:var(--muted);text-transform:uppercase;}
+
+  /* ---------- cover ---------- */
+  .cover{
+    background:var(--ink);
+    color:#efe7d6;
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:3rem 1.6rem 2.4rem;
+    position:relative;overflow:hidden;
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(1200px 380px at 75% -8%, rgba(201,119,42,.22), transparent 60%),
+      radial-gradient(700px 320px at 8% 108%, rgba(157,51,32,.20), transparent 55%);
+  }
+  .cover .kick{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.42em;
+    text-transform:uppercase;font-size:.74rem;color:var(--amber);
+    position:relative;margin-bottom:1.4rem;
+  }
+  .cover h1{
+    font-family:'Oswald',sans-serif;font-weight:700;
+    font-size:clamp(3.4rem,17vw,7rem);line-height:.92;letter-spacing:.01em;
+    margin:0;text-transform:uppercase;position:relative;
+  }
+  .cover h1 .sm{display:block;font-weight:300;font-size:.34em;letter-spacing:.36em;color:#c8bda6;margin-top:.9rem;}
+  .cover .tag{
+    position:relative;margin-top:2.2rem;max-width:30ch;
+    font-style:italic;color:#cabf9f;font-size:1.05rem;line-height:1.6;
+  }
+  .cover .rule{position:relative;width:62px;height:3px;background:var(--amber);margin:1.8rem 0;}
+  .cover .meta{position:relative;font-family:'Oswald',sans-serif;letter-spacing:.16em;font-size:.72rem;text-transform:uppercase;color:#94886e;}
+  .cover .hint{
+    position:relative;margin-top:2.6rem;display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.82rem;color:#cdbf9d;font-style:normal;
+  }
+  .cover .hint b{
+    font-family:'Lora',serif;font-weight:600;color:var(--ink);background:var(--amber-soft);
+    border-bottom:2px dotted var(--amber);border-radius:3px;padding:0 .25rem;
+  }
+  body.night .cover .hint b{color:#efe7d6;background:#3a3324;}
+  .scrolldown{position:relative;margin-top:2.4rem;font-family:'Oswald',sans-serif;letter-spacing:.2em;font-size:.7rem;text-transform:uppercase;color:#94886e;animation:bob 2.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  /* ---------- reading column ---------- */
+  main{max-width:38rem;margin:0 auto;padding:3.4rem 1.5rem 6rem;}
+  .chapter{padding-top:2.4rem;}
+  .chapter-head{margin:0 0 1.8rem;text-align:center;}
+  .chapter-head .no{
+    font-family:'Oswald',sans-serif;font-weight:300;letter-spacing:.5em;
+    text-transform:uppercase;font-size:.8rem;color:var(--amber);
+  }
+  .chapter-head .ti{
+    font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
+    letter-spacing:.02em;font-size:1.9rem;line-height:1.05;margin-top:.5rem;color:var(--text);
+  }
+  .chapter-head .dash{width:42px;height:2px;background:var(--line);margin:1.2rem auto 0;}
+  .chapter p{font-size:var(--fs);line-height:var(--lh);margin:0 0 1.15rem;}
+  .chapter p.first::first-letter{
+    font-family:'Oswald',sans-serif;font-weight:700;
+    float:left;font-size:3.4rem;line-height:.74;padding:.3rem .6rem .1rem 0;color:var(--amber);
+  }
+  .chapter p.sep{text-align:center;color:var(--muted);letter-spacing:.5em;margin:1.6rem 0;}
+
+  /* tappable vocabulary */
+  .w{
+    color:inherit;border-bottom:2px dotted var(--amber);
+    cursor:pointer;position:relative;font-weight:500;white-space:nowrap;
+  }
+  .w .fr{
+    display:none;font-style:italic;font-weight:400;color:var(--amber);
+    font-size:.82em;margin-left:.3em;white-space:normal;
+  }
+  .w.show{border-bottom-style:solid;background:var(--amber-soft);border-radius:3px;padding:0 .15em;}
+  .w.show .fr{display:inline;}
+  .w.show .fr::before{content:"— ";}
+
+  /* end-of-chapter new words box */
+  .words{
+    margin:2.6rem 0 1rem;border:1px solid var(--line);border-radius:14px;
+    background:var(--paper2);padding:1.1rem 1.2rem 1.2rem;
+  }
+  .words h4{
+    font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
+    letter-spacing:.14em;font-size:.74rem;color:var(--amber);margin:0 0 .7rem;
+  }
+  .words dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.3rem .9rem;font-size:.95rem;}
+  .words dt{font-weight:600;}
+  .words dd{margin:0;color:var(--muted);font-style:italic;}
+
+  .chapter-end{text-align:center;color:var(--muted);letter-spacing:.4em;font-family:'Oswald',sans-serif;font-size:.7rem;text-transform:uppercase;margin:2.4rem 0 0;}
+
+  /* final pages */
+  .epilogue{border-top:1px solid var(--line);margin-top:3rem;padding-top:2.4rem;}
+  .the-end{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.3em;text-align:center;font-size:1.6rem;color:var(--amber);margin:3rem 0;}
+  .note{background:var(--paper2);border-left:3px solid var(--amber);border-radius:0 12px 12px 0;padding:1.2rem 1.3rem;margin:1.6rem 0;}
+  .note h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.95rem;margin:0 0 .6rem;color:var(--text);}
+  .note p{font-size:1rem;line-height:1.7;margin:0 0 .7rem;}
+  .qbox{margin:1.4rem 0;}
+  .qbox h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.9rem;color:var(--amber);margin:0 0 .6rem;}
+  .qbox ol{margin:0;padding-left:1.3rem;}
+  .qbox li{font-size:1rem;line-height:1.7;margin-bottom:.5rem;}
+
+  ::selection{background:var(--amber);color:#fff;}
+  @media (max-width:420px){ :root{--fs:1.06rem;} .cover h1{letter-spacing:0;} }
+  @media (prefers-reduced-motion:reduce){ .scrolldown{animation:none;} }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="tools">
+  <span class="brand">The Finish Line</span>
+  <span class="spacer"></span>
+  <a href="index.html" style="text-decoration:none"><button>Library</button></a>
+  <button onclick="fs(-1)" aria-label="Smaller text">A−</button>
+  <button onclick="fs(1)" aria-label="Larger text">A+</button>
+  <button id="themeBtn" onclick="toggleTheme()">Night</button>
+</div>
+
+<header class="cover">
+  <div class="kick">A Thriller · Sport · For English Learners</div>
+  <h1>The Finish<br>Line<span class="sm">A2 – B1</span></h1>
+  <div class="rule"></div>
+  <p class="tag">Mia runs to win. Then a man offers her money to lose — and the favourite collapses on the track.</p>
+  <div class="meta">Ten chapters · ~50 pages · Running &amp</div>
+  <div class="hint">Tip: tap any <b>bold word</b> to see the French.</div>
+  <div class="scrolldown">↓ Scroll to begin</div>
+</header>
+
+<main id="book">
+<section class="chapter" id="c1">
+  <div class="chapter-head">
+    <div class="no">Chapter One</div>
+    <div class="ti">The Track</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Mia Roberts ran every morning, in rain, in wind, in the cold dark before the sun. She ran when she was happy and she ran when she was sad. Running was not a sport for Mia. It was her whole life.</p>
+  <p>She was twenty-four years old. In the day, she worked in a shop. But early in the morning, and late in the evening, she was an <span class="w">athlete<span class="fr">une athlète</span></span>. She trained on the old red <span class="w">track<span class="fr">la piste</span></span> at the city sports centre, again and again, round and round.</p>
+  <p>This morning, like every morning, she started with a <span class="w">warm-up<span class="fr">un échauffement</span></span>. She ran slowly for ten minutes. Then she stopped to <span class="w">stretch<span class="fr">s'étirer</span></span> her legs. Her <span class="w">muscles<span class="fr">les muscles</span></span> were tight from yesterday. She breathed in the cold air and looked at the empty track.</p>
+  <p>"Come on, Mia!" called a voice. "Stop dreaming. Let's work."</p>
+  <p>It was Tom Healy, her <span class="w">coach<span class="fr">son entraîneur</span></span>. Tom was sixty years old, with grey hair and hard, kind eyes. He had a stopwatch in his hand, like always. Tom never smiled before nine o'clock.</p>
+  <p>"Four hundred metres," Tom said. "Fast. I want to see your best <span class="w">pace<span class="fr">ton allure / ton rythme</span></span>. Go!"</p>
+  <p>Mia ran. She ran like the wind. Her feet hit the track, her arms moved, her <span class="w">heart rate<span class="fr">ton rythme cardiaque</span></span> went up and up. When she crossed the line, Tom looked at his stopwatch and his old face changed. Just a little.</p>
+  <p>"Again," he said. But Mia heard the truth in his voice. That was a good time. That was a <em>very</em> good time.</p>
+  <p class="sep">• • •</p>
+  <p>After the training, they sat on a bench by the track. Tom gave Mia a bottle of water.</p>
+  <p>"Three weeks," he said. "Three weeks to the City <span class="w">Marathon<span class="fr">le marathon</span></span>. Do you know what that means, Mia?"</p>
+  <p>"It means I run twenty-six miles and my legs fall off," Mia said.</p>
+  <p>Tom did not laugh. "It means everything," he said. "The City Marathon is on television. The big <span class="w">sponsors<span class="fr">les sponsors</span></span> watch it. The winner gets money — real money. And the winner gets something better than money. A professional <span class="w">contract<span class="fr">un contrat</span></span>. A real running team. A real career." He looked at her. "You could be that runner, Mia. You're fast enough now. I've waited forty years for a runner like you."</p>
+  <p>Mia's heart jumped. This was her dream. This was everything she wanted.</p>
+  <p>"But there's a problem," Tom said. His voice went quiet. "Her name is Ana Silva."</p>
+  <p>Mia knew the name very well. Ana Silva was the national champion. She was beautiful, famous, and faster than anyone. Ana was the <span class="w">favourite<span class="fr">la favorite</span></span> for the marathon. Everybody said Ana would win.</p>
+  <p>"I can beat her," Mia said.</p>
+  <p>"Maybe," Tom said. "Maybe you can. But Mia — listen to me. The world of professional sport is not always clean. There is a lot of money in this race, and where there is money, there are dangerous people. Just run. Run your race. Don't talk to strangers. Don't trust anyone you don't know." He stood up slowly. "Promise me that."</p>
+  <p>Mia laughed. "Tom, it's a running race. What dangerous people? It's just running."</p>
+  <p>Tom did not laugh. "Promise me," he said again.</p>
+  <p>"Okay, okay," Mia said. "I promise."</p>
+  <p>She did not know, then, how soon she would break that promise.</p>
+  <div class="words">
+    <h4>New words — Chapter One</h4>
+    <dl>
+      <dt>an athlete</dt><dd>une athlète</dd>
+      <dt>the track</dt><dd>la piste</dd>
+      <dt>to stretch</dt><dd>s'étirer</dd>
+      <dt>a coach</dt><dd>un entraîneur</dd>
+      <dt>pace</dt><dd>l'allure, le rythme</dd>
+      <dt>heart rate</dt><dd>le rythme cardiaque</dd>
+      <dt>a sponsor</dt><dd>un sponsor</dd>
+      <dt>the favourite</dt><dd>le favori / la favorite</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter One</div>
+</section>
+<section class="chapter" id="c2">
+  <div class="chapter-head">
+    <div class="no">Chapter Two</div>
+    <div class="ti">The Offer</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">That evening, Mia stayed late at the track. She liked it when everyone was gone. The lights came on. The world was quiet. She did one more long, slow run, alone, under the lights.</p>
+  <p>When she finished, a man was waiting for her.</p>
+  <p>He stood near the gate, by a big black car. He wore an expensive grey <span class="w">suit<span class="fr">un costume</span></span> and shiny black shoes. He was about fifty, with a smooth, friendly face and white teeth. He did not look like a runner. He looked like money.</p>
+  <p>"Mia Roberts," the man said. He smiled. "The fastest woman in the city. May I have a moment of your time?"</p>
+  <p>"Who are you?" Mia said.</p>
+  <p>"My name is Frank Vance," the man said. "I'm a sports <span class="w">agent<span class="fr">un agent</span></span>. I find young athletes, and I help them. I make them rich and famous." He gave her a small white card. "I watched your training today. You're very, very good. Better than people know."</p>
+  <p>Mia did not take the card. "Thank you," she said carefully. "But I have a coach."</p>
+  <p>"Tom Healy." Vance laughed softly. "A good man. An <em>old</em> man. Tom can't give you what I can give you." He moved closer. "Let me be honest with you, Mia. There is a lot of <span class="w">betting<span class="fr">des paris</span></span> on this marathon. Huge amounts of money. People bet on who will win, who will lose, the exact times. And some of us... well, we like to know the result before the race."</p>
+  <p>Mia felt cold. "What do you mean?"</p>
+  <p>"I mean," Vance said quietly, "that I can make you a rich woman in three weeks. All you have to do is run a certain way. Not too fast. Finish in a certain place, at a certain time. We will tell you exactly. Nobody will know. And you will have more money than you can dream of." His smile grew. "Everybody has a price, Mia. What's yours?"</p>
+  <p>Mia stepped back. Her face was hot now, with <span class="w">anger<span class="fr">la colère</span></span>. "You want me to <span class="w">cheat<span class="fr">tricher</span></span>," she said. "You want me to lose on purpose."</p>
+  <p>"I want you to be smart," Vance said.</p>
+  <p>"No," Mia said. "I run to win. I run because I love it. I would never, ever sell a race. Now leave me alone."</p>
+  <p>Vance looked at her for a long moment. The friendly smile was still on his face, but his eyes had gone cold and flat, like a snake's.</p>
+  <p>"Such a young heart," he said softly. "So sure of everything. Take the card, Mia. Keep it. People change their minds. And the race... the race can be a dangerous place for runners who don't listen." He put the card on the ground in front of her and got into his big black car. "Think about it," he said through the window. "We'll talk again."</p>
+  <p>The car drove away into the dark.</p>
+  <p>Mia stood alone under the lights, breathing hard, her heart beating fast — and not from running. She looked down at the small white card on the wet ground.</p>
+  <p>She did not pick it up. But she did not throw it away either.</p>
+  <div class="words">
+    <h4>New words — Chapter Two</h4>
+    <dl>
+      <dt>a suit</dt><dd>un costume</dd>
+      <dt>an agent</dt><dd>un agent</dd>
+      <dt>betting</dt><dd>les paris</dd>
+      <dt>anger</dt><dd>la colère</dd>
+      <dt>to cheat</dt><dd>tricher</dd>
+      <dt>on purpose</dt><dd>exprès, volontairement</dd>
+      <dt>to win</dt><dd>gagner</dd>
+      <dt>to lose</dt><dd>perdre</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Two</div>
+</section>
+<section class="chapter" id="c3">
+  <div class="chapter-head">
+    <div class="no">Chapter Three</div>
+    <div class="ti">The Champion</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">The next morning, Mia went to the <span class="w">gym<span class="fr">la salle de sport</span></span> inside the sports centre. She wanted to forget Frank Vance and his cold snake eyes. The best way to forget, for Mia, was always to work until her body hurt too much to think.</p>
+  <p>The gym was full of machines, mirrors, and the smell of sweat and metal. Mia did her <span class="w">weights<span class="fr">la musculation</span></span>. She lifted, pushed, and pulled until her arms shook. She ran on the <span class="w">treadmill<span class="fr">le tapis de course</span></span>, faster and faster, watching her <span class="w">heart rate<span class="fr">son rythme cardiaque</span></span> climb on the little screen. She did her core work on the floor. Building <span class="w">strength<span class="fr">la force</span></span>, building <span class="w">stamina<span class="fr">l'endurance</span></span> — this was the boring, hard work that nobody on television ever sees, the work that makes a champion.</p>
+  <p>And that morning, in the gym, was the famous champion herself.</p>
+  <p>Ana Silva trained in the corner, alone, with her own coach watching every move. She was doing <span class="w">sprints<span class="fr">des sprints</span></span> on a special machine. Mia could not stop watching her. Ana's body was a perfect machine — every muscle working together, her face calm and hard, her eyes far away. When she finished a set, she did not smile, she did not rest. She drank a little water, breathed, and started again.</p>
+  <p>"She never stops," said a voice. It was one of the other runners, a young man called Pete, resting near Mia. "Six hours a day, they say. No friends. No fun. No life. Just running." He shook his head. "She's amazing. But would you want to be her?"</p>
+  <p>"I want to <em>beat</em> her," Mia said.</p>
+  <p>Pete laughed. "Everybody does. Nobody can." He lowered his voice. "And not everybody plays fair, you know. There's a lot of money on this marathon. People say strange things happen to runners who get in the way of the favourites. Bad luck. <span class="w">Injuries<span class="fr">des blessures</span></span>. Failed tests." He shrugged. "Probably just stories."</p>
+  <p>Mia thought of Frank Vance, and said nothing.</p>
+  <p>Later, by the water fountain, Mia and Ana met by chance, face to face for the first time. Up close, Ana looked tired — more tired than a healthy young woman should look.</p>
+  <p>"You're Roberts," Ana said. It was not a question. "The new one. They say you're fast."</p>
+  <p>"I'm fast," Mia said.</p>
+  <p>Ana looked at her for a long moment. And then, to Mia's surprise, the cold champion said something quiet and strange.</p>
+  <p>"Be careful," Ana said. "In this race. Watch your food, your water, everything. Trust no one." Her dark eyes were serious, almost frightened. "I've been at the top for three years. And it's not the running that's dangerous, Roberts. It's the people around the running." Then she picked up her bottle, turned, and walked away, back to her endless training.</p>
+  <p>Mia stood by the fountain, her heart cold. <em>Watch your water. Trust no one.</em> The champion knew something. Mia was sure of it.</p>
+  <p>She did not know that, in three days, those very words would save her — and that Ana Silva, the proud, lonely champion, would be the one lying on the ground, fighting for her life.</p>
+  <div class="words">
+    <h4>New words — Chapter Three</h4>
+    <dl>
+      <dt>a gym</dt><dd>une salle de sport</dd>
+      <dt>weights</dt><dd>la musculation</dd>
+      <dt>a treadmill</dt><dd>un tapis de course</dd>
+      <dt>strength</dt><dd>la force</dd>
+      <dt>stamina</dt><dd>l'endurance</dd>
+      <dt>a sprint</dt><dd>un sprint</dd>
+      <dt>an injury</dt><dd>une blessure</dd>
+      <dt>to beat</dt><dd>battre</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Three</div>
+</section>
+<section class="chapter" id="c4">
+  <div class="chapter-head">
+    <div class="no">Chapter Four</div>
+    <div class="ti">The Collapse</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Mia told no one about Frank Vance. She wanted to forget him. She had a marathon to run, and three weeks was not much time.</p>
+  <p>Two days later, there was a big training session at the track. Many runners came — runners from different clubs, getting ready for the marathon. And the national champion came too. Ana Silva.</p>
+  <p>Mia watched her from the other side of the track. Ana was tall and strong, with long black hair. She trained alone, with her own coach and her own <span class="w">physiotherapist<span class="fr">un kinésithérapeute</span></span>. She did not talk to the other runners. She looked proud and cold. Mia did not like her, but she had to be honest: Ana was beautiful to watch. When Ana ran, she looked like she was flying.</p>
+  <p>"That's the one to beat," said a voice next to Mia. It was Jo, Mia's best friend. Jo was a <span class="w">physiotherapist<span class="fr">un(e) kiné</span></span> too — she worked with <span class="w">injured<span class="fr">blessé(e)</span></span> runners, fixing tired and broken bodies. Jo knew everything about <span class="w">muscles<span class="fr">les muscles</span></span>, bones, and <span class="w">recovery<span class="fr">la récupération</span></span>.</p>
+  <p>"She's fast," Mia said.</p>
+  <p>"She's the favourite," Jo said. "But you're getting faster every week, Mia. I've seen your numbers. I think—"</p>
+  <p>Jo stopped.</p>
+  <p>On the track, something was wrong.</p>
+  <p>Ana Silva had stopped running. She was standing in the middle of the track, holding her chest. Her face was white. She took a few steps, like a drunk person. Then her legs went soft, and she fell.</p>
+  <p>"Ana!" her coach shouted. "Ana!"</p>
+  <p>Everyone ran to her. Ana was on the ground, shaking. Her eyes were open but strange. She could not speak. Her body moved in a way that was horrible to watch.</p>
+  <p>"Give her space!" Jo shouted. She ran forward — Jo knew first aid. She kneeled next to Ana, checked her <span class="w">pulse<span class="fr">le pouls</span></span>, talked to her in a calm voice. "Call an <span class="w">ambulance<span class="fr">une ambulance</span></span>! Now! Her heart is racing — her pulse is far too fast!"</p>
+  <p>Someone called the ambulance. The minutes were long and terrible. Ana shook and could not breathe well. Then, slowly, she became quiet, but she did not wake up properly.</p>
+  <p>The ambulance came. They put Ana on a bed with wheels and took her away, fast, the blue lights flashing.</p>
+  <p>The track was silent. Everyone was in shock. A young, strong, healthy champion — and in one minute, she was on the ground.</p>
+  <p>But Mia was not looking at the ambulance.</p>
+  <p>Mia was looking at the small table by the side of the track, where Ana had left her water <span class="w">bottle<span class="fr">une bouteille</span></span> before training. And Mia was remembering something. Two minutes before Ana collapsed, Mia had seen a man near that table. A man in normal sports clothes, with a cap low over his face. He had bent down near Ana's bottle. And then he had walked away.</p>
+  <p>At the time, Mia thought nothing of it.</p>
+  <p>Now, her blood went cold.</p>
+  <div class="words">
+    <h4>New words — Chapter Four</h4>
+    <dl>
+      <dt>a physiotherapist</dt><dd>un(e) kiné</dd>
+      <dt>injured</dt><dd>blessé(e)</dd>
+      <dt>recovery</dt><dd>la récupération</dd>
+      <dt>the pulse</dt><dd>le pouls</dd>
+      <dt>an ambulance</dt><dd>une ambulance</dd>
+      <dt>to collapse</dt><dd>s'effondrer</dd>
+      <dt>a bottle</dt><dd>une bouteille</dd>
+      <dt>healthy</dt><dd>en bonne santé</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Four</div>
+</section>
+<section class="chapter" id="c5">
+  <div class="chapter-head">
+    <div class="no">Chapter Five</div>
+    <div class="ti">The Water Bottle</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">That night, Mia could not sleep. She kept seeing two things: Ana shaking on the ground, and the man in the cap, bending down near Ana's bottle.</p>
+  <p>In the morning, she went to find Tom. She told him everything — the man, the bottle, her fear.</p>
+  <p>Tom listened, but his face grew dark and tired. "Mia," he said. "Stop. Listen to yourself. A runner collapsed. It happens. The heart, the heat, too much training — it happens to athletes. It's sad, but it's normal."</p>
+  <p>"But the man—"</p>
+  <p>"Was probably nobody," Tom said. "A friend. A helper. You're tired and you're nervous about the race. You're seeing problems that aren't there." He put a hand on her shoulder. "I told you. Don't make trouble. Just run."</p>
+  <p>"Tom, what if someone <span class="w">poisoned<span class="fr">empoisonné</span></span> her? What if someone—"</p>
+  <p>"<em>Stop,</em>" Tom said, harder now. And then, more quietly, almost afraid: "Please, Mia. For your own good. Leave it alone."</p>
+  <p>Mia looked at her old coach. There was something in his eyes she had never seen before. Not anger. <span class="w">Fear<span class="fr">la peur</span></span>. Tom was afraid.</p>
+  <p>She left. But she did not leave it alone.</p>
+  <p class="sep">• • •</p>
+  <p>Mia went back to the track. The training table was still there. The bin next to it had not been emptied. Mia put on a plastic bag over her hand, like she had seen on television, and she searched through the bin.</p>
+  <p>And there it was. Ana Silva's water bottle. Half full.</p>
+  <p>Mia's heart was beating fast. She put the bottle inside the plastic bag, carefully, and she took it to the one person she trusted completely.</p>
+  <p>Jo looked at the bottle on her kitchen table. "Mia," she said slowly, "do you understand what you're saying? You're saying someone put a drug in a runner's bottle. On purpose. To hurt her."</p>
+  <p>"I'm saying I saw a man near the bottle," Mia said. "And then Ana nearly died. Jo — you work with athletes. You know people who can test this. Can you find out what's in it? Quietly?"</p>
+  <p>Jo was quiet for a long time. She looked at the bottle, then at her friend's serious face.</p>
+  <p>"This is dangerous, Mia," she said. "If you're right, then there are dangerous people behind this. If you're wrong, you look crazy and you ruin your own race."</p>
+  <p>"I know," Mia said. "But I can't pretend I saw nothing. Will you help me?"</p>
+  <p>Jo took a deep breath. "Yes," she said. "I have a friend in a <span class="w">laboratory<span class="fr">un laboratoire</span></span>. He owes me a favour. Give me three days."</p>
+  <div class="words">
+    <h4>New words — Chapter Five</h4>
+    <dl>
+      <dt>poisoned</dt><dd>empoisonné(e)</dd>
+      <dt>fear</dt><dd>la peur</dd>
+      <dt>a bin</dt><dd>une poubelle</dd>
+      <dt>to search</dt><dd>fouiller</dd>
+      <dt>to trust</dt><dd>faire confiance</dd>
+      <dt>on purpose</dt><dd>exprès</dd>
+      <dt>a laboratory</dt><dd>un laboratoire</dd>
+      <dt>a favour</dt><dd>un service</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Five</div>
+</section>
+<section class="chapter" id="c6">
+  <div class="chapter-head">
+    <div class="no">Chapter Six</div>
+    <div class="ti">Side Effects</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Three days felt like three years. Mia trained, worked, and waited. Every time her phone rang, she jumped.</p>
+  <p>In the news, there was a small story about Ana Silva. "National champion in hospital after collapse during training. Doctors say she is stable. Cause unknown." That was all. Ana was alive. But the marathon was in two weeks, and the favourite was in a hospital bed.</p>
+  <p>On the third night, Jo came to Mia's flat. Her face told Mia everything before she spoke.</p>
+  <p>"You were right," Jo said. "And I wish you weren't."</p>
+  <p>She sat down. "My friend tested the water. There was a <span class="w">drug<span class="fr">une drogue / un médicament</span></span> in it. A strong one. It's a kind of <span class="w">stimulant<span class="fr">un stimulant</span></span> — it makes the heart beat faster and faster. In a small amount, it's used in some medicines. But in a large amount, in a healthy young athlete who is already running hard..." Jo stopped. "It can stop the heart, Mia. It nearly killed her. It was not an accident. Someone wanted Ana out of that race."</p>
+  <p>Mia felt sick. "So I was right. Someone is <span class="w">drugging<span class="fr">en train de droguer</span></span> runners."</p>
+  <p>"There's more," Jo said. "This drug — it's a <span class="w">banned substance<span class="fr">un produit interdit</span></span>. If a runner has it in their body and they take a <span class="w">blood test<span class="fr">un test sanguin</span></span> after a race, the test shows it. The runner gets caught for <span class="w">doping<span class="fr">le dopage</span></span>. They lose everything — their medals, their name, their career."</p>
+  <p>Mia's mind was racing now. "Wait. So if someone secretly puts this drug in a runner's bottle... the runner doesn't just collapse. The runner also <em>fails the drug test</em>. Everyone thinks the runner is a cheat. The runner is destroyed — and nobody looks for a <span class="w">poisoner<span class="fr">un empoisonneur</span></span>, because everyone thinks the runner did it to themselves."</p>
+  <p>"Exactly," Jo said quietly. "It's perfect. You hurt the runner <em>and</em> you destroy their name, all at once. And the real criminal is invisible."</p>
+  <p>The two friends looked at each other in the small, quiet flat.</p>
+  <p>"Jo," Mia said slowly. "Why would someone do this? Why hurt runners?"</p>
+  <p>Jo had already thought about it. "Money," she said. "The <span class="w">betting<span class="fr">les paris</span></span>. Think about it. If you know, before the race, that the favourite is going to collapse and lose — then you bet against her. You bet all your money. And you win a fortune. You don't just guess the result, Mia. You <em>make</em> the result."</p>
+  <p>Frank Vance's smooth, smiling face came into Mia's mind. <em>Some of us like to know the result before the race.</em></p>
+  <p>"I know who's behind this," Mia whispered. "A man came to me. He offered me money to lose. His name is Frank Vance."</p>
+  <p>Jo went pale. "Mia," she said. "If Frank Vance offered you money, and you said no... then you're a problem for him. And we just learned what Frank Vance does to problems."</p>
+  <p>As if in answer, somewhere outside in the dark street, a car engine started, and slowly drove away.</p>
+  <div class="words">
+    <h4>New words — Chapter Six</h4>
+    <dl>
+      <dt>a drug</dt><dd>une drogue / un médicament</dd>
+      <dt>a stimulant</dt><dd>un stimulant</dd>
+      <dt>a banned substance</dt><dd>un produit interdit</dd>
+      <dt>a blood test</dt><dd>un test sanguin</dd>
+      <dt>doping</dt><dd>le dopage</dd>
+      <dt>to drug someone</dt><dd>droguer quelqu'un</dd>
+      <dt>a fortune</dt><dd>une fortune</dd>
+      <dt>pale</dt><dd>pâle</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Six</div>
+</section>
+<section class="chapter" id="c7">
+  <div class="chapter-head">
+    <div class="no">Chapter Seven</div>
+    <div class="ti">Room 212</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Two days later, Mia did something difficult. She went to the hospital to visit Ana Silva.</p>
+  <p>She was not sure why she went. They were not friends. They were rivals. But Ana's quiet warning at the gym — <em>watch your water, trust no one</em> — would not leave Mia's head. And now Ana was lying in a hospital bed because someone had put a <span class="w">drug<span class="fr">une drogue</span></span> in her bottle. Mia felt she owed her something. The truth, at least.</p>
+  <p>Ana was in room 212. She was awake now, but weak and pale, with a <span class="w">drip<span class="fr">une perfusion</span></span> in her arm and a machine beeping quietly beside the bed. She looked smaller in the white bed, not like a champion at all. Just a tired young woman who had nearly died.</p>
+  <p>"Roberts," Ana said when she saw her. A small, surprised smile. "The new one. I didn't think anyone would come. My 'friends' in the sport are all too busy."</p>
+  <p>Mia sat down by the bed. "How do you feel?"</p>
+  <p>"Like my heart tried to run a marathon while I was standing still," Ana said. "The doctors say I'm lucky to be alive." Her eyes grew hard. "They also say it was 'exhaustion.' That I trained too hard. That it was my own fault." She laughed bitterly. "They're wrong, and I know it. I felt fine that morning. And then I drank from my bottle, and ten minutes later the world was ending."</p>
+  <p>Mia took a breath. "Ana," she said quietly. "I have to tell you something. Before you collapsed, I saw a man near your water bottle. A man in a cap. He bent down by your table and then walked away." She paused. "And I took your bottle from the bin afterwards. I had it tested. There was a drug in it, Ana. A strong one. A <span class="w">banned substance<span class="fr">un produit interdit</span></span>. Someone poisoned you on purpose."</p>
+  <p>Ana did not look shocked. She closed her eyes, and a tear ran down her face.</p>
+  <p>"I knew it," she whispered. "I knew it wasn't me." She opened her eyes and grabbed Mia's hand, her grip suddenly strong. "Listen to me. A month ago, a man came to me. Smiling. Expensive suit. He wanted me to lose a race for money. I said no. I told him to leave. And his eyes — his eyes went cold, like a snake."</p>
+  <p>"Frank Vance," Mia said.</p>
+  <p>Ana's face went white. "He came to you too."</p>
+  <p>"He did," Mia said. "I said no, just like you. And then you collapsed — to clear the way, maybe. To make me the favourite, so they could control the race through me, or so I'd be too scared to say no next time."</p>
+  <p>The two rivals looked at each other in the quiet hospital room, and in that moment they were not rivals any more. They were two runners who had been told they were nothing, two women who someone powerful had tried to use, hurt, and throw away.</p>
+  <p>"You have to stop him," Ana said. "I can't — I'm stuck in this bed, and nobody believes me. But you can run that race. You can be there when he tries again. Promise me, Roberts. Promise me you'll bring him down."</p>
+  <p>Mia held the champion's hand.</p>
+  <p>"I promise," she said.</p>
+  <div class="words">
+    <h4>New words — Chapter Seven</h4>
+    <dl>
+      <dt>a drug</dt><dd>une drogue</dd>
+      <dt>a drip</dt><dd>une perfusion</dd>
+      <dt>a banned substance</dt><dd>un produit interdit</dd>
+      <dt>exhaustion</dt><dd>l'épuisement</dd>
+      <dt>my own fault</dt><dd>ma faute</dd>
+      <dt>to grab</dt><dd>saisir, attraper</dd>
+      <dt>a grip</dt><dd>une prise, une poigne</dd>
+      <dt>stuck (in bed)</dt><dd>coincé(e)</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Seven</div>
+</section>
+<section class="chapter" id="c8">
+  <div class="chapter-head">
+    <div class="no">Chapter Eight</div>
+    <div class="ti">The Pattern</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">The next day, Mia and Jo started to dig. They were careful. They worked at night, on Jo's computer, with the curtains closed.</p>
+  <p>They looked at the last two years of running. And slowly, a terrible picture appeared.</p>
+  <p>It was not just Ana Silva. Over two years, in different cities, good runners had bad, strange "accidents." One runner <span class="w">collapsed<span class="fr">s'est effondré</span></span> before an important race. Two runners suddenly failed <span class="w">drug tests<span class="fr">des contrôles antidopage</span></span> — runners everyone believed were clean and honest. One young man, a beautiful runner with a big future, was caught for <span class="w">doping<span class="fr">dopage</span></span>, lost his <span class="w">sponsor<span class="fr">son sponsor</span></span>, and never ran again. He always said he was <span class="w">innocent<span class="fr">innocent</span></span>. Nobody believed him.</p>
+  <p>"Look at this," Jo said. She pointed at the screen. "Every time one of these 'accidents' happened, there was a lot of strange betting. Huge amounts of money, bet against the favourite, just before the race. Someone knew. Every time."</p>
+  <p>"And every time," Mia said, "was there a connection to Frank Vance?"</p>
+  <p>Jo searched. It took an hour. And there he was — not in the front, never in the front, but always somewhere near. Vance was the agent of one runner. Vance was a "friend" of a race organiser. Vance was a guest at a betting company's party. Like a spider, he sat in the middle of a web, and he never touched anything himself.</p>
+  <p>"He's clever," Jo said. "He never holds the bottle. He never puts the drug in. He has other people for that — the man in the cap. He just... arranges things. And takes the money."</p>
+  <p>Mia sat back. She felt small and afraid, but also very, very angry. "These are runners, Jo. People who train their whole lives. People who love the sport, like me. And he's destroying them, one by one, for money. We have to stop him."</p>
+  <p>"How?" Jo said. "We have a water bottle and some notes on a computer. He has money, lawyers, and dangerous men. If we go to the police, what if a policeman works for him too?"</p>
+  <p>It was a good question. It was the same question, Mia thought, that anyone in real trouble must ask.</p>
+  <p>"Then we need proof," Mia said. "Real, hard proof that even Frank Vance can't hide. Proof of him, doing it, this time. At the marathon." She looked at Jo. "There's only one place we can catch him. The race. He's going to try again — he's going to fix the City Marathon. And this time, we're going to be ready, and we're going to be watching."</p>
+  <p>"That's in two weeks," Jo said. "And Mia — if Vance fixes this race, who's the favourite now that Ana is in hospital?"</p>
+  <p>Mia went cold.</p>
+  <p>Because she already knew the answer. With Ana Silva gone, there was a new favourite for the City Marathon.</p>
+  <p>It was her.</p>
+  <div class="words">
+    <h4>New words — Chapter Eight</h4>
+    <dl>
+      <dt>to collapse</dt><dd>s'effondrer</dd>
+      <dt>a drug test</dt><dd>un contrôle antidopage</dd>
+      <dt>innocent</dt><dd>innocent</dd>
+      <dt>a sponsor</dt><dd>un sponsor</dd>
+      <dt>a connection</dt><dd>un lien</dd>
+      <dt>a web</dt><dd>une toile</dd>
+      <dt>proof</dt><dd>une preuve</dd>
+      <dt>to fix (a race)</dt><dd>truquer (une course)</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Eight</div>
+</section>
+<section class="chapter" id="c9">
+  <div class="chapter-head">
+    <div class="no">Chapter Nine</div>
+    <div class="ti">The Warning</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Mia was the favourite now. And that meant she was the next target.</p>
+  <p>Strange things began to happen. One evening, she came home and the door of her flat was open. Inside, nothing was stolen — not her money, not her phone. But her things were moved. Someone had been there, searching. Looking for the water bottle, maybe. Looking for what she knew.</p>
+  <p>The next day, a message came to her phone, from a number she did not know:</p>
+  <p style="font-style:italic;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;">"Beautiful runners get hurt sometimes. Knees. Ankles. Hearts. Be smart, Mia. Take the money, run a quiet race, and live a long life. — A friend."</p>
+  <p>Mia's hands shook as she read it. But she did not delete it. She saved it. It was proof — small proof, but proof.</p>
+  <p>She also became careful, the way she had seen people be careful in films. She checked the street before she left her flat. She never drank from a bottle she did not open herself. At training, she watched everyone.</p>
+  <p>And the more she watched, the more she worried about one person. Tom. Her own coach.</p>
+  <p>Because Tom was acting strangely. He was nervous. He looked over his shoulder. When Mia talked about the race, his hands shook. And once, Mia saw him talking quietly to a man in a car — and the man, she was almost sure, worked for Frank Vance.</p>
+  <p>"Jo," she said that night, her voice small. "What if it's Tom? What if my own coach is part of it? He keeps telling me to 'be quiet,' to 'just run,' to 'leave it alone.' He knew there was danger before anyone. How did he know? He's afraid of something — or he's <span class="w">guilty<span class="fr">coupable</span></span> of something."</p>
+  <p>"You can't know that," Jo said.</p>
+  <p>"I have to know," Mia said. "I can't run this race not knowing if my own coach wants me to lose — or worse. I have to ask him. Tomorrow."</p>
+  <p>That night, Mia barely slept. She thought about Tom — the man who woke up at five every morning for her, who timed every run, who believed in her when nobody else did. The man who said, "I've waited forty years for a runner like you." Could that man be helping Frank Vance?</p>
+  <p>She did not want to believe it. But she had learned a hard lesson in the last two weeks. In this world, you could not be sure of anyone. Not strangers, not friends — and maybe not even the people you loved most.</p>
+  <p>She would ask him tomorrow, face to face. And she would watch his eyes when he answered.</p>
+  <div class="words">
+    <h4>New words — Chapter Nine</h4>
+    <dl>
+      <dt>a target</dt><dd>une cible</dd>
+      <dt>to steal (stole)</dt><dd>voler</dd>
+      <dt>to delete</dt><dd>supprimer</dd>
+      <dt>to be careful</dt><dd>faire attention</dd>
+      <dt>over his shoulder</dt><dd>par-dessus son épaule</dd>
+      <dt>guilty</dt><dd>coupable</dd>
+      <dt>to barely sleep</dt><dd>à peine dormir</dd>
+      <dt>a lesson</dt><dd>une leçon</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Nine</div>
+</section>
+<section class="chapter" id="c10">
+  <div class="chapter-head">
+    <div class="no">Chapter Ten</div>
+    <div class="ti">Trust Your Coach?</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Mia found Tom alone at the track, early, before the other runners came. The morning was grey and cold. He was sitting on the bench, holding his old stopwatch, looking at nothing.</p>
+  <p>She sat down next to him. For a moment, neither of them spoke.</p>
+  <p>"You know," Tom said at last, without looking at her. "Don't you. You know what's happening."</p>
+  <p>Mia's heart was beating hard. "I know runners are being drugged," she said. "I know it's about betting. I know a man called Frank Vance is behind it." She took a breath. "And I saw you, Tom. I saw you talking to his men. So I need you to tell me the truth. Are you helping him? Are you helping Frank Vance?"</p>
+  <p>Tom turned and looked at her. And to Mia's shock, there were tears in his old, hard eyes.</p>
+  <p>"Forty years ago," Tom said quietly, "I was a runner. A good one. Maybe a great one. I was going to the Olympics." He looked down at his hands. "And a man came to me — a young man, smiling, in an expensive suit. He offered me money to lose a race. I said no. I said no, just like you did, because I loved the sport and I would never sell it." He stopped. "That man was Frank Vance. He was young then. We were both young."</p>
+  <p>"What happened?" Mia whispered.</p>
+  <p>"Two weeks later, in a race, I 'failed' a drug test," Tom said. "A drug I never took. A drug someone put in my body without my knowledge. I lost everything. My name, my team, my dream, the Olympics. Everyone called me a cheat. My own family believed it. My running life was over at twenty-three." He wiped his eyes. "I never proved I was innocent. Vance destroyed me, and he smiled while he did it. And there was nothing I could do."</p>
+  <p>Mia understood now. All of it. "That's why you were afraid," she said softly. "That's why you said, 'just run, don't make trouble.' You weren't helping him. You were trying to protect me. You knew what he does to runners who say no — because he did it to <em>you</em>."</p>
+  <p>Tom nodded. "And those men you saw me with? Vance sent them. To remind me. To say, 'keep your runner quiet, old man, or we'll do it again.'" He took Mia's hands in his. "I've spent forty years living with this. I let him win. I was too afraid to fight. And I have been so ashamed, every single day." His voice grew strong now. "But I will not watch him destroy you, Mia. Not you. Not again. I'm done being afraid."</p>
+  <p>Mia felt her own eyes fill with tears. She had doubted him — and he had been protecting her all along.</p>
+  <p>"Then help me," she said. "Don't tell me to run quietly. Help me catch him. Once and for all. For Ana. For that young runner who lost everything. For <em>you</em>, Tom."</p>
+  <p>The old coach looked at his runner for a long moment. Then, for the first time that Mia had ever seen, Tom Healy smiled before nine o'clock in the morning.</p>
+  <p>"All right," he said. "Let's catch a spider. And Mia — I know exactly how he'll try to fix the race. I've seen it before. Here's what we do."</p>
+  <div class="words">
+    <h4>New words — Chapter Ten</h4>
+    <dl>
+      <dt>a tear</dt><dd>une larme</dd>
+      <dt>the Olympics</dt><dd>les Jeux Olympiques</dd>
+      <dt>to fail (a test)</dt><dd>échouer (à un test)</dd>
+      <dt>to protect</dt><dd>protéger</dd>
+      <dt>to remind</dt><dd>rappeler</dd>
+      <dt>ashamed</dt><dd>honteux</dd>
+      <dt>to doubt</dt><dd>douter de</dd>
+      <dt>once and for all</dt><dd>une fois pour toutes</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Ten</div>
+</section>
+<section class="chapter" id="c11">
+  <div class="chapter-head">
+    <div class="no">Chapter Eleven</div>
+    <div class="ti">The Night Before</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">The night before the City Marathon, Mia could not eat. She sat in Jo's kitchen with Jo and Tom, and on the table between them was their whole plan, written on a piece of paper.</p>
+  <p>"Let's go through it one more time," Tom said. His old face was serious. "Tomorrow is the most important day of your life, Mia — and the most dangerous. We have to do this right."</p>
+  <p>Jo poured tea nobody drank. "Rule one," she said. "Mia drinks <em>nothing</em> she doesn't open herself. Nothing from the public <span class="w">water stations<span class="fr">les points de ravitaillement</span></span>. The drug goes in the cups, like with Ana. If Mia drinks one cup, the race is over and so is she."</p>
+  <p>"So how do I drink?" Mia asked. "I can't run a marathon with no water. I'll <span class="w">collapse<span class="fr">m'effondrer</span></span> by myself."</p>
+  <p>"That's my job," Tom said. "I'll be at three points on the road — at ten, twenty, and thirty kilometres. Bright yellow coat, so you see me. I'll hand you a <span class="w">sealed<span class="fr">scellée</span></span> bottle each time, opened by no one. You only drink from my hand. Nobody else's."</p>
+  <p>"Rule two," Jo went on. "We catch them in the act. I'll be at the water stations, near the tables, filming with my phone. The moment the man in the cap puts something in a cup, I've got him — clear video, no doubt. That's our <span class="w">proof<span class="fr">notre preuve</span></span>."</p>
+  <p>Mia looked at the plan. It seemed so small against a man like Frank Vance — three friends, two phones, and a yellow coat against money, lawyers, and dangerous men.</p>
+  <p>"What if it goes wrong?" she said quietly. "What if they see you, Jo? What if Tom can't get to the road? What if—"</p>
+  <p>"Then we run," Tom said simply. "And we try again another day. But Mia — listen to me." He took her hands across the table. "Forty years ago, I was too afraid to fight this man. I let him win, and I have hated myself every day since. Tomorrow, I am not afraid any more. Whatever happens, win or lose, caught or free — tomorrow we <em>fight</em>. And that already makes us better than him."</p>
+  <p>There was one more thing. Tom had done something he had not told Vance's people about. Days before, he had gone quietly to an old friend — a woman from forty years ago, honest and brave, who now worked at the national <span class="w">anti-doping<span class="fr">antidopage</span></span> agency, and who had always believed Tom was innocent. He had told her the whole plan. He had asked her to come to the marathon with real, trusted police, and to watch the water stations from a distance. Insurance. A safety net, in case everything else failed.</p>
+  <p>"So we're not alone," Tom said. "Remember that tomorrow, when you're tired and afraid and your legs are screaming. You are not alone out there."</p>
+  <p>That night, Mia lay in bed and could not sleep. She thought of Ana in her hospital bed. She thought of the young runner whose life Vance had destroyed years ago. She thought of Tom, carrying forty years of shame. She thought of the finish line, and everything she wanted, and everything that could go wrong.</p>
+  <p>Then, at last, she slept. And in the morning, she got up, put on her running shoes, and went to fight.</p>
+  <div class="words">
+    <h4>New words — Chapter Eleven</h4>
+    <dl>
+      <dt>water stations</dt><dd>les points de ravitaillement</dd>
+      <dt>to collapse</dt><dd>s'effondrer</dd>
+      <dt>sealed</dt><dd>scellé(e)</dd>
+      <dt>proof</dt><dd>la preuve</dd>
+      <dt>anti-doping</dt><dd>antidopage</dd>
+      <dt>a safety net</dt><dd>un filet de sécurité</dd>
+      <dt>to scream</dt><dd>hurler</dd>
+      <dt>afraid</dt><dd>effrayé(e)</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Eleven</div>
+</section>
+<section class="chapter" id="c12">
+  <div class="chapter-head">
+    <div class="no">Chapter Twelve</div>
+    <div class="ti">The Marathon</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">The day of the City Marathon was bright and cold. The streets were full of thousands of people. Flags moved in the wind. Music played. Helicopters flew above with cameras, because the whole country was watching on television.</p>
+  <p>At the start line, hundreds of runners waited together, jumping, stretching, breathing out clouds in the cold air. And at the front, in lane one, in a clean white running shirt, stood Mia Roberts — the favourite.</p>
+  <p>She was terrified. She was ready.</p>
+  <p>The plan was set. Mia would drink nothing from the public tables — only sealed bottles from Tom's hand, at three points on the road. Jo would watch the water stations, filming, ready to catch the man in the cap. And somewhere in the crowd, an honest woman from the anti-doping agency waited with real police. Everything now depended on running, watching, and waiting.</p>
+  <p>The gun fired.</p>
+  <p>The runners ran.</p>
+  <p class="sep">• • •</p>
+  <p>For the first hour, Mia ran well. Her <span class="w">pace<span class="fr">son allure</span></span> was strong. Her legs felt good. She ran in a group of five fast runners, near the front. The crowd shouted her name. Her heart was full.</p>
+  <p>But she did not drink. At every water station, she ran past the public tables. Instead, Tom was there at three points along the road, in a bright yellow coat, and only from Tom's hand did she take a bottle — a sealed bottle, opened by no one.</p>
+  <p>At twenty kilometres, her body began to hurt. This is the hard part of every marathon — when the legs scream and the <span class="w">lungs<span class="fr">les poumons</span></span> burn and the mind says <em>stop, stop, stop.</em> But Mia had run through this pain a thousand times in training. <em>Keep your pace. Breathe. One step. One more step.</em></p>
+  <p>Then, at the twenty-five kilometre water station, Jo's voice came through a small earphone Mia was wearing.</p>
+  <p>"Mia! I see him! The man in the cap — he's at the next table. He just put something in the blue cups. <em>Don't drink the blue cups!</em> I'm filming him now. We've got him! We've—"</p>
+  <p>The voice stopped.</p>
+  <p>"Jo?" Mia said, running. "Jo! Are you there? <em>Jo!</em>"</p>
+  <p>Nothing. Just the noise of the crowd and her own hard breathing.</p>
+  <p>Something had gone wrong. Mia's heart, already racing from the run, beat even harder. They had seen Jo. They knew. And Jo had the film — the only proof.</p>
+  <p>Mia made a decision. There were still seventeen kilometres to run. She could win this race. The professional contract, the money, the dream — it was right there in front of her.</p>
+  <p>But her friend was in trouble.</p>
+  <p>Mia turned her head and looked back, toward the twenty-five kilometre station, where she had left Jo. Then she looked forward, toward the finish line and everything she had ever wanted.</p>
+  <p>And she stopped running.</p>
+  <div class="words">
+    <h4>New words — Chapter Twelve</h4>
+    <dl>
+      <dt>a water station</dt><dd>un point de ravitaillement</dd>
+      <dt>sealed</dt><dd>scellé, fermé</dd>
+      <dt>pace</dt><dd>l'allure</dd>
+      <dt>lungs</dt><dd>les poumons</dd>
+      <dt>to burn</dt><dd>brûler</dd>
+      <dt>an earphone</dt><dd>une oreillette</dd>
+      <dt>to film</dt><dd>filmer</dd>
+      <dt>a decision</dt><dd>une décision</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Twelve</div>
+</section>
+<section class="chapter" id="c13">
+  <div class="chapter-head">
+    <div class="no">Chapter Thirteen</div>
+    <div class="ti">The Finish Line</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Mia ran back — the wrong way, against the river of runners, pushing through them. People shouted. She did not care. She ran to the twenty-five kilometre station.</p>
+  <p>There, behind the water table, in the gap between two buildings, she found Jo. A big man held Jo by the arms. Another man — the man in the cap — was reaching for Jo's phone, for the film.</p>
+  <p>"Get off her!" Mia shouted.</p>
+  <p>She did not think. She ran straight at them. The man in the cap turned — and Mia, twenty-six years of running in her legs, hit him with all her speed. He fell. Jo pulled free. "The phone!" Jo shouted. "I threw it — there!" The phone was on the ground by the table. The big man went for it.</p>
+  <p>But at that exact moment, the crowd at the water station saw what was happening, and people began to shout. And then a runner in a bright yellow coat pushed through — Tom. And behind Tom, two police officers in real uniforms, running hard.</p>
+  <p>Because Mia and Tom had not trusted only themselves. Days before, Tom had gone to one person — an old friend from forty years ago, an honest woman who now worked for the national <span class="w">anti-doping<span class="fr">antidopage</span></span> agency, a woman who had always believed Tom was innocent. They had told her the plan. They had asked her to bring real, trusted police to the marathon, and to watch the water stations.</p>
+  <p>It was over in a minute. The man in the cap and the big man were on the ground, in handcuffs. And Jo's phone — picked up by a police officer — held the film: clear video of the man in the cap putting a banned <span class="w">drug<span class="fr">une drogue</span></span> into the runners' cups. Real proof. Proof even Frank Vance could not hide.</p>
+  <p class="sep">• • •</p>
+  <p>They found Vance an hour later, in a private room above the finish line, drinking expensive wine, watching the race on a screen, waiting to collect his betting money. He was still smiling when the police came in. He stopped smiling when they showed him the film, and the saved threatening message, and the water bottle, and forty years of a pattern, all coming together at once.</p>
+  <p>"You can't prove I touched anything," Vance said.</p>
+  <p>"We don't need to prove you touched it," said the woman from the anti-doping agency. "We can prove you arranged it. All of it. For years." She leaned close. "You destroyed a lot of runners, Mr. Vance. You should have remembered something. Runners don't give up. We run through the pain. Right to the finish line."</p>
+  <p class="sep">• • •</p>
+  <p>Mia did not win the City Marathon that year. She had run back; she lost too much time. She finished, much later, in the middle of the race, tired and happy, holding Jo's hand as they crossed the line together. The crowd, who now knew the story, cheered louder for her than for the winner.</p>
+  <p>She did not get the prize money. But three weeks later, a different sponsor called — a clean, honest one. They had heard about the runner who turned back from the finish line to save her friend and catch a criminal. They offered her a real professional contract. "We want runners with fast legs," they said. "But more than that, we want runners with good hearts."</p>
+  <p>Ana Silva came out of hospital. She was weak for a long time, but she recovered. One day she came to the track and found Mia. The proud, cold champion was gone. "You saved my life," Ana said quietly. "And you didn't even like me." Mia laughed. "I like you now," she said. They trained together after that.</p>
+  <p>And Tom Healy — Tom finally put down the shame he had carried for forty years. The anti-doping agency reopened his old case. They proved, at last, that he had been innocent all along. His name was clean again. At sixty years old, the runner who lost everything got it back.</p>
+  <p class="sep">• • •</p>
+  <p>Months later, on a cold bright morning, Mia Roberts ran on the old red track, round and round, the way she always did. Tom stood at the side with his stopwatch, the way he always did. The sun came up over the city.</p>
+  <p>"Again," Tom said. "Faster this time."</p>
+  <p>Mia smiled, and ran. Some things, she thought, you should never sell. And some things — like the love of running, like a true friend, like an honest finish line — are worth more than any prize in the world.</p>
+  <div class="words">
+    <h4>New words — Chapter Thirteen</h4>
+    <dl>
+      <dt>anti-doping</dt><dd>antidopage</dd>
+      <dt>a drug</dt><dd>une drogue</dd>
+      <dt>handcuffs</dt><dd>des menottes</dd>
+      <dt>to arrange</dt><dd>organiser</dd>
+      <dt>to give up</dt><dd>abandonner</dd>
+      <dt>to recover</dt><dd>se rétablir</dd>
+      <dt>shame</dt><dd>la honte</dd>
+      <dt>worth</dt><dd>qui vaut</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Thirteen</div>
+</section>
+
+<section class="chapter epilogue" id="end">
+  <div class="the-end">The End</div>
+  <div class="note">
+    <h3>A note from your tutor 📚</h3>
+    <p>Well done — that's two books finished! This one was full of <strong>sport vocabulary</strong>: the track, pace, heart rate, warm-up, muscles, injury, doping, the finish line. These are words from your own world — trail running and the gym — so they'll be easy to remember and use.</p>
+    <p>Notice the grammar from your lessons working inside the story: the present continuous in the race scenes (<em>she is running, her heart is pounding</em>), frequency adverbs for Mia's training habits (<em>she ran every morning</em>), and modal verbs at the tense moments (<em>you should be smart, I would never sell a race</em>).</p>
+  </div>
+  <div class="qbox">
+    <h3>Comprehension — can you answer?</h3>
+    <ol>
+      <li>Why did Frank Vance want Mia to lose the race on purpose?</li>
+      <li>How does the drug hurt runners in <em>two</em> ways at once?</li>
+      <li>Why was Tom, Mia's coach, so afraid — and was he really helping Vance?</li>
+      <li>What did Mia do at the 25 km point, and why was it a hard choice?</li>
+      <li>Mia didn't win the marathon. Why was the ending still a happy one?</li>
+    </ol>
+  </div>
+  <div class="qbox">
+    <h3>Talk or write about it 🗣️</h3>
+    <ol>
+      <li>Describe Mia's character at the start and at the end. Did she change? Use the past simple.</li>
+      <li>Have you ever had to choose between winning and doing the right thing? Tell the story. Use <em>I could…, I should…, I had to…</em></li>
+    </ol>
+  </div>
+  <div class="note">
+    <h3>Want more? 🎯</h3>
+    <p>Tell me if the level felt easy, just right, or hard, and I'll tune the next one. I can also write a <em>sequel</em>, build a sport-vocabulary quiz in your Voice Coach, or add all the new words to your glossary.</p>
+  </div>
+</section>
+</main>
+<script>
+/* progress bar */
+var bar=document.getElementById('bar');
+function onScroll(){
+  var h=document.documentElement;
+  var max=h.scrollHeight-h.clientHeight;
+  var p=max>0?(h.scrollTop/max)*100:0;
+  bar.style.width=p+'%';
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+
+/* tap to reveal French */
+document.addEventListener('click',function(e){
+  var w=e.target.closest('.w');
+  if(w){ w.classList.toggle('show'); }
+});
+
+/* font size */
+var sizes=[0.96,1.06,1.14,1.24,1.36,1.5];
+var si=2;
+function fs(d){
+  si=Math.max(0,Math.min(sizes.length-1,si+d));
+  document.documentElement.style.setProperty('--fs',sizes[si]+'rem');
+}
+
+/* theme */
+function toggleTheme(){
+  document.body.classList.toggle('night');
+  document.getElementById('themeBtn').textContent=document.body.classList.contains('night')?'Day':'Night';
+}
+onScroll();
+</script>
+</body>
+</html>
