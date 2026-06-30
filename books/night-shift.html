@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Night Shift — A Thriller for English Learners (A2–B1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c;
+    --ink2:#20242b;
+    --paper:#f3ecdd;
+    --paper2:#ece3d0;
+    --text:#1d2026;
+    --muted:#736a58;
+    --amber:#1d8f86;
+    --amber-soft:#c9e4df;
+    --rust:#9d3320;
+    --line:#d8cdb6;
+    --fs:1.14rem;
+    --lh:1.85;
+  }
+  body.night{
+    --paper:#15181d;
+    --paper2:#1b1f25;
+    --text:#d9d2c2;
+    --muted:#8c8472;
+    --line:#2c313a;
+    --amber:#54bdaf;
+    --amber-soft:#3a3324;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:'Lora',Georgia,serif;
+    transition:background .3s,color .3s;
+  }
+
+  /* ---------- top progress + toolbar ---------- */
+  #bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--amber);z-index:50;transition:width .1s linear;}
+  #tools{
+    position:fixed;top:0;right:0;left:0;z-index:40;
+    display:flex;gap:.4rem;justify-content:flex-end;align-items:center;
+    padding:.5rem .8rem;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  #tools button{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.04em;
+    border:1px solid var(--line);background:transparent;color:var(--muted);
+    border-radius:999px;padding:.32rem .7rem;font-size:.74rem;cursor:pointer;
+    text-transform:uppercase;transition:.15s;
+  }
+  #tools button:hover,#tools button:focus-visible{border-color:var(--amber);color:var(--amber);outline:none;}
+  #tools .spacer{flex:1;}
+  #tools .brand{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;font-size:.72rem;color:var(--muted);text-transform:uppercase;}
+
+  /* ---------- cover ---------- */
+  .cover{
+    background:var(--ink);
+    color:#efe7d6;
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:3rem 1.6rem 2.4rem;
+    position:relative;overflow:hidden;
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(1200px 380px at 75% -8%, rgba(201,119,42,.22), transparent 60%),
+      radial-gradient(700px 320px at 8% 108%, rgba(157,51,32,.20), transparent 55%);
+  }
+  .cover .kick{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.42em;
+    text-transform:uppercase;font-size:.74rem;color:var(--amber);
+    position:relative;margin-bottom:1.4rem;
+  }
+  .cover h1{
+    font-family:'Oswald',sans-serif;font-weight:700;
+    font-size:clamp(3.4rem,17vw,7rem);line-height:.92;letter-spacing:.01em;
+    margin:0;text-transform:uppercase;position:relative;
+  }
+  .cover h1 .sm{display:block;font-weight:300;font-size:.34em;letter-spacing:.36em;color:#c8bda6;margin-top:.9rem;}
+  .cover .tag{
+    position:relative;margin-top:2.2rem;max-width:30ch;
+    font-style:italic;color:#cabf9f;font-size:1.05rem;line-height:1.6;
+  }
+  .cover .rule{position:relative;width:62px;height:3px;background:var(--amber);margin:1.8rem 0;}
+  .cover .meta{position:relative;font-family:'Oswald',sans-serif;letter-spacing:.16em;font-size:.72rem;text-transform:uppercase;color:#94886e;}
+  .cover .hint{
+    position:relative;margin-top:2.6rem;display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.82rem;color:#cdbf9d;font-style:normal;
+  }
+  .cover .hint b{
+    font-family:'Lora',serif;font-weight:600;color:var(--ink);background:var(--amber-soft);
+    border-bottom:2px dotted var(--amber);border-radius:3px;padding:0 .25rem;
+  }
+  body.night .cover .hint b{color:#efe7d6;background:#3a3324;}
+  .scrolldown{position:relative;margin-top:2.4rem;font-family:'Oswald',sans-serif;letter-spacing:.2em;font-size:.7rem;text-transform:uppercase;color:#94886e;animation:bob 2.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  /* ---------- reading column ---------- */
+  main{max-width:38rem;margin:0 auto;padding:3.4rem 1.5rem 6rem;}
+  .chapter{padding-top:2.4rem;}
+  .chapter-head{margin:0 0 1.8rem;text-align:center;}
+  .chapter-head .no{
+    font-family:'Oswald',sans-serif;font-weight:300;letter-spacing:.5em;
+    text-transform:uppercase;font-size:.8rem;color:var(--amber);
+  }
+  .chapter-head .ti{
+    font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
+    letter-spacing:.02em;font-size:1.9rem;line-height:1.05;margin-top:.5rem;color:var(--text);
+  }
+  .chapter-head .dash{width:42px;height:2px;background:var(--line);margin:1.2rem auto 0;}
+  .chapter p{font-size:var(--fs);line-height:var(--lh);margin:0 0 1.15rem;}
+  .chapter p.first::first-letter{
+    font-family:'Oswald',sans-serif;font-weight:700;
+    float:left;font-size:3.4rem;line-height:.74;padding:.3rem .6rem .1rem 0;color:var(--amber);
+  }
+  .chapter p.sep{text-align:center;color:var(--muted);letter-spacing:.5em;margin:1.6rem 0;}
+
+  /* tappable vocabulary */
+  .w{
+    color:inherit;border-bottom:2px dotted var(--amber);
+    cursor:pointer;position:relative;font-weight:500;white-space:nowrap;
+  }
+  .w .fr{
+    display:none;font-style:italic;font-weight:400;color:var(--amber);
+    font-size:.82em;margin-left:.3em;white-space:normal;
+  }
+  .w.show{border-bottom-style:solid;background:var(--amber-soft);border-radius:3px;padding:0 .15em;}
+  .w.show .fr{display:inline;}
+  .w.show .fr::before{content:"— ";}
+
+  /* end-of-chapter new words box */
+  .words{
+    margin:2.6rem 0 1rem;border:1px solid var(--line);border-radius:14px;
+    background:var(--paper2);padding:1.1rem 1.2rem 1.2rem;
+  }
+  .words h4{
+    font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
+    letter-spacing:.14em;font-size:.74rem;color:var(--amber);margin:0 0 .7rem;
+  }
+  .words dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.3rem .9rem;font-size:.95rem;}
+  .words dt{font-weight:600;}
+  .words dd{margin:0;color:var(--muted);font-style:italic;}
+
+  .chapter-end{text-align:center;color:var(--muted);letter-spacing:.4em;font-family:'Oswald',sans-serif;font-size:.7rem;text-transform:uppercase;margin:2.4rem 0 0;}
+
+  /* final pages */
+  .epilogue{border-top:1px solid var(--line);margin-top:3rem;padding-top:2.4rem;}
+  .the-end{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.3em;text-align:center;font-size:1.6rem;color:var(--amber);margin:3rem 0;}
+  .note{background:var(--paper2);border-left:3px solid var(--amber);border-radius:0 12px 12px 0;padding:1.2rem 1.3rem;margin:1.6rem 0;}
+  .note h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.95rem;margin:0 0 .6rem;color:var(--text);}
+  .note p{font-size:1rem;line-height:1.7;margin:0 0 .7rem;}
+  .qbox{margin:1.4rem 0;}
+  .qbox h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.9rem;color:var(--amber);margin:0 0 .6rem;}
+  .qbox ol{margin:0;padding-left:1.3rem;}
+  .qbox li{font-size:1rem;line-height:1.7;margin-bottom:.5rem;}
+
+  ::selection{background:var(--amber);color:#fff;}
+  @media (max-width:420px){ :root{--fs:1.06rem;} .cover h1{letter-spacing:0;} }
+  @media (prefers-reduced-motion:reduce){ .scrolldown{animation:none;} }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="tools">
+  <span class="brand">Night Shift</span>
+  <span class="spacer"></span>
+  <a href="index.html" style="text-decoration:none"><button>Library</button></a>
+  <button onclick="fs(-1)" aria-label="Smaller text">A−</button>
+  <button onclick="fs(1)" aria-label="Larger text">A+</button>
+  <button id="themeBtn" onclick="toggleTheme()">Night</button>
+</div>
+
+<header class="cover">
+  <div class="kick">A Thriller · Medical · For English Learners</div>
+  <h1>Night<br>Shift<span class="sm">A2 – B1</span></h1>
+  <div class="rule"></div>
+  <p class="tag">On Ward 7, the recovering patients keep dying in the night. Nurse Nora is the only one who notices.</p>
+  <div class="meta">Ten chapters · ~50 pages · Hospital &amp</div>
+  <div class="hint">Tip: tap any <b>bold word</b> to see the French.</div>
+  <div class="scrolldown">↓ Scroll to begin</div>
+</header>
+
+<main id="book">
+<section class="chapter" id="c1">
+  <div class="chapter-head">
+    <div class="no">Chapter One</div>
+    <div class="ti">Ward 7</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Nora Davies worked nights. While the city slept, she walked the quiet halls of St. Catherine's Hospital, in soft white shoes, with a small torch in her pocket and a kind word for everyone who was awake and afraid.</p>
+  <p>She was a <span class="w">nurse<span class="fr">une infirmière</span></span>. She had been a nurse for nine years. She worked on <span class="w">Ward 7<span class="fr">le service 7</span></span>, on the fourth floor — the ward for older patients who were getting better after an illness or an operation. Most of them would soon go home.</p>
+  <p>Nora loved the night shift. People thought it was hard and lonely, but Nora saw it differently. At night, the hospital was calm. There were no crowds, no noise, no managers. There was just Nora, a few other nurses, and the <span class="w">patients<span class="fr">les patients</span></span> who needed her.</p>
+  <p>Her work followed a pattern, every night. She checked each patient. She took their <span class="w">blood pressure<span class="fr">la tension</span></span> and their <span class="w">temperature<span class="fr">la température</span></span>. She counted their <span class="w">pulse<span class="fr">le pouls</span></span>. She wrote everything on the <span class="w">chart<span class="fr">le dossier / la feuille de soins</span></span> at the end of each bed. She gave the right <span class="w">medicine<span class="fr">les médicaments</span></span> at the right time. She made sure the <span class="w">drip<span class="fr">la perfusion</span></span> over each bed was working, drop by drop. And when a patient could not sleep, she sat with them and listened.</p>
+  <p>"Good evening, Nora," said an old voice as she came into the room. "Is it that time again? Are you here to torture an old man?"</p>
+  <p>Nora smiled. It was Mr. Owen, in bed nine. He was seventy-eight years old, with white hair, bright eyes, and a joke for every nurse. Two weeks ago he had been very ill. Now he was strong again. In three or four days, he would go home to his garden and his cat.</p>
+  <p>"Just your blood pressure, Mr. Owen," she said. "Hold out your arm."</p>
+  <p>"You only want me for my arm," he said. "It's always the same. Nobody loves me for my mind."</p>
+  <p>Nora laughed and put the cuff on his arm. His blood pressure was good. His pulse was strong and steady. He was getting better every day.</p>
+  <p>"You'll be home by the weekend," she told him. "Back in your garden."</p>
+  <p>"And who will make you laugh at three in the morning?" Mr. Owen said.</p>
+  <p>"I'll manage," Nora said softly. She liked Mr. Owen very much. In nine years, she had learned not to have favourites among the patients. But Mr. Owen was her favourite, and they both knew it.</p>
+  <p>She finished her round. Everyone was peaceful. Everyone was getting better. It was a calm, ordinary night.</p>
+  <p>Nora did not know it yet, but it was the last ordinary night she would have for a long time.</p>
+  <div class="words">
+    <h4>New words — Chapter One</h4>
+    <dl>
+      <dt>a nurse</dt><dd>une infirmière</dd>
+      <dt>a ward</dt><dd>un service (hospitalier)</dd>
+      <dt>a patient</dt><dd>un(e) patient(e)</dd>
+      <dt>blood pressure</dt><dd>la tension</dd>
+      <dt>temperature</dt><dd>la température</dd>
+      <dt>the pulse</dt><dd>le pouls</dd>
+      <dt>the chart</dt><dd>le dossier de soins</dd>
+      <dt>the drip</dt><dd>la perfusion</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter One</div>
+</section>
+<section class="chapter" id="c2">
+  <div class="chapter-head">
+    <div class="no">Chapter Two</div>
+    <div class="ti">The Handover</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Every night shift began the same way: with the <span class="w">handover<span class="fr">les transmissions</span></span>.</p>
+  <p>At nine o'clock, the day nurses sat down with the night nurses in the small office, and they passed on every patient, one by one. Who was getting better. Who was getting worse. Who had new <span class="w">medication<span class="fr">un traitement</span></span>. Who was in pain. Who was frightened. The handover was the most important ten minutes of the shift. If you missed something here, a patient could suffer all night.</p>
+  <p>"Bed three, Mr. Foster," the day nurse said. "Recovering well after his heart trouble. Going home Friday, all being well. Bed four, Mrs. Khan, had her <span class="w">operation<span class="fr">son opération</span></span> yesterday, doing fine. Bed eight, Mrs. Shah — lovely lady, chest much better, home in two days. Bed nine, Mr. Owen — your favourite, Nora." The nurse smiled. "Blood pressure perfect, mood terrible, jokes worse than ever. Home by the weekend."</p>
+  <p>Nora wrote it all down. She knew most of these patients well. Ward 7 was her world.</p>
+  <p>When the handover finished, the day staff went home, and the great hospital settled into night. The lights went down low. The visitors left. The bright, busy day-world of doctors and tests and <span class="w">X-rays<span class="fr">des radios</span></span> became something else — a quiet, dark place where a few nurses watched over many sleeping people.</p>
+  <p>Nora began her round. She moved from bed to bed with her little trolley of medicines. At each one she did the same careful things. She checked the <span class="w">monitor<span class="fr">le moniteur</span></span> above the bed, with its little green lines and numbers. She made sure the <span class="w">oxygen<span class="fr">l'oxygène</span></span> was flowing where it should. She read each chart. She gave each patient exactly the right pill, in exactly the right <span class="w">dose<span class="fr">la dose</span></span>, at exactly the right time, and she signed for every one. In this work, a small mistake could become a big tragedy. Nora never made small mistakes. That was why patients felt safe with her.</p>
+  <p>"You're too good to me," said old Mrs. Shah in bed eight, taking her evening pills. "Nine years I've watched nurses come and go. The good ones, they don't last. Too much heart. It wears them out." She patted Nora's hand. "Don't let this place take your heart, dear."</p>
+  <p>"I won't, Mrs. Shah," Nora said, smiling. "Now drink your water and sleep. You're going home soon."</p>
+  <p>"Home." Mrs. Shah closed her eyes happily. "My garden in the spring. My grandchildren. Oh, I can't wait."</p>
+  <p>Nora turned off the bright light over the bed and left only the soft night light. She moved on to the next patient, and the next, until the whole ward was quiet and breathing in the dark.</p>
+  <p>It was a good ward. A safe ward. A place where the sick came to get better and go home.</p>
+  <p>That was what everyone believed. That was what Nora believed too, on that ordinary, peaceful night.</p>
+  <p>By the same time the next week, Mrs. Shah would be dead — and Nora's safe world would begin to fall apart.</p>
+  <div class="words">
+    <h4>New words — Chapter Two</h4>
+    <dl>
+      <dt>the handover</dt><dd>les transmissions</dd>
+      <dt>medication</dt><dd>un traitement</dd>
+      <dt>an operation</dt><dd>une opération</dd>
+      <dt>an X-ray</dt><dd>une radio</dd>
+      <dt>a monitor</dt><dd>un moniteur</dd>
+      <dt>oxygen</dt><dd>l'oxygène</dd>
+      <dt>a dose</dt><dd>une dose</dd>
+      <dt>a tragedy</dt><dd>une tragédie</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Two</div>
+</section>
+<section class="chapter" id="c3">
+  <div class="chapter-head">
+    <div class="no">Chapter Three</div>
+    <div class="ti">The Empty Bed</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">It happened in bed eight, next to Mr. Owen.</p>
+  <p>In bed eight was Mrs. Shah. She was seventy-one years old. She had come in two weeks ago with a bad chest, but she was much better now. That evening, she had eaten all her dinner. She had talked and laughed with her daughter. The doctors said she could go home in two days.</p>
+  <p>At two o'clock in the morning, Nora did her round. Mrs. Shah was sleeping. Nora checked her: pulse a little slow, but she was old and tired. Nothing strange. Nora wrote on the chart and moved on.</p>
+  <p>At four o'clock, Nora came back.</p>
+  <p>Mrs. Shah was not breathing.</p>
+  <p>Nora moved fast. She had done this many times. She pressed the <span class="w">emergency<span class="fr">l'urgence</span></span> button. She started <span class="w">CPR<span class="fr">le massage cardiaque</span></span> — pushing hard on the chest, again and again. The night doctor ran in. Another nurse came with the machine that can shock the heart. They worked on Mrs. Shah for twenty minutes.</p>
+  <p>It was no good. Mrs. Shah was gone.</p>
+  <p>Nora stood back, breathing hard, her hands shaking a little. The night doctor, Dr. Reyes, looked tired and sad.</p>
+  <p>"There was nothing you could do," he said gently. "Her heart simply stopped. It happens, Nora. Even with patients who seem well. The body is a mystery. She was seventy-one. Her heart was old."</p>
+  <p>"But she was getting better," Nora said quietly. "This evening she was laughing."</p>
+  <p>"I know," Dr. Reyes said. "I know. It's the cruel thing about this work. Go and sit down. Have a cup of tea. You did everything right."</p>
+  <p>Nora went to the small kitchen and made tea she did not drink. In nine years, she had lost patients before. It never got easier. But Dr. Reyes was right. Mrs. Shah was old, and old hearts sometimes stop. It was sad. It was not strange.</p>
+  <p>That is what Nora told herself.</p>
+  <p>But as she sat in the quiet kitchen, one small thing stayed in her mind, like a stone in a shoe. When she had found Mrs. Shah, there had been a tiny mark on the inside of her arm — a small red <span class="w">injection<span class="fr">une piqûre</span></span> mark, fresh, with a little spot of blood. The kind of mark a <span class="w">needle<span class="fr">une aiguille</span></span> makes.</p>
+  <p>But Mrs. Shah did not have a drip. And Nora had given her no injection that night.</p>
+  <p>So who had?</p>
+  <p>Nora was very tired. <em>Stop it,</em> she told herself. <em>You're upset. You're imagining things.</em></p>
+  <p>She finished her shift. She went home as the sun came up. And she tried to forget the small red mark on a dead woman's arm.</p>
+  <div class="words">
+    <h4>New words — Chapter Three</h4>
+    <dl>
+      <dt>emergency</dt><dd>l'urgence</dd>
+      <dt>CPR (cardiac massage)</dt><dd>le massage cardiaque</dd>
+      <dt>to shock (the heart)</dt><dd>défibriller</dd>
+      <dt>an injection / a jab</dt><dd>une piqûre</dd>
+      <dt>a needle</dt><dd>une aiguille</dd>
+      <dt>a mark</dt><dd>une marque</dd>
+      <dt>to imagine things</dt><dd>se faire des idées</dd>
+      <dt>a shift</dt><dd>un service / une garde</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Three</div>
+</section>
+<section class="chapter" id="c4">
+  <div class="chapter-head">
+    <div class="no">Chapter Four</div>
+    <div class="ti">Twice Is Strange</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">For a few nights, Ward 7 was calm. Nora did her rounds. Mr. Owen made his jokes. The empty bed eight was filled by a new patient, a quiet man named Mr. Buti, who was recovering well after an operation.</p>
+  <p>Then, five nights later, it happened again.</p>
+  <p>This time it was Mr. Foster, in bed three. He was sixty-eight. He had a weak heart, yes — but he had been doing well. He was due to go home at the end of the week. That night, like always, Nora checked him at two o'clock. He was fine. He smiled at her and said, "See you later, nurse."</p>
+  <p>At half past four, Nora found him cold and still. No pulse. Gone.</p>
+  <p>Again, the emergency button. Again, the running feet, the machine, the twenty hard minutes. Again, no good.</p>
+  <p>And again — Nora looked, this time on purpose — there was a tiny fresh red mark on his arm. A needle mark. From a needle that should not have been there.</p>
+  <p>Nora's blood ran cold.</p>
+  <p>She did not say anything that night. She was too shocked, too unsure. But the next evening, she came to work early, and she went quietly to the office where the patient records were kept. She looked back over the last year.</p>
+  <p>What she found made her feel sick.</p>
+  <p>It was not two deaths. Over the last year, on Ward 7, there had been <em>seven</em> sudden, unexpected deaths. Seven patients who were getting better, who were going home soon — and who suddenly died in the night. Each one, the doctors said, was "a heart that simply stopped." Each one, alone, looked normal. Old people do die.</p>
+  <p>But seven? Seven patients who were all <em>recovering</em>? All in the night? All on the same ward?</p>
+  <p>Nora was good with patterns. It was part of her job — to notice when something was not right. And every part of her, now, was shouting that something here was very, very wrong.</p>
+  <p>She thought about the red marks. Someone, she was now sure, was coming to these patients in the night. Someone with a <span class="w">syringe<span class="fr">une seringue</span></span>. Someone was giving them something — the wrong medicine, a <span class="w">dose<span class="fr">une dose</span></span> that should not be given, something that quietly stopped an old, recovering heart.</p>
+  <p>Someone in this hospital was a killer.</p>
+  <p>And Nora was working the night shift, alone in the dark, beside them.</p>
+  <div class="words">
+    <h4>New words — Chapter Four</h4>
+    <dl>
+      <dt>to recover</dt><dd>se rétablir</dd>
+      <dt>due to (go home)</dt><dd>censé (rentrer)</dd>
+      <dt>a record</dt><dd>un dossier</dd>
+      <dt>sudden</dt><dd>soudain</dd>
+      <dt>unexpected</dt><dd>inattendu</dd>
+      <dt>a syringe</dt><dd>une seringue</dd>
+      <dt>a dose</dt><dd>une dose</dd>
+      <dt>to notice</dt><dd>remarquer</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Four</div>
+</section>
+<section class="chapter" id="c5">
+  <div class="chapter-head">
+    <div class="no">Chapter Five</div>
+    <div class="ti">The Chart</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Nora needed to be sure. She could not go to anyone with only a feeling. So, for several nights, she became a quiet detective in her own hospital.</p>
+  <p>She studied the seven cases, one by one, in the records. And slowly, she found things that connected them.</p>
+  <p>First: the time. Almost all the deaths happened between two and five o'clock in the morning — the deepest, quietest part of the night, when most of the hospital slept and one nurse covered many beds.</p>
+  <p>Second: the patients. Every single one was a patient who was getting better. Not the sickest patients. The <em>recovering</em> ones. The ones with hope. The ones going home.</p>
+  <p>Third — and this was the worst — the medicine. Nora checked the drug records, the locked cabinet where strong medicines were kept. There was a small medicine that, in the wrong <span class="w">dose<span class="fr">une dose</span></span>, can stop the heart and is very hard to find in the body afterwards. On several of those nights, a little of that medicine was "used" — but it did not match any doctor's order. It was given to no patient on the chart. It simply disappeared.</p>
+  <p>Someone was taking it. And using it.</p>
+  <p>Nora's hands were cold as she wrote it all down in a small private notebook she kept in her bag. Times. Names. Dates. The missing medicine.</p>
+  <p>And then she came to the fourth thing — and she did not want to find it, but she had to look. <em>Who</em> was working on each of those nights?</p>
+  <p>She made a list of the nurses and doctors on the ward for each death. She crossed off everyone who was not there. And when she finished, three names were left — three people who had been in the hospital on the night of almost every death.</p>
+  <p>The first name was Dr. Hale, a senior doctor — cold, clever, never warm, but very respected.</p>
+  <p>The second name was a night porter named Gary, who moved patients and equipment around the hospital in the dark hours.</p>
+  <p>And the third name was a senior nurse. A kind, gentle, much-loved nurse who had worked on Ward 7 for thirty years, who trained the young nurses, who held the hands of the dying, who everyone called "the heart of the ward."</p>
+  <p>The third name was Sister Pauline.</p>
+  <p>Nora looked at the three names for a long time.</p>
+  <p>And the fourth name on the list, of course — the name on the chart for almost every one of those nights — was her own. Nora Davies. Because Nora, too, was always there. Nora always worked nights on Ward 7.</p>
+  <p>If she went to the police with this, Nora suddenly understood, they would not just look at Dr. Hale, or Gary, or Sister Pauline.</p>
+  <p>They would look at her.</p>
+  <div class="words">
+    <h4>New words — Chapter Five</h4>
+    <dl>
+      <dt>a dose</dt><dd>une dose</dd>
+      <dt>a cabinet</dt><dd>une armoire (à pharmacie)</dd>
+      <dt>an order (medical)</dt><dd>une prescription</dd>
+      <dt>to disappear</dt><dd>disparaître</dd>
+      <dt>a notebook</dt><dd>un carnet</dd>
+      <dt>a porter</dt><dd>un brancardier</dd>
+      <dt>gentle</dt><dd>doux, gentil</dd>
+      <dt>to cross off</dt><dd>barrer</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Five</div>
+</section>
+<section class="chapter" id="c6">
+  <div class="chapter-head">
+    <div class="no">Chapter Six</div>
+    <div class="ti">Nobody Listens</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Nora knew she should tell someone. The longer she waited, the more people might die. So she went to her manager, the head of the ward, a busy woman named Carol.</p>
+  <p>She told Carol everything — carefully, calmly. The seven deaths. The pattern. The times. The missing medicine. The red marks on the patients' arms.</p>
+  <p>Carol listened. But as Nora spoke, she watched Carol's face change — from interest, to worry, to something that looked, finally, like pity.</p>
+  <p>"Nora," Carol said gently when she finished. "How many hours are you working?"</p>
+  <p>"That's not the point—"</p>
+  <p>"How many night shifts in a row?"</p>
+  <p>"Carol, listen to me. Someone is hurting these patients. The marks—"</p>
+  <p>"Old patients have marks, Nora. They have thin skin, they bruise, they have blood tests. And recovering patients <em>do</em> sometimes die — it's one of the saddest, hardest truths of our work. You know this." Carol leaned forward. "You've been doing nights for too long. You're tired. You're seeing a pattern because your brain is looking for one. It happens to good nurses — the best nurses, the ones who care too much."</p>
+  <p>"I am not imagining this," Nora said.</p>
+  <p>"I think," Carol said carefully, "that you should take some time off. Some <span class="w">leave<span class="fr">un congé</span></span>. Rest. See a doctor yourself, maybe. And Nora—" she paused. "Be very, very careful about saying these things to other people. Do you understand what you are saying? You are saying someone here is a <span class="w">murderer<span class="fr">un meurtrier</span></span>. If you say that, and you are wrong, you will destroy good people, and your own career. Please. Go home. Sleep."</p>
+  <p>Nora left the office shaking with anger and fear.</p>
+  <p>She tried one more person: Dr. Reyes, the kind night doctor. But he, too, looked at her with worry, not belief. "I understand why you're upset," he said. "But Nora — think about how this sounds. And think about something else." He lowered his voice, not unkindly. "You were there for every one of those deaths too. If you start shouting 'murder,' some people might start asking questions about <em>you</em>."</p>
+  <p>That night, Nora sat in her car in the dark hospital car park and put her head on the wheel.</p>
+  <p>Nobody believed her. Worse — if she pushed too hard, she would become the suspect herself. The perfect trap. The killer was safe, because the truth sounded crazy, and because the one person who saw it was also the easiest person to blame.</p>
+  <p>She had two choices. She could do what Carol said — go home, rest, forget it, let it continue.</p>
+  <p>Or she could find the proof herself, alone.</p>
+  <p>Nora lifted her head. She thought of Mr. Owen in bed nine, with his jokes and his garden and his cat — a recovering patient, going home soon. Exactly the kind of patient the killer chose.</p>
+  <p>She started the car.</p>
+  <p>"I'm not going home," she said quietly to the empty dark. "I'm going to catch you."</p>
+  <div class="words">
+    <h4>New words — Chapter Six</h4>
+    <dl>
+      <dt>pity</dt><dd>la pitié</dd>
+      <dt>to bruise</dt><dd>avoir un bleu</dd>
+      <dt>leave (time off)</dt><dd>un congé</dd>
+      <dt>a murderer</dt><dd>un meurtrier</dd>
+      <dt>a suspect</dt><dd>un(e) suspect(e)</dd>
+      <dt>to blame</dt><dd>blâmer, accuser</dd>
+      <dt>a trap</dt><dd>un piège</dd>
+      <dt>a choice</dt><dd>un choix</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Six</div>
+</section>
+<section class="chapter" id="c7">
+  <div class="chapter-head">
+    <div class="no">Chapter Seven</div>
+    <div class="ti">The Pathologist</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Nobody at the hospital believed Nora. So she went to find someone outside it.</p>
+  <p>His name was David Cole. He was an old friend from nursing school, but David had not become a nurse. He had become a <span class="w">pathologist<span class="fr">un médecin légiste</span></span> — a doctor who studies why people die, who reads the body the way other people read a book. If anyone could tell Nora whether a hidden murder was even possible, it was David.</p>
+  <p>They met in a quiet café, far from the hospital. Nora told him everything: the seven deaths, the recovering patients, the times, the missing medicine, the small red marks. She watched his face, ready to see the same pity she had seen in Carol's eyes.</p>
+  <p>But David did not look at her with pity. He looked at her with cold, professional fear.</p>
+  <p>"Tell me about the medicine that went missing," he said quietly.</p>
+  <p>Nora told him the name.</p>
+  <p>David was silent for a moment. "Nora," he said. "I need you to understand something, and I need you to keep it very quiet. There are medicines — normal medicines, kept on every ward — that the body needs in tiny amounts, but that can stop the heart if too much is given. Given in the night, to a sleeping patient, by someone who knows exactly what they're doing... the death looks completely natural. The heart simply stops. An old person, a weak heart — nobody asks questions. Nobody does a <span class="w">post-mortem<span class="fr">une autopsie</span></span>. The family cries, the bed is cleaned, and the next patient comes." He leaned forward. "It is one of the very few ways a trained person could kill, again and again, and never be caught. Because nobody is looking. Because everyone expects old, sick people to die."</p>
+  <p>Nora felt cold all over. "So it's possible. I'm not imagining it."</p>
+  <p>"It's possible," David said. "And worse — it's almost invisible. That's why you've found no proof that anyone will accept. The deaths look natural <em>because they were designed to look natural.</em> The only proof would be to catch the person doing it. Or to find the <span class="w">evidence<span class="fr">les preuves</span></span> before they hide it — the syringe, the wrong medicine, the records that don't match."</p>
+  <p>"That's what I have," Nora said. "The records that don't match. And the marks."</p>
+  <p>"It's not enough," David said gently. "Not for the police. A clever lawyer would explain it all away in five minutes. Old people bruise. Records have errors. You're a tired nurse who's seen too much death." He took her hand. "Nora, listen to me. If you are right — and I think you might be — then you are dealing with someone very dangerous and very patient. Someone who has done this for years and never been caught. Someone clever. Please. Be careful. People who can kill seven times without anyone noticing... they will not stop because of one nurse who asks too many questions."</p>
+  <p>Nora walked back to her car in the cold afternoon air, David's words turning over and over in her mind. <em>The only proof would be to catch the person doing it.</em></p>
+  <p>She thought of the recovering patients on Ward 7, sleeping safely, trusting their nurses. She thought of Mr. Owen, going home soon.</p>
+  <p>And she made up her mind. If catching the killer in the act was the only way — then that was what she would do.</p>
+  <div class="words">
+    <h4>New words — Chapter Seven</h4>
+    <dl>
+      <dt>a pathologist</dt><dd>un médecin légiste</dd>
+      <dt>a post-mortem</dt><dd>une autopsie</dd>
+      <dt>evidence</dt><dd>des preuves</dd>
+      <dt>natural (death)</dt><dd>naturel(le)</dd>
+      <dt>invisible</dt><dd>invisible</dd>
+      <dt>to be caught</dt><dd>se faire prendre</dd>
+      <dt>patient (adj.)</dt><dd>patient</dd>
+      <dt>to make up your mind</dt><dd>se décider</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Seven</div>
+</section>
+<section class="chapter" id="c8">
+  <div class="chapter-head">
+    <div class="no">Chapter Eight</div>
+    <div class="ti">The Syringe</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Now Nora watched everything.</p>
+  <p>She still did her work — the blood pressures, the medicines, the kind words. But under it all, she was watching. She watched Dr. Hale, cold and silent, moving through the ward. She watched Gary the porter, pushing his beds and trolleys through the dark halls. And she watched Sister Pauline, gentle and loved, sitting at the bedside of frightened patients, holding their hands.</p>
+  <p>Nora trusted no one now. That was the hardest part. For nine years, these were her colleagues, her friends. Now any one of them might be a killer.</p>
+  <p>She needed proof. So she did three things.</p>
+  <p>First, she started to write down, every night, exactly who went near which patient, and when. Small notes, hidden in her notebook.</p>
+  <p>Second, she watched the medicine cabinet. She checked it at the start of every shift and the end. She counted.</p>
+  <p>And third — the dangerous thing — she began to stay near the recovering patients in the deep hours of the night, when the deaths always happened. Especially near bed nine. Near Mr. Owen.</p>
+  <p>For four nights, nothing happened. Nora grew tired. She began to wonder if Carol was right after all. Maybe she <em>was</em> imagining it. Maybe—</p>
+  <p>On the fifth night, she found the syringe.</p>
+  <p>It was nearly four in the morning. Nora went to throw something away in the <span class="w">bin<span class="fr">la poubelle</span></span> in the sluice room — the small room where nurses clean things. And there, in the bottom of the bin, half hidden under paper towels, was a used <span class="w">syringe<span class="fr">une seringue</span></span>. An empty one. With a needle still on it.</p>
+  <p>Nora's heart stopped. A used syringe, thrown away in secret, in the wrong bin, with no record. She knew, the way she knew her own name, that this was it. This was the <span class="w">weapon<span class="fr">l'arme</span></span>.</p>
+  <p>Very carefully, with a glove, she picked it up. She would keep it. She would have it <span class="w">tested<span class="fr">analyser</span></span>. It might show what drug was used. It might even show fingerprints.</p>
+  <p>She turned to leave the small room — and stopped.</p>
+  <p>Someone was standing in the doorway, watching her.</p>
+  <p>The light was behind them, so for a second Nora could not see the face. She could only see a figure in a nurse's uniform, standing very still, looking at the syringe in Nora's gloved hand.</p>
+  <p>"Nora," said a soft, gentle, familiar voice. "What have you got there?"</p>
+  <p>It was Sister Pauline.</p>
+  <div class="words">
+    <h4>New words — Chapter Eight</h4>
+    <dl>
+      <dt>a colleague</dt><dd>un(e) collègue</dd>
+      <dt>the bin</dt><dd>la poubelle</dd>
+      <dt>a syringe</dt><dd>une seringue</dd>
+      <dt>a glove</dt><dd>un gant</dd>
+      <dt>the weapon</dt><dd>l'arme</dd>
+      <dt>to test / analyse</dt><dd>analyser</dd>
+      <dt>fingerprints</dt><dd>des empreintes</dd>
+      <dt>a figure</dt><dd>une silhouette</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Eight</div>
+</section>
+<section class="chapter" id="c9">
+  <div class="chapter-head">
+    <div class="no">Chapter Nine</div>
+    <div class="ti">You're Imagining Things</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">For a long, cold moment, Nora and Sister Pauline looked at each other.</p>
+  <p>"I— I found it in the bin," Nora said. Her mouth was dry. "A used syringe. In the wrong bin. With no record."</p>
+  <p>"How strange," Sister Pauline said softly. She did not move from the doorway. "People are careless these days. The young nurses, you know. They don't follow the rules like we did." She smiled — a warm, gentle, motherly smile. "Give it to me, dear. I'll deal with it. You have enough to worry about."</p>
+  <p>Nora's hand closed tightly around the syringe. Every instinct in her body said: <em>do not give it to her.</em></p>
+  <p>"It's all right," Nora said. "I'll record it properly. The rules say I have to write it up."</p>
+  <p>Something moved behind Sister Pauline's gentle eyes. Just for a second.</p>
+  <p>"Of course," Pauline said. "You're quite right. Always so careful, our Nora." She stepped back from the doorway. "I heard you've been very tired lately. Carol told me. She's worried about you. We all are." She paused. "You should be careful, Nora. Tired nurses make mistakes. And a mistake on this ward... well. It can cost a life."</p>
+  <p>Then she turned and walked away down the dark corridor, soft and silent in her white shoes.</p>
+  <p>Nora stood frozen, the syringe still in her hand, her heart beating wildly. <em>It can cost a life.</em> Was that a warning? A normal thing to say? Or a threat?</p>
+  <p>She did not know. But she knew one thing now: someone had seen her find the weapon. And whoever the killer was, they now knew that Nora was hunting them.</p>
+  <p class="sep">• • •</p>
+  <p>Things got worse quickly.</p>
+  <p>Two days later, Carol called Nora into the office. Her face was serious. "Nora," she said, "a serious mistake has been found in the records. A medicine was given to a patient on bed five three nights ago — the wrong dose. It was written and signed... by you."</p>
+  <p>"That's not possible," Nora said. "I didn't give that. I never touched that patient's medicine."</p>
+  <p>"It's your signature, Nora."</p>
+  <p>"Then someone copied it. Someone is making it look like—"</p>
+  <p>Carol held up a hand. Her eyes were sad and tired. "Do you hear yourself? First it's a secret killer. Now it's a person copying your signature. Nora, I'm sorry, but I have to take you off nights. You'll work days, with other staff around you, until we understand what's happening." She lowered her voice. "And between us — some people are starting to ask questions. About you. About why you're always there when things go wrong. Please, Nora. For your own sake. Let it go."</p>
+  <p>Nora understood, with cold clarity, exactly what was happening. The killer had not just threatened her. The killer was now turning her into the suspect — planting a fake mistake in her name, making her look careless, even dangerous, so that nobody would ever believe a word she said.</p>
+  <p>It was clever. It was the move of someone who had done this many times.</p>
+  <p>And it meant Nora had almost no time left. Soon she would be off the ward completely. Soon nobody would let her near a patient. If she was going to catch the killer, and protect Mr. Owen, she had only a few nights left.</p>
+  <p>Maybe only one.</p>
+  <div class="words">
+    <h4>New words — Chapter Nine</h4>
+    <dl>
+      <dt>careless</dt><dd>négligent</dd>
+      <dt>an instinct</dt><dd>un instinct</dd>
+      <dt>a corridor</dt><dd>un couloir</dd>
+      <dt>a warning</dt><dd>un avertissement</dd>
+      <dt>a threat</dt><dd>une menace</dd>
+      <dt>a signature</dt><dd>une signature</dd>
+      <dt>to plant (evidence)</dt><dd>placer (une fausse preuve)</dd>
+      <dt>for your own sake</dt><dd>pour ton bien</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Nine</div>
+</section>
+<section class="chapter" id="c10">
+  <div class="chapter-head">
+    <div class="no">Chapter Ten</div>
+    <div class="ti">Three Suspects</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">That night, off the ward, suspended from her work, Nora did not sleep. She sat at her kitchen table with her notebook and the syringe in a sealed bag, and she thought hard about her three suspects.</p>
+  <p>Dr. Hale. Cold, clever, always there, with full access to every medicine. He had the knowledge. He had the keys. But Nora kept coming back to one thing: <em>why?</em> Hale did not seem to care enough about anything to kill. He treated patients like problems to solve, not people. Could he hurt them? Maybe. But he was new to the ward — only two years. And some of the deaths went back longer than two years.</p>
+  <p>Gary, the porter. He moved through the whole hospital in the dark, unseen, ordinary. People did not notice porters. But Gary did not have the medical knowledge, Nora thought. He would not know the exact medicine, the exact dose, the way to make a death look natural. The killer knew the body. The killer was trained.</p>
+  <p>And Sister Pauline. Thirty years on the ward. Loved by everyone. The gentle one. The one who sat with the dying and held their hands.</p>
+  <p>Nora stopped on that last thought. <em>The one who sat with the dying.</em></p>
+  <p>She went back through her notes. And there it was, written in her own hand, night after night, a thing so normal she had never thought about it: whenever a patient was frightened or could not sleep, Sister Pauline would say, "Don't worry, dear. I'll sit with them for a while. You go and rest." And the other nurses, grateful, would leave Pauline alone with the patient.</p>
+  <p>Alone. In the deep hours. With recovering patients.</p>
+  <p>Nora felt sick. She remembered something else, too — something Pauline often said, in her soft, kind voice, about patients who were old, or in pain, or struggling: "Poor thing. Sometimes I think it would be a kindness to let them rest. To let them go peacefully. We keep people alive too long these days, you know. We're not kind. We're cruel."</p>
+  <p>At the time, Nora had thought it was just sad talk — the tired words of an old nurse who had seen too much death.</p>
+  <p>Now it sounded like something else. It sounded like a reason. A terrible, gentle, mad reason. Someone who had decided, in her own heart, who should live and who should "rest" — and who had been quietly making that choice, for years, with a soft smile and a kind voice, while everyone called her the heart of the ward.</p>
+  <p>It fit. It fit perfectly. But Nora still had no proof — only the syringe, not yet tested, and a feeling.</p>
+  <p>She needed to be sure. And there was only one way to be sure.</p>
+  <p>She had to be on Ward 7 tonight, in the dark, watching. Even though she was suspended. Even though it was against every rule. Even though, if she was caught, it would be the end of everything.</p>
+  <p>Because she had checked the records one last time before she left the hospital. And she had seen that Mr. Owen, in bed nine — recovering, cheerful, going home in the morning — was being moved to a quiet single room tonight. "For a good night's sleep before he goes home," the note said. A quiet room. Alone. Away from the other patients and the other nurses.</p>
+  <p>The perfect place.</p>
+  <div class="words">
+    <h4>New words — Chapter Ten</h4>
+    <dl>
+      <dt>suspended</dt><dd>suspendu</dd>
+      <dt>access</dt><dd>l'accès</dd>
+      <dt>knowledge</dt><dd>le savoir, les connaissances</dd>
+      <dt>trained</dt><dd>formé</dd>
+      <dt>grateful</dt><dd>reconnaissant</dd>
+      <dt>a kindness</dt><dd>une gentillesse</dd>
+      <dt>peacefully</dt><dd>paisiblement</dd>
+      <dt>mad</dt><dd>fou, folle</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Ten</div>
+</section>
+<section class="chapter" id="c11">
+  <div class="chapter-head">
+    <div class="no">Chapter Eleven</div>
+    <div class="ti">The Locked Cabinet</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Nora was suspended now. She was not allowed on Ward 7. But she had one more thing to check, and only one place to check it: the <span class="w">locked cabinet<span class="fr">l'armoire fermée à clé</span></span> where the strong medicines were kept, and the <span class="w">logbook<span class="fr">le registre</span></span> beside it, where every nurse must sign for every dose taken out.</p>
+  <p>If the killer had been stealing the heart-stopping medicine, the logbook would show a gap — medicine signed out, but going to no patient. And maybe, just maybe, it would show <em>who</em> signed for it.</p>
+  <p>So Nora did a dangerous thing. In the middle of the afternoon, in normal clothes, she walked back into the hospital where she was forbidden to be.</p>
+  <p>It was strangely easy. A big hospital is full of people coming and going. Nobody stopped a calm woman walking with purpose. She took the stairs, not the lift. She reached the fourth floor and looked carefully down the corridor toward Ward 7. The day staff were busy. The cabinet and its logbook were in a small medicine room near the entrance.</p>
+  <p>Heart pounding, Nora slipped into the medicine room and opened the logbook. Her fingers moved fast down the pages, back through the months, to the nights of the deaths. And there it was, exactly as she feared — on several of those nights, the dangerous medicine was signed out. But the <span class="w">handwriting<span class="fr">l'écriture</span></span> was careful and hard to read, and the patient names beside it were ones who had no order for that medicine.</p>
+  <p>She took out her phone to photograph the pages.</p>
+  <p>"Can I help you?"</p>
+  <p>Nora froze. A voice behind her. Cold. Quiet.</p>
+  <p>She turned. Dr. Hale stood in the doorway, tall and pale, watching her with eyes that gave nothing away.</p>
+  <p>"You're not supposed to be here, Nora," he said. "You've been suspended. Everyone knows that."</p>
+  <p>"I forgot something in my locker," Nora said quickly. Her mouth was dry.</p>
+  <p>Dr. Hale looked at the open logbook on the desk in front of her. He looked at it for a long, long moment. Then he looked back at her face.</p>
+  <p>"The medicine log," he said softly. "Interesting reading, is it?"</p>
+  <p>Nora's heart was in her throat. Was Hale the killer? Was she standing alone with him in a small room, having just shown him exactly what she knew? Or was he simply a cold, honest doctor, about to report her and end her career for good?</p>
+  <p>She could not tell. That was the horror of it. She still could not tell who was real and who was not.</p>
+  <p>"I should go," Nora said.</p>
+  <p>Dr. Hale did not move from the doorway for a moment. Then, slowly, he stepped aside. "Yes," he said. "You should." And as she passed him, he said one more quiet thing, so quiet she almost missed it. "Whoever you're looking for, Nurse Davies — they're cleverer than you. And more careful. Don't be alone with them in the dark."</p>
+  <p>Then he turned and walked away, and Nora could not tell, for the life of her, whether he had just warned her — or threatened her.</p>
+  <p>She hurried out of the hospital, the photographs safe on her phone. She had her evidence now, as much as she would ever get. But David's words and Hale's words rang together in her head: <em>they're cleverer than you. Don't be alone with them in the dark.</em></p>
+  <p>And tonight, she knew, she would be exactly that. Alone. In the dark. Waiting for a killer.</p>
+  <div class="words">
+    <h4>New words — Chapter Eleven</h4>
+    <dl>
+      <dt>a locked cabinet</dt><dd>une armoire fermée à clé</dd>
+      <dt>a logbook</dt><dd>un registre</dd>
+      <dt>forbidden</dt><dd>interdit</dd>
+      <dt>handwriting</dt><dd>l'écriture</dd>
+      <dt>a locker</dt><dd>un casier</dd>
+      <dt>to photograph</dt><dd>photographier</dd>
+      <dt>in your throat</dt><dd>dans la gorge (serrée)</dd>
+      <dt>to warn</dt><dd>avertir</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Eleven</div>
+</section>
+<section class="chapter" id="c12">
+  <div class="chapter-head">
+    <div class="no">Chapter Twelve</div>
+    <div class="ti">The Night Shift</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">Nora came back into the hospital at midnight, through a side door she knew, in normal clothes, not her uniform. Her heart was beating hard. If anyone saw her, she was finished. But she walked like she belonged — and at midnight, in a big hospital, no one looks twice at a tired woman walking with purpose.</p>
+  <p>She went up the back stairs to the fourth floor. She did not go onto the main ward. Instead, she found the quiet single room where they had moved Mr. Owen — room 9, at the end of a dark corridor, away from everything.</p>
+  <p>She looked in through the small window in the door. Mr. Owen was asleep, peaceful, his white hair soft on the pillow, going home in the morning to his garden and his cat.</p>
+  <p>Across the corridor was a store room. Nora slipped inside, left the door open just a crack, turned off the light, and waited in the dark. She had her phone in her hand, ready to film. She had the syringe in her bag. She had decided: she would watch, she would record, and if anyone came near Mr. Owen with a needle, she would have the proof at last — and she would stop them.</p>
+  <p>The hospital at night was full of small sounds. A machine beeping far away. A trolley. Footsteps that came and went. Each time, Nora's heart jumped. Each time, it was nothing.</p>
+  <p>The hours passed. Two o'clock. Three o'clock. Nora's legs ached. Her eyes were heavy. <em>Maybe I'm wrong,</em> she thought. <em>Maybe I really am imagining all of it. Maybe—</em></p>
+  <p>At ten past three, a figure came down the dark corridor.</p>
+  <p>Soft white shoes. A nurse's uniform. Silent, gentle, certain. The figure carried a small kidney dish, the kind nurses use, and in it, something that caught the light for just a second. A syringe.</p>
+  <p>The figure stopped at room 9. A gloved hand pushed the door open, quietly, quietly. The figure went inside, toward the bed where Mr. Owen slept.</p>
+  <p>And in the weak light from the corridor, Nora saw the face.</p>
+  <p>Sister Pauline.</p>
+  <p>Nora's whole body went cold. It was true. It was all true. The gentle, beloved nurse stood over the sleeping old man, looking down at him with a soft, sad, terrible kindness on her face. She lifted the syringe. She reached for the thin skin of his arm.</p>
+  <p>"Don't worry, dear," Pauline whispered to the sleeping man. "I'll let you rest now. You'll be at peace. It's a kindness, really. It's a—"</p>
+  <p>Nora pushed the door open and turned on the light.</p>
+  <p>"<em>Stop,</em>" she said. "Pauline. Put it down. Now."</p>
+  <p>Sister Pauline froze. She turned slowly. For one moment, the gentle mask was gone, and Nora saw what was really behind it — not a monster, but something almost worse: a calm, certain, sleeping madness, sure of itself, sure it was good.</p>
+  <p>"Nora," Pauline said softly. "You shouldn't be here. You don't understand. I help them. I'm kind to them. The doctors keep them alive in pain, but I — I give them peace. I've given peace to so many. It's love, Nora. It's the only real love left in this place."</p>
+  <p>"He's going home in the morning," Nora said, her voice shaking. "To his garden. He's not in pain. He's getting <em>better</em>. Put the syringe down, Pauline. It's finished."</p>
+  <p>And on Nora's phone, held steady in her hand, the little red light was on.</p>
+  <p>It was all being filmed.</p>
+  <div class="words">
+    <h4>New words — Chapter Twelve</h4>
+    <dl>
+      <dt>to belong</dt><dd>être à sa place</dd>
+      <dt>a crack (gap)</dt><dd>une fente</dd>
+      <dt>to film</dt><dd>filmer</dd>
+      <dt>to ache</dt><dd>faire mal</dd>
+      <dt>a kidney dish</dt><dd>un haricot (médical)</dd>
+      <dt>a mask</dt><dd>un masque</dd>
+      <dt>madness</dt><dd>la folie</dd>
+      <dt>at peace</dt><dd>en paix</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Twelve</div>
+</section>
+<section class="chapter" id="c13">
+  <div class="chapter-head">
+    <div class="no">Chapter Thirteen</div>
+    <div class="ti">Morning</div>
+    <div class="dash"></div>
+  </div>
+  <p class="first">It did not end quietly.</p>
+  <p>Sister Pauline did not give up. For thirty years she had believed, in her broken mind, that she was an angel of kindness — and she would not let Nora take that away. She lunged toward Mr. Owen with the syringe.</p>
+  <p>But Nora was younger, and she was ready. She caught Pauline's arm and held it back, away from the old man. They struggled. Mr. Owen woke, confused and frightened, calling out. The noise — at last, the noise — brought other people running. Dr. Reyes. Two night nurses. Gary the porter.</p>
+  <p>"Get the syringe!" Nora shouted. "Don't let her— it's her, it's Pauline, she's been killing them—"</p>
+  <p>For a moment, the others stood frozen, unable to believe it. Gentle Sister Pauline? It was impossible.</p>
+  <p>But the syringe was in Pauline's hand. Nora's phone was still filming. And Mr. Owen, sitting up in his bed, white-faced, said the words that broke the spell: "She was leaning over me with a needle. I felt it. I woke up and she was— she was going to—"</p>
+  <p>Dr. Reyes took the syringe from Pauline's hand. The hospital security came. The real police were called — and this time, with a filmed confession, a syringe, a missing-medicine record, and seven years of a pattern in Nora's careful notebook, there were no doubts and no traps. Nobody asked questions about Nora now.</p>
+  <p class="sep">• • •</p>
+  <p>It took weeks for the whole truth to come out. The syringe was tested: it held the heart-stopping medicine, just as Nora had thought. The records, once people finally looked, told a clear and terrible story. The young nurse whose signature had been copied — that, too, was Pauline, protecting herself, turning the one honest person into the suspect. Over the years, on Ward 7, Sister Pauline had quietly ended the lives of patients she decided were "ready to rest" — patients who, almost always, were getting better and wanted to live.</p>
+  <p>She was not evil in the way of films. She was sure she was doing good. That, the doctors said, was the most frightening thing of all.</p>
+  <p>Carol came to find Nora. The busy manager, who had not believed her, had tears in her eyes. "I told you to go home," she said. "I told you to let it go. I was wrong, Nora. If I had listened to you, Mr. Owen would be— I'm so sorry. You saw what none of us could see. You saved his life. You probably saved others."</p>
+  <p>"You didn't believe me because it was unbelievable," Nora said quietly. "I almost didn't believe myself."</p>
+  <p class="sep">• • •</p>
+  <p>Mr. Owen went home three days later — to his garden, and his cat, and many more mornings. Before he left, he held Nora's hand with both of his.</p>
+  <p>"You know," he said, "I spent my whole life thinking angels had wings." His bright eyes were wet. "Turns out they wear soft white shoes and steal old men's blood pressure at three in the morning. Thank you, Nora. For my life."</p>
+  <p>Nora could not speak. She just held his hand.</p>
+  <p class="sep">• • •</p>
+  <p>A month later, Nora Davies walked the quiet halls of St. Catherine's Hospital again, in her soft white shoes, with a small torch in her pocket and a kind word for everyone awake and afraid.</p>
+  <p>She still worked nights. Some people asked her how she could bear to come back — to the same ward, the same dark hours where such terrible things had happened.</p>
+  <p>But Nora understood something now that she had not fully understood before. The night shift was not about the dark. It was about the people in the dark — the frightened, the lonely, the recovering, the ones who needed someone to watch over them while the world slept.</p>
+  <p>Someone had to watch. Someone had to care enough to notice when something was wrong, and brave enough to say so, even when no one believed.</p>
+  <p>Nora checked her watch. It was three in the morning — the deepest, quietest part of the night. She picked up her chart, and she went to see her patients.</p>
+  <p>They were all sleeping. They were all safe.</p>
+  <p>And Nora was awake, and watching, the way she always was.</p>
+  <div class="words">
+    <h4>New words — Chapter Thirteen</h4>
+    <dl>
+      <dt>to give up</dt><dd>abandonner</dd>
+      <dt>to lunge</dt><dd>se jeter sur</dd>
+      <dt>to struggle</dt><dd>se débattre</dd>
+      <dt>a spell</dt><dd>un sortilège</dd>
+      <dt>a confession</dt><dd>des aveux</dd>
+      <dt>a doubt</dt><dd>un doute</dd>
+      <dt>evil</dt><dd>le mal, mauvais</dd>
+      <dt>to bear</dt><dd>supporter</dd>
+    </dl>
+  </div>
+  <div class="chapter-end">End of Chapter Thirteen</div>
+</section>
+
+<section class="chapter epilogue" id="end">
+  <div class="the-end">The End</div>
+  <div class="note">
+    <h3>A note from your tutor 📚</h3>
+    <p>You read a whole medical thriller in English! This story was made for your world — it's full of <strong>hospital and nursing vocabulary</strong>: ward, patient, blood pressure, pulse, drip, syringe, dose, chart, recovery. You probably knew many of these already in French; now you have them in English too.</p>
+    <p>And the grammar from your lessons is here as well: question words drive the mystery (<em>who, when, why, which patient?</em>), modal verbs carry the danger (<em>you should be careful, it can cost a life</em>), and the present continuous builds the tension in the dark corridor (<em>someone is coming, the light is on</em>).</p>
+  </div>
+  <div class="qbox">
+    <h3>Comprehension — can you answer?</h3>
+    <ol>
+      <li>Why did nobody believe Nora at first?</li>
+      <li>Why was Nora herself in danger of becoming the <em>suspect</em>?</li>
+      <li>What three clues in the records pointed to a killer (time, patients, medicine)?</li>
+      <li>How did the killer try to make Nora look careless and dangerous?</li>
+      <li>Why does the story say Sister Pauline was 'almost worse' than a monster?</li>
+    </ol>
+  </div>
+  <div class="qbox">
+    <h3>Talk or write about it 🗣️</h3>
+    <ol>
+      <li>Nora chose to keep going when everyone told her to stop. Was she right? Why? Use modal verbs.</li>
+      <li>You work in this world. Which English words from this book are useful for your job? Write 5 sentences using them.</li>
+    </ol>
+  </div>
+  <div class="note">
+    <h3>Want more? 🎯</h3>
+    <p>Tell me if the level felt easy, just right, or hard. I can write a sequel, make a medical-vocabulary quiz, or add all the hospital words to your glossary so they live alongside your course vocabulary.</p>
+  </div>
+</section>
+</main>
+<script>
+/* progress bar */
+var bar=document.getElementById('bar');
+function onScroll(){
+  var h=document.documentElement;
+  var max=h.scrollHeight-h.clientHeight;
+  var p=max>0?(h.scrollTop/max)*100:0;
+  bar.style.width=p+'%';
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+
+/* tap to reveal French */
+document.addEventListener('click',function(e){
+  var w=e.target.closest('.w');
+  if(w){ w.classList.toggle('show'); }
+});
+
+/* font size */
+var sizes=[0.96,1.06,1.14,1.24,1.36,1.5];
+var si=2;
+function fs(d){
+  si=Math.max(0,Math.min(sizes.length-1,si+d));
+  document.documentElement.style.setProperty('--fs',sizes[si]+'rem');
+}
+
+/* theme */
+function toggleTheme(){
+  document.body.classList.toggle('night');
+  document.getElementById('themeBtn').textContent=document.body.classList.contains('night')?'Day':'Night';
+}
+onScroll();
+</script>
+</body>
+</html>
