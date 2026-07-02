@@ -168,6 +168,35 @@
   ::selection{background:var(--amber);color:#fff;}
   @media (max-width:420px){ :root{--fs:1.06rem;} .cover h1{letter-spacing:0;} }
   @media (prefers-reduced-motion:reduce){ .scrolldown{animation:none;} }
+  /* ---------- read-aloud (TTS) ---------- */
+  .sent{ border-radius:4px; transition:background .15s; }
+  .sent.reading{ background:var(--amber-soft); box-shadow:0 0 0 3px var(--amber-soft); }
+  .ch-listen{
+    display:inline-flex;align-items:center;gap:.4em;margin-top:.9rem;
+    font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;
+    font-size:.66rem;color:var(--amber);background:transparent;
+    border:1px solid var(--amber);border-radius:999px;padding:.4rem .85rem;cursor:pointer;
+  }
+  .ch-listen:active{ background:var(--amber-soft); }
+  #ttsbar{
+    position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:60;
+    display:flex;align-items:center;gap:.35rem;
+    background:var(--ink);color:#efe7d6;border:1px solid rgba(255,255,255,.14);
+    border-radius:999px;padding:.4rem .55rem;box-shadow:0 10px 34px rgba(0,0,0,.4);
+    font-family:'Oswald',sans-serif;
+  }
+  #ttsbar[hidden]{ display:none; }
+  #ttsbar button{
+    font-family:'Oswald',sans-serif;background:transparent;color:#efe7d6;border:none;
+    cursor:pointer;font-size:1rem;line-height:1;padding:.4rem .55rem;border-radius:999px;
+  }
+  #ttsbar button:active{ background:rgba(255,255,255,.12); }
+  #ttsbar .lbl{ font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;opacity:.6;padding:0 .2rem 0 .4rem; }
+  #ttsbar .tts-speeds{ display:flex;gap:.1rem; }
+  #ttsbar .tts-speeds button{ font-size:.7rem;letter-spacing:.03em;opacity:.55;border:1px solid transparent; }
+  #ttsbar .tts-speeds button.on{ opacity:1;color:var(--amber);border-color:var(--amber); }
+  #tts-play{ font-size:1.15rem; }
+  #tts-stop{ opacity:.7;font-size:.85rem; }
 </style>
 </head>
 <body>
@@ -725,10 +754,13 @@ function onScroll(){
 }
 window.addEventListener('scroll',onScroll,{passive:true});
 
-/* tap to reveal French */
+/* tap to reveal French (+ speak the word) */
 document.addEventListener('click',function(e){
   var w=e.target.closest('.w');
-  if(w){ w.classList.toggle('show'); }
+  if(w){
+    w.classList.toggle('show');
+    if(w.classList.contains('show') && window.TTS){ window.TTS.sayWord(w); }
+  }
 });
 
 /* font size */
@@ -745,6 +777,185 @@ function toggleTheme(){
   document.getElementById('themeBtn').textContent=document.body.classList.contains('night')?'Day':'Night';
 }
 onScroll();
+</script>
+<!-- read-aloud control bar -->
+<div id="ttsbar" hidden>
+  <button id="tts-play" aria-label="Pause / Play">⏸</button>
+  <span class="lbl">Listening</span>
+  <div class="tts-speeds">
+    <button data-r="0.7">0.7×</button>
+    <button data-r="0.85" class="on">0.85×</button>
+    <button data-r="1">1×</button>
+  </div>
+  <button id="tts-stop" aria-label="Stop">✕ Stop</button>
+</div>
+
+<script>
+/* ===== Read-aloud engine (Web Speech API, 100% client) ===== */
+(function(){
+  var SUPPORTED = ('speechSynthesis' in window) &&
+                  (typeof window.SpeechSynthesisUtterance !== 'undefined');
+  if(!SUPPORTED) return;   // no buttons if the browser can't speak
+
+  var synth = window.speechSynthesis;
+  var state = { playing:false, paused:false, seq:[], idx:0, rate:0.85, voice:null, wake:null };
+
+  /* ---- pick an English voice ---- */
+  function pickVoice(){
+    var vs = synth.getVoices() || [];
+    var gb = vs.filter(function(v){ return /en[-_]GB/i.test(v.lang); });
+    var us = vs.filter(function(v){ return /en[-_]US/i.test(v.lang); });
+    var en = vs.filter(function(v){ return /^en/i.test(v.lang); });
+    state.voice = gb[0] || us[0] || en[0] || null;
+  }
+  pickVoice();
+  if(typeof synth.onvoiceschanged !== 'undefined'){ synth.onvoiceschanged = pickVoice; }
+
+  /* ---- readable text of an element (English only, no .fr, no bullets) ---- */
+  function readable(el){
+    var c = el.cloneNode(true);
+    var frs = c.querySelectorAll('.fr'); for(var i=0;i<frs.length;i++){ frs[i].remove(); }
+    var t = (c.textContent||'').replace(/\s+/g,' ').trim();
+    if(t === '• • •') return '';
+    return t;
+  }
+
+  /* ---- split paragraphs into sentence spans (keeps .w intact) ---- */
+  var ABBR = /(^|\s)(Mr|Mrs|Ms|Dr|St|vs|Vs|No)\.$/;
+  function segmentParagraph(p){
+    var out=[], cur=mk();
+    function mk(){ var s=document.createElement('span'); s.className='sent'; return s; }
+    function flush(){ if(cur.childNodes.length){ out.push(cur); cur=mk(); } }
+    Array.prototype.slice.call(p.childNodes).forEach(function(node){
+      if(node.nodeType === 3){
+        var parts = node.nodeValue.split(/(?<=[.!?…”"])\s+/);
+        parts.forEach(function(part, i){
+          cur.appendChild(document.createTextNode(part + (i<parts.length-1 ? ' ' : '')));
+          if(/[.!?…”"]\s*$/.test(part) && !ABBR.test(part.trim())){ flush(); }
+        });
+      } else {
+        cur.appendChild(node.cloneNode(true));
+      }
+    });
+    flush();
+    while(p.firstChild){ p.removeChild(p.firstChild); }
+    out.forEach(function(s){ p.appendChild(s); });
+  }
+  function segmentAll(){
+    document.querySelectorAll('.chapter p').forEach(function(p){
+      if(p.classList.contains('sep')) return;
+      if(p.dataset.seg) return;
+      try{ segmentParagraph(p); p.dataset.seg='1'; }catch(err){}
+    });
+  }
+
+  /* ---- highlight + gentle auto-scroll ---- */
+  function clearHi(){
+    var r=document.querySelectorAll('.sent.reading');
+    for(var i=0;i<r.length;i++){ r[i].classList.remove('reading'); }
+  }
+  function ensureVisible(el){
+    try{
+      if(typeof el.scrollIntoView !== 'function') return;
+      var r=el.getBoundingClientRect(), h=window.innerHeight||document.documentElement.clientHeight;
+      if(r.top < h*0.18 || r.bottom > h*0.82){
+        try{ el.scrollIntoView({block:'center', behavior:'smooth'}); }
+        catch(e){ el.scrollIntoView(); }
+      }
+    }catch(e){}
+  }
+
+  /* ---- wake lock (best effort, Chrome Android) ---- */
+  function requestWake(){
+    try{ if(navigator.wakeLock && !state.wake){
+      navigator.wakeLock.request('screen').then(function(w){ state.wake=w; }).catch(function(){});
+    }}catch(e){}
+  }
+  function releaseWake(){ try{ if(state.wake){ state.wake.release(); state.wake=null; } }catch(e){} }
+
+  /* ---- speak current sentence, then chain ---- */
+  function speakCurrent(){
+    if(!state.playing) return;
+    if(state.idx >= state.seq.length){ stop(true); return; }
+    var span = state.seq[state.idx];
+    var text = readable(span);
+    if(!text){ state.idx++; speakCurrent(); return; }
+    clearHi(); span.classList.add('reading'); ensureVisible(span);
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='en-GB'; u.rate=state.rate; if(state.voice) u.voice=state.voice;
+    u.onend  = function(){ if(state.playing && !state.paused){ state.idx++; speakCurrent(); } };
+    u.onerror= function(){ if(state.playing && !state.paused){ state.idx++; speakCurrent(); } };
+    synth.speak(u);
+  }
+
+  var bar = document.getElementById('ttsbar');
+  var playBtn = document.getElementById('tts-play');
+
+  function start(section){
+    segmentAll();
+    var spans = Array.prototype.slice.call(section.querySelectorAll('.sent'))
+                     .filter(function(s){ return readable(s).length>0; });
+    if(!spans.length) return;
+    synth.cancel();
+    state.seq=spans; state.idx=0; state.playing=true; state.paused=false;
+    bar.hidden=false; playBtn.textContent='⏸';
+    requestWake();
+    speakCurrent();
+  }
+  function stop(atEnd){
+    state.playing=false; state.paused=false;
+    synth.cancel(); clearHi(); bar.hidden=true; releaseWake();
+  }
+  function togglePause(){
+    if(!state.playing) return;
+    if(state.paused){
+      state.paused=false; playBtn.textContent='⏸'; speakCurrent();   // re-speak current (robust on Android)
+    } else {
+      state.paused=true; playBtn.textContent='▶'; synth.cancel();
+    }
+  }
+  function setRate(r){
+    state.rate=r;
+    if(state.playing && !state.paused){ synth.cancel(); speakCurrent(); }  // apply immediately
+  }
+
+  /* ---- wire the control bar ---- */
+  playBtn.addEventListener('click', togglePause);
+  document.getElementById('tts-stop').addEventListener('click', function(){ stop(false); });
+  Array.prototype.slice.call(bar.querySelectorAll('.tts-speeds button')).forEach(function(b){
+    b.addEventListener('click', function(){
+      bar.querySelectorAll('.tts-speeds button').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on'); setRate(parseFloat(b.getAttribute('data-r')));
+    });
+  });
+
+  /* ---- inject a "Listen" button in each chapter head ---- */
+  document.querySelectorAll('.chapter:not(.epilogue)').forEach(function(sec){
+    var head = sec.querySelector('.chapter-head'); if(!head) return;
+    var b = document.createElement('button');
+    b.type='button'; b.className='ch-listen'; b.innerHTML='▶ Listen to this chapter';
+    b.addEventListener('click', function(){ start(sec); });
+    head.appendChild(b);
+  });
+
+  /* ---- re-acquire wake lock if tab returns to foreground during reading ---- */
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState==='visible' && state.playing && !state.paused){ requestWake(); }
+  });
+  window.addEventListener('beforeunload', function(){ synth.cancel(); });
+
+  /* ---- expose word-speak for the tap handler ---- */
+  window.TTS = {
+    sayWord:function(w){
+      if(state.playing) return;              // don't cut into chapter reading
+      var t = readable(w); if(!t) return;
+      synth.cancel();
+      var u = new SpeechSynthesisUtterance(t);
+      u.lang='en-GB'; u.rate=0.9; if(state.voice) u.voice=state.voice;
+      synth.speak(u);
+    }
+  };
+})();
 </script>
 </body>
 </html>
