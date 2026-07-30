@@ -58,6 +58,7 @@ footer{margin-top:60px;font-size:11px;color:var(--mut);letter-spacing:1px;text-a
   .tool-card{padding:20px}
 }
 </style>
+<script src="/lvnav.js"></script>
 </head>
 <body>
 
@@ -114,6 +115,9 @@ footer{margin-top:60px;font-size:11px;color:var(--mut);letter-spacing:1px;text-a
 
 <footer>Construit sur mesure · Données locales · Aucune pub</footer>
 
+<script>
+if(window.LVNAV){ LVNAV.init({ app:"english-hub", snapshot:function(){return{};}, restore:function(){} }); }
+</script>
 </body>
 </html>
 
