@@ -108,6 +108,7 @@
   footer{font-family:system-ui,sans-serif; font-size:.66rem; text-align:center; opacity:.45; padding:14px}
   .hidden{display:none !important}
 </style>
+<script src="/lvnav.js"></script>
 </head>
 <body>
 <header>
@@ -1112,7 +1113,7 @@ function loadQueue(){
 }
 
 /* ============ RENDER ============ */
-function show(id){['picker','session','results'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
+function show(id){lvScreen=id; if(!lvRestoring&&window.LVNAV)LVNAV.push();['picker','session','results'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
 
 function updateProgress(){
   document.getElementById('pgCount').textContent=`Question ${Math.min(S.idx+1,S.queue.length)} / ${S.queue.length}`;
@@ -1313,6 +1314,16 @@ document.getElementById('redoErr').onclick=()=>{
 };
 document.getElementById('redoAll').onclick=()=>{ loadQueue(); show('session'); renderCard(); };
 document.getElementById('backHome').onclick=()=>{ show('picker'); };
+</script>
+<script>
+/* ============ LV : memoire de navigation ============ */
+var lvRestoring=false; var lvScreen="picker";
+if(window.LVNAV){
+  LVNAV.init({ app:"english-coach", sections:'details',
+    snapshot:function(){ return {v:lvScreen}; },
+    restore:function(s){ lvRestoring=true; try{ if(s&&s.v&&s.v!=='session')show(s.v); }catch(e){} lvRestoring=false; }
+  });
+}
 </script>
 </body>
 </html>
