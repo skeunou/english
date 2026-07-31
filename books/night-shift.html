@@ -198,6 +198,7 @@
   #tts-play{ font-size:1.15rem; }
   #tts-stop{ opacity:.7;font-size:.85rem; }
 </style>
+<script src="/lvnav.js"></script>
 </head>
 <body>
 <div id="bar"></div>
@@ -962,6 +963,16 @@ onScroll();
     }
   };
 })();
+</script>
+<script>
+/* ============ LV : memoire de navigation ============ */
+var lvRestoring=false;
+if(window.LVNAV){
+  LVNAV.init({ app:"book-night-shift", sections:'details',
+    snapshot:function(){ return {}; },
+    restore:function(s){ lvRestoring=true; try{  }catch(e){} lvRestoring=false; }
+  });
+}
 </script>
 </body>
 </html>
