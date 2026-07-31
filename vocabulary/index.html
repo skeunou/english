@@ -360,6 +360,7 @@
     header h1 { font-size: 16px; }
   }
 </style>
+<script src="/lvnav.js"></script>
 </head>
 <body>
 
@@ -1199,6 +1200,16 @@ function buildGlossary() {
 }
 
 buildGlossary();
+</script>
+<script>
+/* ============ LV : memoire de navigation ============ */
+var lvRestoring=false;
+if(window.LVNAV){
+  LVNAV.init({ app:"english-vocab", sections:'details, .sec, .acc',
+    snapshot:function(){ return {}; },
+    restore:function(s){ lvRestoring=true; try{  }catch(e){} lvRestoring=false; }
+  });
+}
 </script>
 </body>
 </html>
