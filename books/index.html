@@ -51,6 +51,7 @@
   .tipbar p{margin:0;line-height:1.65;font-size:1rem;}
   footer{max-width:46rem;margin:0 auto;padding:0 1.2rem 3rem;color:var(--muted);font-size:.86rem;text-align:center;}
 </style>
+<script src="/lvnav.js"></script>
 </head>
 <body>
 <header>
@@ -113,5 +114,15 @@
 <footer>
   Made for Laurent · English reading practice · Happy holidays 🌴
 </footer>
+<script>
+/* ============ LV : memoire de navigation ============ */
+var lvRestoring=false;
+if(window.LVNAV){
+  LVNAV.init({ app:"english-books", sections:'details, .sec, .acc',
+    snapshot:function(){ return {}; },
+    restore:function(s){ lvRestoring=true; try{  }catch(e){} lvRestoring=false; }
+  });
+}
+</script>
 </body>
 </html>
